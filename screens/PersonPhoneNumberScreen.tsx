@@ -9,12 +9,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 
-export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
+interface ErrorType {
+    message: string | null;
+  }
+
+const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: any }> = ({ navigation, onLogin, route }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [unMaskedValue, setUnmaskedValue] = useState("");
     const maskedInputRef = useRef(null);
     const [loggedIn, setLoggedIn] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<ErrorType>({ message: null });
     const { user, setUser } = useUserContext();
     const [verificationCode, setVerificationCode] = useState('');
     const [authStep, setAuthStep] = useState('phone');
@@ -22,7 +26,7 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isCheckingPhoneNumber, setIsCheckingPhoneNumber] = useState(false);
 
-    const saveToken = async (token) => {
+    const saveToken = async (token: string) => {
         try {
             await AsyncStorage.setItem('access_token', token);
         } catch (error) {
@@ -50,12 +54,12 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
         }
     };
 
-    const handleTextChange = (text, rawText) => {
+    const handleTextChange = (text: string, rawText: string) => {
         if (rawText.length === 11) {
-            setError(null);
+            setError({ message: null});
             setIsButtonDisabled(false);
         } else {
-            setError(null);
+            setError({ message: null});
             setIsButtonDisabled(true);
         }
         setPhoneNumber(rawText);
@@ -78,7 +82,7 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
                 console.log(response.data.verification_code)
                 setAuthStep('code');
             } else {
-                setError('user not found');
+                setError({ message: 'user not found'});
             }
         } catch (error) {
             console.error('Ошибка авторизации', error);
@@ -93,20 +97,20 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
             if (checkNumberResponse.status === 200) {
               setPhoneNumberExists(true);
               setIsButtonDisabled(true);
-              setError('Пользователь уже зарегистрирован');
+              setError({ message: 'Пользователь уже зарегистрирован'});
             } else {
               setPhoneNumberExists(false);
-              setIsButtonDisabled(false); // Разблокируем кнопку
-              setError(null);
+              setIsButtonDisabled(false);
+              setError({ message: null});
             }
           } finally {
             setIsCheckingPhoneNumber(false);
           }
         } else if (phoneNumber.length < 0) {
-          setError('Введите номер телефона');
+          setError({ message: 'Введите номер телефона'});
           setIsButtonDisabled(true);
         } else {
-          setError(null); // Сбрасываем ошибку
+          setError({ message: null});
           setIsButtonDisabled(true);
         }
       };
@@ -117,7 +121,7 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
         }
     }, [phoneNumber]);
 
-    const handleCodeChange = async (code) => {
+    const handleCodeChange = async (code: string) => {
         try {
             if (code.length === 6) {
                 const response = await axios.post(`http://193.164.150.223:1024/api/register?phone_number=${phoneNumber}&code=${code}`);
@@ -130,17 +134,17 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
                         await saveToken(finalAccessToken);
                         navigation.navigate('PersonDataScreen', { phoneNumber: phoneNumber });
                     } else {
-                        setError('Неверный код. Попробуйте еще раз.');
+                        setError({ message: 'Неверный код. Попробуйте еще раз.'});
                     }
                 } else {
-                    setError('Неверный код. Попробуйте еще раз.');
+                    setError({ message: 'Неверный код. Попробуйте еще раз.'});
                 }
             } else {
-                setError('Код должен состоять из 6 цифр.');
+                setError({ message: 'Код должен состоять из 6 цифр.'});
             }
         } catch (error) {
             console.error('Error verifying code', error);
-            setError('Неверный код. Попробуйте еще раз.');
+            setError({ message: 'Неверный код. Попробуйте еще раз.'});
         }
     };
 
@@ -172,7 +176,7 @@ export default PersonPhoneNumberScreen = ({ navigation, onLogin, route }) => {
                             <View style={styles.inputContainer}>
                                 {error && (
                                     <Text style={styles.errorText}>
-                                        {error}
+                                        {error.message}
                                     </Text>
                                 )}
                                 <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40}>
@@ -266,3 +270,5 @@ const styles = StyleSheet.create({
         position: 'absolute'
     }
 })
+
+export default PersonPhoneNumberScreen;

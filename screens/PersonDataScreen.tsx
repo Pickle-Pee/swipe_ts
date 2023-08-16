@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -19,7 +19,7 @@ import CitySearchInput from '../components/CitySearcInput';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 
-export default PersonDataScreen = ({ navigation, route }) => {
+const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const { phoneNumber } = route.params;
   const [textName, setTextName] = useState('');
   const [textSecondName, setTextSecondName] = useState('');
@@ -27,10 +27,10 @@ export default PersonDataScreen = ({ navigation, route }) => {
   const [nameError, setNameError] = useState(false);
   const [secondNameError, setSecondNameError] = useState(false);
   const [error, setError] = useState('');
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState('');
 
-  const saveToken = async (token) => {
+  const saveToken = async (token: string) => {
     try {
       await AsyncStorage.setItem('access_token', token);
     } catch (error) {
@@ -67,7 +67,7 @@ export default PersonDataScreen = ({ navigation, route }) => {
     setTextSecondName('');
   };
 
-  const handleNameChange = (text) => {
+  const handleNameChange = (text: string) => {
     const filteredText = text.replace(/[^A-Za-zА-Яа-яЁё]/g, '');
     if (filteredText !== text) {
       Alert.alert(
@@ -80,7 +80,7 @@ export default PersonDataScreen = ({ navigation, route }) => {
     setTextName(filteredText);
   };
 
-  const handleSecondNameChange = (text) => {
+  const handleSecondNameChange = (text: string) => {
     const filteredText = text.replace(/[^A-Za-zА-Яа-яЁё]/g, '');
     if (filteredText !== text) {
       Alert.alert(
@@ -93,7 +93,7 @@ export default PersonDataScreen = ({ navigation, route }) => {
     setTextSecondName(filteredText);
   };
 
-  const handleDateChange = (event, selected) => {
+  const handleDateChange = (event: any, selected: any) => {
     const currentDate = selected || selectedDate;
     setSelectedDate(currentDate);
   };
@@ -141,7 +141,7 @@ export default PersonDataScreen = ({ navigation, route }) => {
     }
   };
 
-  const handleCitySelect = (city) => {
+  const handleCitySelect = (city: string) => {
     setSelectedCity(city);
   };
 
@@ -171,12 +171,12 @@ export default PersonDataScreen = ({ navigation, route }) => {
               keyboardType='default'
               variant="underlined"
               isInvalid={nameError}
-              InputRightElement={textName !== '' && (
+              InputRightElement={textName !== '' ? (
                 <IconButton
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputName}
                 />
-              )} />
+              ) : null as ReactNode} />
             <Input
               style={styles.input}
               p={2}
@@ -251,5 +251,5 @@ const styles = StyleSheet.create({
   }
 })
 
-
+export default PersonDataScreen;
 

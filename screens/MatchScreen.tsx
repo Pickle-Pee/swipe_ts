@@ -7,10 +7,18 @@ import { faHeart, faHeartBroken, faXmark } from '@fortawesome/free-solid-svg-ico
 import Geolocation from '@react-native-community/geolocation';
 import { useUserContext } from '../utils/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-export default MatchScreen = () => {
+interface CardData {
+    card: string;
+    cardYears: string;
+    userStatus: string;
+  }
 
-    const { user } = useUserContext;
+
+const MatchScreen = () => {
+
+    const { user } = useUserContext();
 
     const getCurrentLocation = () => {
         if (Platform.OS === 'android') {
@@ -51,14 +59,12 @@ export default MatchScreen = () => {
     }, []);
 
     const removeUser = async () => {
-        await AsyncStorage.clear() 
+        await AsyncStorage.clear();
     }
 
     const getUsersResponse = async () => {
-        response = await axios.get(`http://193.164.150.223:1024/api/users/${phoneNumber}`);
-
+        Response = await axios.get(`http://193.164.150.223:1024/api/users/${user.phoneNumber}`);
     }
-
 
     return (
         <Swiper
@@ -82,7 +88,6 @@ export default MatchScreen = () => {
                                 }}>{userStatus === 'online' ? 'Онлайн' : 'Оффлайн'}</Text>
                             </View>
                             <View style={styles.actionsCardItem}>
-
                                 <TouchableOpacity
                                     style={styles.button}
                                     onPress={() => console.log('like')}>
@@ -90,7 +95,6 @@ export default MatchScreen = () => {
                                         <FontAwesomeIcon icon={faHeart} size={40} color={"#EB539F"} />
                                     </Text>
                                 </TouchableOpacity>
-
                                 <TouchableOpacity
                                     style={styles.button}
                                     onPress={() => console.log('dislike')}>
@@ -101,7 +105,6 @@ export default MatchScreen = () => {
                             </View>
                         </View>
                         <View style={styles.contentContainer}>
-
                             <Text> TEST </Text>
                             <Text> TEST </Text>
                             <Text> TEST </Text>
@@ -109,7 +112,6 @@ export default MatchScreen = () => {
                             <Text> TEST </Text>
                             <Text> TEST </Text>
                             <Text> TEST </Text>
-
                         </View>
                     </>
                 )
@@ -176,7 +178,6 @@ export default MatchScreen = () => {
                     }
                 }
             }}
-
             overlayLabelStyle={{
                 backgroundColor: '#',
                 justifyContent: 'center',
@@ -197,7 +198,6 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
         backgroundColor: "#D4D4D8",
     },
-
     text: {
         backgroundColor: "transparent",
         paddingLeft: 10,
@@ -208,14 +208,12 @@ const styles = StyleSheet.create({
     cardButton: {
 
     },
-
     actionsCardItem: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: 'center',
         paddingVertical: 30
     },
-
     button: {
         backgroundColor: "transparent",
         width: 60,
@@ -224,19 +222,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-
     cardSwiperLikeText: {
         color: '#34D399',
         fontSize: 20,
         fontWeight: 600
     },
-
     cardSwiperDislikeText: {
         color: '#F43F5E',
         fontSize: 20,
         fontWeight: 600
     },
-
     cardSwiperSuperlikeText: {
         color: '#0EA5E9',
         fontSize: 20,
@@ -256,7 +251,6 @@ const styles = StyleSheet.create({
     contentContainer: {
         position: 'absolute'
     }
-
-
-
 });
+
+export default MatchScreen;

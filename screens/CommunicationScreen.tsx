@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-type Chat = {
-  id: number;
-  title: string;
-};
 
-const CommunicationScreen: React.FC = () => {
-  const navigation = useNavigation();
+const CommunicationScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
+
+  type Chat = {
+    id: number;
+    title: string;
+  };
 
   const chats: Chat[] = [
     { id: 1, title: 'Чат 1' },
@@ -20,8 +19,8 @@ const CommunicationScreen: React.FC = () => {
   const renderItem = ({ item }: { item: Chat }) => (
     <TouchableOpacity
       style={styles.chatItem}
-      onPress={() => navigation.navigate('Chat', { chatId: item.id, title: item.title })}
-    >
+      onPress={() => navigation.navigate('Chat' as 'Chat', { chatId: item.id, title: item.title })}
+      >
       <Text style={styles.chatTitle}>{item.title}</Text>
     </TouchableOpacity>
   );

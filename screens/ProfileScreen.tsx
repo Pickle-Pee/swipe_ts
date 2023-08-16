@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 
 
-const ProfileScreen = ({ route, navigation, handleLogout }) => {
+const ProfileScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(false);
   const { user, userData, setUser } = useUserContext();
@@ -24,25 +24,16 @@ const ProfileScreen = ({ route, navigation, handleLogout }) => {
 
   const handleLogoutPress = async () => {
     try {
-      if (user.accessToken) {
+      if (user) {
         await AsyncStorage.clear();
         setUser(null);
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{
-        //     name: 'AuthStack',
-        //     state: {
-        //       routes: [{ name: 'AuthNavigator' }],
-        //     },
-        //   }]
-        // });
       }
     } catch (error) {
       console.error('Ошибка выхода:', error);
     }
   };
 
-  const calculateAge = (dateBirth) => {
+  const calculateAge = (dateBirth: any) => {
     const birthYear = new Date(dateBirth).getFullYear();
     const currentYear = new Date().getFullYear();
     return currentYear - birthYear;
@@ -58,35 +49,15 @@ const ProfileScreen = ({ route, navigation, handleLogout }) => {
     );
   }
 
-  if (!user) {
-    return (
-      <View style={styles.container}>
-        <GradientButton onPress={handleLogoutPress}>
-          <Text fontSize="sm" p={2}>Выйти</Text>
-        </GradientButton>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      {!user ? (
-        <>
-          <GradientButton onPress={handleLogoutPress}>
-            <Text fontSize="sm" p={2}>Выйти</Text>
-          </GradientButton>
-        </>
-      ) : (
-        <>
-          <Text style={styles.text}>Имя: {userData.firstName}</Text>
-          <Text style={styles.text}>Фамилия: {userData.lastName}</Text>
-          <Text style={styles.text}>Возраст: {age}</Text>
-          <GradientButton onPress={handleLogoutPress}>
-            <Text fontSize="sm" p={2}>Выйти</Text>
-          </GradientButton>
-        </>
-      )}
-
+      <Text style={styles.text}>Имя: {userData.firstName}</Text>
+      <Text style={styles.text}>Фамилия: {userData.lastName}</Text>
+      <Text style={styles.text}>Возраст: {age}</Text>
+      <GradientButton onPress={handleLogoutPress}>
+        <Text fontSize="sm" p={2}>Выйти</Text>
+      </GradientButton>
     </View>
   );
 };

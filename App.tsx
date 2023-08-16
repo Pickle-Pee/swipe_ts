@@ -6,6 +6,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { UserProvider, useUserContext } from "./utils/UserContext";
+import AuthScreen from "./screens/AuthScreen";
 import MatchScreen from './screens/MatchScreen';
 import LikesScreen from './screens/LikesScreen';
 import CommunicationScreen from './screens/CommunicationScreen';
@@ -26,14 +27,14 @@ type RootStackParamList = {
 type AuthStackParamList = {
   AuthScreen: undefined;
   RegistrationScreen: undefined;
-  PersonPhoneNumberScreen: undefined;
+  PersonPhoneNumberScreen: { navigation: any, onLogin: any, route: any };
   PersonDataScreen: undefined;
 };
 
 type MainStackParamList = {
   TabNavigator: undefined;
-  Chat: undefined;
-  CommunicationScreen: undefined;
+  Chat: { chatId: number; title: string };
+  CommunicationScreen: { chatId: number; title: string };
   LikesScreen: undefined;
   MatchScreen: undefined;
   ProfileScreen: undefined;

@@ -18,7 +18,7 @@ type Props = {
   navigation: ChatScreenNavigationProp;
 };
 
-const ChatScreen: React.FC<Props> = ({ route }) => {
+const ChatScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const { chatId, title } = route.params;
 
   return (
