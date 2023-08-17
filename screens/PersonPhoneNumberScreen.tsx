@@ -8,12 +8,13 @@ import { useUserContext } from "../utils/UserContext";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { PersonPhoneNumberScreenProps } from "../App";
 
 interface ErrorType {
     message: string | null;
-  }
+}
 
-const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: any }> = ({ navigation, onLogin, route }) => {
+const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumberScreenProps) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [unMaskedValue, setUnmaskedValue] = useState("");
     const maskedInputRef = useRef(null);
@@ -56,10 +57,10 @@ const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: 
 
     const handleTextChange = (text: string, rawText: string) => {
         if (rawText.length === 11) {
-            setError({ message: null});
+            setError({ message: null });
             setIsButtonDisabled(false);
         } else {
-            setError({ message: null});
+            setError({ message: null });
             setIsButtonDisabled(true);
         }
         setPhoneNumber(rawText);
@@ -82,7 +83,7 @@ const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: 
                 console.log(response.data.verification_code)
                 setAuthStep('code');
             } else {
-                setError({ message: 'user not found'});
+                setError({ message: 'user not found' });
             }
         } catch (error) {
             console.error('Ошибка авторизации', error);
@@ -91,29 +92,29 @@ const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: 
 
     const handleCheckPhoneNumber = async () => {
         if (phoneNumber.length === 11) {
-          setIsCheckingPhoneNumber(true);
-          try {
-            const checkNumberResponse = await axios.get(`http://193.164.150.223:1024/api/users/${phoneNumber}`);
-            if (checkNumberResponse.status === 200) {
-              setPhoneNumberExists(true);
-              setIsButtonDisabled(true);
-              setError({ message: 'Пользователь уже зарегистрирован'});
-            } else {
-              setPhoneNumberExists(false);
-              setIsButtonDisabled(false);
-              setError({ message: null});
+            setIsCheckingPhoneNumber(true);
+            try {
+                const checkNumberResponse = await axios.get(`http://193.164.150.223:1024/api/user/${phoneNumber}`);
+                if (checkNumberResponse.status === 200) {
+                    setPhoneNumberExists(true);
+                    setIsButtonDisabled(true);
+                    setError({ message: 'Пользователь уже зарегистрирован' });
+                } else {
+                    setPhoneNumberExists(false);
+                    setIsButtonDisabled(false);
+                    setError({ message: null });
+                }
+            } finally {
+                setIsCheckingPhoneNumber(false);
             }
-          } finally {
-            setIsCheckingPhoneNumber(false);
-          }
         } else if (phoneNumber.length < 0) {
-          setError({ message: 'Введите номер телефона'});
-          setIsButtonDisabled(true);
+            setError({ message: 'Введите номер телефона' });
+            setIsButtonDisabled(true);
         } else {
-          setError({ message: null});
-          setIsButtonDisabled(true);
+            setError({ message: null });
+            setIsButtonDisabled(true);
         }
-      };
+    };
 
     useEffect(() => {
         if (phoneNumber) {
@@ -134,17 +135,17 @@ const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: 
                         await saveToken(finalAccessToken);
                         navigation.navigate('PersonDataScreen', { phoneNumber: phoneNumber });
                     } else {
-                        setError({ message: 'Неверный код. Попробуйте еще раз.'});
+                        setError({ message: 'Неверный код. Попробуйте еще раз.' });
                     }
                 } else {
-                    setError({ message: 'Неверный код. Попробуйте еще раз.'});
+                    setError({ message: 'Неверный код. Попробуйте еще раз.' });
                 }
             } else {
-                setError({ message: 'Код должен состоять из 6 цифр.'});
+                setError({ message: 'Код должен состоять из 6 цифр.' });
             }
         } catch (error) {
             console.error('Error verifying code', error);
-            setError({ message: 'Неверный код. Попробуйте еще раз.'});
+            setError({ message: 'Неверный код. Попробуйте еще раз.' });
         }
     };
 
@@ -183,6 +184,7 @@ const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: 
                                     <MaskedTextInput
                                         mask="+7 (999) 999-99-99"
                                         placeholder="Номер телефона"
+                                        placeholderTextColor={"#78716C"}
                                         onChangeText={(text, rawText) => {
                                             handleTextChange(text, rawText);
                                         }}
@@ -213,6 +215,7 @@ const PersonPhoneNumberScreen: React.FC<{ navigation: any, onLogin: any, route: 
                                 <MaskedTextInput
                                     mask="999999"
                                     placeholder="Код из СМС"
+                                    placeholderTextColor={"#78716C"}
                                     keyboardType='numeric'
                                     style={styles.input}
                                     onChangeText={handleCodeChange} />

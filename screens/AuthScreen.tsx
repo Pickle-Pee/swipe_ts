@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Button, Center, Text, KeyboardAvoidingView, View } from 'native-base';
-import { StyleSheet, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ViewStyle, TextStyle, TouchableOpacityProps } from 'react-native';
+import { StyleSheet, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ViewStyle, TextStyle } from 'react-native';
 import GradientButton from '../assets/elements/elements';
 import { MaskedTextInput } from 'react-native-mask-text';
 import axios from 'axios';
@@ -77,6 +77,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
         const response = await axios.post(
           `http://193.164.150.223:1024/api/send-code?phone_number=${phoneNumber}`
         );
+        console.log(response)
         const accessToken = response.data.access_token;
         if (accessToken) {
           await saveToken(accessToken);
@@ -102,8 +103,10 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
           `http://193.164.150.223:1024/api/login?phone_number=${phoneNumber}&code=${code}`
         );
         const responseUserData = await axios.get(
-          `http://193.164.150.223:1024/api/users?phone_number=${phoneNumber}`
+          `http://193.164.150.223:1024/api/user/${phoneNumber}`
         );
+
+        console.log(responseUserData)
 
         if (response && response.data && response.data.access_token) {
           const finalAccessToken = response.data.access_token;
@@ -153,7 +156,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
       setIsCheckingPhoneNumber(true);
       try {
         const checkNumberResponse = await axios.get(
-          `http://193.164.150.223:1024/api/users/${phoneNumber}`
+          `http://193.164.150.223:1024/api/user/${phoneNumber}`
         );
         setError(null);
         setIsButtonDisabled(false);
@@ -206,6 +209,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
                 <MaskedTextInput
                   mask="+7 (999) 999-99-99"
                   placeholder="Номер телефона"
+                  placeholderTextColor={"#78716C"}
                   onChangeText={(text, rawText) => {
                     handleTextChange(text, rawText);
                   }}
@@ -213,9 +217,11 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
                   style={styles.input}
                   ref={maskedInputRef}
                 />
-                {error && <Text style={styles.errorText}>{error}</Text>}
               </View>
             </KeyboardAvoidingView>
+            {/* <View>
+              {error && <Text style={styles.errorText}>{error}</Text>}
+            </View> */}
             <GradientButton
               onPress={handleLogin}
               disabled={isButtonDisabled || isCheckingPhoneNumber}
@@ -247,6 +253,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
               <MaskedTextInput
                 mask="999999"
                 placeholder="Код из СМС"
+                placeholderTextColor={"#78716C"}
                 keyboardType="numeric"
                 style={styles.input}
                 onChangeText={handleCodeChange}
@@ -271,7 +278,6 @@ interface Styles {
   inputContainer: ViewStyle;
   input: TextStyle;
   errorText: TextStyle;
-  // button: TouchableOpacityProps;
 }
 
 const styles: Styles = {
@@ -282,17 +288,19 @@ const styles: Styles = {
     marginTop: 20,
   },
   input: {
-    width: "100%",
-    borderBottomWidth: 1,
-    borderColor: "gray",
-    padding: 10,
-    fontSize: 18,
+    width: 280,
+    height: 25,
+    marginVertical: 20,
+    padding: 5,
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   errorText: {
     color: "red",
     fontSize: 16,
-    marginTop: 5,
     textAlign: "center",
+    position: "absolute"
   },
 };
 

@@ -7136,6 +7136,11 @@
   dependencies:
     "prop-types" "15.5.10"
 
+"react-native-eject@^0.2.0":
+  "integrity" "sha512-muPhImNfKWa9hsdkrYeIkXM8/6lhZj3NnFCxI7kRrD3F50l6a6lc7crRWjg0i0aBt6XdkoE4efATjxCRkmTOFA=="
+  "resolved" "https://registry.npmjs.org/react-native-eject/-/react-native-eject-0.2.0.tgz"
+  "version" "0.2.0"
+
 "react-native-gesture-handler@^2.12.1":
   "integrity" "sha512-deqh36bw82CFUV9EC4tTo2PP1i9HfCOORGS3Zmv71UYhEZEHkzZv18IZNPB+2Awzj45vLIidZxGYGFxHlDSQ5A=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.12.1.tgz"

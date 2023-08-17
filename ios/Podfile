@@ -25,7 +25,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'Swipe_TS' do
+target 'Swipe' do
+  inherit! :complete
   use_modular_headers!
   use_frameworks! :linkage => :static
   # $RNFirebaseAsStaticFramework = true
@@ -50,7 +51,7 @@ target 'Swipe_TS' do
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker/'
 
 
-  target 'Swipe_TSTests' do
+  target 'SwipeTests' do
     inherit! :complete
     # Pods for testing
   end

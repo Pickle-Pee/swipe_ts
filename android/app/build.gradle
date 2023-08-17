@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.swipe_ts"
+    namespace "com.swipe"
     defaultConfig {
-        applicationId "com.swipe_ts"
+        applicationId "com.swipe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

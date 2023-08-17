@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Button, Text, ScrollView } from 'native-base';
-import { StyleSheet, TouchableOpacity, PermissionsAndroid, Platform } from 'react-native';
+import { StyleSheet, TouchableOpacity, PermissionsAndroid, Platform, ViewStyle, TextStyle } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHeartBroken, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -70,7 +70,7 @@ const MatchScreen = () => {
         <Swiper
             cards={['Кирилл', 'Дмитрий', 'Сергей', 'Владислав', 'Райан']}
             cardYears={['12', '15', '25']}
-            renderCard={(card, cardYears, userStatus) => {
+            renderCard={(card: any, cardYears: any, userStatus: any) => {
                 const getStatusColor = () => {
                     return userStatus === 'online' ? 'green' : 'red';
                 };
@@ -91,14 +91,14 @@ const MatchScreen = () => {
                                 <TouchableOpacity
                                     style={styles.button}
                                     onPress={() => console.log('like')}>
-                                    <Text style={styles.like}>
+                                    <Text>
                                         <FontAwesomeIcon icon={faHeart} size={40} color={"#EB539F"} />
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.button}
                                     onPress={() => console.log('dislike')}>
-                                    <Text style={styles.dislike}>
+                                    <Text>
                                         <FontAwesomeIcon icon={faXmark} size={50} color={"#20BDFF"} />
                                     </Text>
                                 </TouchableOpacity>
@@ -189,6 +189,7 @@ const MatchScreen = () => {
     )
 }
 
+
 const styles = StyleSheet.create({
     card: {
         flex: 1,
@@ -225,17 +226,17 @@ const styles = StyleSheet.create({
     cardSwiperLikeText: {
         color: '#34D399',
         fontSize: 20,
-        fontWeight: 600
+        fontWeight: "600"
     },
     cardSwiperDislikeText: {
         color: '#F43F5E',
         fontSize: 20,
-        fontWeight: 600
+        fontWeight: "600"
     },
     cardSwiperSuperlikeText: {
         color: '#0EA5E9',
         fontSize: 20,
-        fontWeight: 600
+        fontWeight: "600"
     },
     statusIndicator: {
         width: 10,

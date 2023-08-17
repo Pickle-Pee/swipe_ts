@@ -24,14 +24,20 @@ type RootStackParamList = {
   MainStack: undefined;
 };
 
-type AuthStackParamList = {
+export type PersonPhoneNumberScreenProps = {
+  navigation: any;
+  onLogin: any;
+  route: any;
+};
+
+export type AuthStackParamList = {
   AuthScreen: undefined;
   RegistrationScreen: undefined;
-  PersonPhoneNumberScreen: { navigation: any, onLogin: any, route: any };
+  PersonPhoneNumberScreen: PersonPhoneNumberScreenProps;
   PersonDataScreen: undefined;
 };
 
-type MainStackParamList = {
+export type MainStackParamList = {
   TabNavigator: undefined;
   Chat: { chatId: number; title: string };
   CommunicationScreen: { chatId: number; title: string };

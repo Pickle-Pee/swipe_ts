@@ -112,7 +112,7 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
     console.log(getToken)
 
     try {
-      const token = await getToken(); // Получение токена
+      const token = await getToken(); 
       const response = await axios.post('http://193.164.150.223:1024/api/add_register_data', {
         phone_number: phoneNumber,
         first_name: textName,
@@ -130,7 +130,6 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
       console.log('Response data:', response.data);
 
       if (response && response.data && response.data.message) {
-        // Обработка успешного добавления данных
         console.log(response.data.message);
       } else {
         setError('Ошибка при добавлении данных пользователя');
@@ -165,7 +164,7 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
               m={2}
               mt={70}
               placeholder={nameError ? 'Это обязательное поле' : 'Имя'}
-              placeholderTextColor={nameError ? 'red' : 'grey'}
+              placeholderTextColor={nameError ? 'red' : "#78716C"}
               value={textName}
               onChangeText={handleNameChange}
               keyboardType='default'
@@ -176,13 +175,15 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputName}
                 />
-              ) : null as ReactNode} />
+              ) : null as ReactNode} 
+              />
             <Input
               style={styles.input}
               p={2}
               m={2}
               mb={5}
               placeholder={secondNameError ? 'Это обязательное поле' : 'Фамилия'}
+              placeholderTextColor={nameError ? 'red' : "#78716C"}
               value={textSecondName}
               onChangeText={handleSecondNameChange}
               keyboardType='default'
@@ -192,7 +193,8 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
                 <IconButton
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputSecondName} />
-              )} />
+              )} 
+              />
 
             <Select minWidth="300"
               accessibilityLabel="Укажите ваш пол"
@@ -202,7 +204,8 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
               }}
               mt="1"
               mb="1"
-              onValueChange={selectedGender => setSelectedGender(value)}>
+              borderRadius={15}
+              onValueChange={selectedGender => setSelectedGender(selectedGender)}>
               <Select.Item label="Мужской" value="male" />
               <Select.Item label="Женский" value="female" />
             </Select>
