@@ -13,7 +13,7 @@ import { CommonActions } from '@react-navigation/native';
 const ProfileScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(false);
-  const { user, userData, setUser } = useUserContext();
+  const { user, userData, setUser, setUserData } = useUserContext();
 
   useEffect(() => {
     if (user && userData) {
@@ -26,6 +26,7 @@ const ProfileScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, 
     try {
       if (user) {
         await AsyncStorage.clear();
+        // setUserData(null);
         setUser(null);
       }
     } catch (error) {

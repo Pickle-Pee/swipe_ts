@@ -18,6 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CitySearchInput from '../components/CitySearcInput';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
+import { useUserContext } from '../utils/UserContext';
 
 const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const { phoneNumber } = route.params;
@@ -127,10 +128,11 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
         }
       });
 
-      console.log('Response data:', response.data);
-
       if (response && response.data && response.data.message) {
-        console.log(response.data.message);
+        const finalAccessToken = response.data;
+        console.log(finalAccessToken)
+
+        
       } else {
         setError('Ошибка при добавлении данных пользователя');
       }

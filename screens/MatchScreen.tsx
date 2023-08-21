@@ -18,7 +18,10 @@ interface CardData {
 
 const MatchScreen = () => {
 
-    const { user } = useUserContext();
+    const { user, userData } = useUserContext();
+
+    console.log("user: ", user);
+    console.log("user data: ", userData);
 
     const getCurrentLocation = () => {
         if (Platform.OS === 'android') {

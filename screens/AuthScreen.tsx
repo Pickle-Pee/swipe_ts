@@ -20,7 +20,17 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
   const [isCheckingPhoneNumber, setIsCheckingPhoneNumber] = useState<boolean>(false);
   const { setUser, setUserData } = useUserContext();
 
-  const saveToken = async (token: string) => {
+  const saveUserData = async (data: UserData, token: string) => {
+    try {
+      await AsyncStorage.setItem("user_full_data", JSON.stringify(data));
+      await AsyncStorage.setItem("access_token", token);
+      console.log("data saved");
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
+
+  const saveToken = async ( token: string) => {
     try {
       await AsyncStorage.setItem("access_token", token);
       console.log("token saved");
@@ -77,7 +87,6 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
         const response = await axios.post(
           `http://193.164.150.223:1024/api/send-code?phone_number=${phoneNumber}`
         );
-        console.log(response)
         const accessToken = response.data.access_token;
         if (accessToken) {
           await saveToken(accessToken);
@@ -97,7 +106,6 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
 
   const handleCodeChange = async (code: string) => {
     try {
-      console.log("handleCodeChange called with code:", code);
       if (code.length === 6) {
         const response = await axios.post(
           `http://193.164.150.223:1024/api/login?phone_number=${phoneNumber}&code=${code}`
@@ -105,8 +113,6 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
         const responseUserData = await axios.get(
           `http://193.164.150.223:1024/api/user/${phoneNumber}`
         );
-
-        console.log(responseUserData)
 
         if (response && response.data && response.data.access_token) {
           const finalAccessToken = response.data.access_token;
@@ -118,7 +124,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
               accessToken: finalAccessToken,
             };
 
-            const userData = responseUserData.data[0];
+            const userData = responseUserData.data;
 
             const {
               phone_number,
@@ -135,6 +141,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
             };
 
             console.log("Setting user data:", user, "User data:", formattedUserData);
+            saveUserData(formattedUserData, finalAccessToken);
             setUser(user);
             setUserData(formattedUserData);
           } else {

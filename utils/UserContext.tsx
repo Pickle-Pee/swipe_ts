@@ -5,10 +5,17 @@ interface UserData {
   accessToken: string;
 }
 
+interface UserFullData {
+  phoneNumber: string,
+  firstName: string,
+  lastName: string,
+  dateBirth: string,
+}
+
 interface UserContextProps {
   user: UserData | null;
   isLoggedIn: boolean;
-  userData: any;
+  userData: UserFullData;
   setUser: (user: UserData | null) => void;
   setIsLoggedIn: (loggedIn: boolean) => void;
   setUserData: (data: any) => void;
@@ -33,14 +40,32 @@ export function UserProvider({ children }: UserProviderProps) {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userData, setUserData] = useState<any>(null);
 
+  const logAllAsyncStorageData = async () => {
+    try {
+      const allKeys = await AsyncStorage.getAllKeys();
+      const allData = await AsyncStorage.multiGet(allKeys);
+  
+      console.log('All AsyncStorage Data:');
+      allData.forEach(([key, value]) => {
+        console.log(`${key}: ${value}`);
+      });
+    } catch (error) {
+      console.error('Error logging AsyncStorage data:', error);
+    }
+  };
+
   useEffect(() => {
     const restoreUser = async () => {
       try {
-        const userString = await AsyncStorage.getItem('user_data');
-        if (userString) {
-          const parsedUser = JSON.parse(userString) as UserData;
-          setUser(parsedUser);
+        const userDataString = await AsyncStorage.getItem('user_full_data');
+        const userTokenString = await AsyncStorage.getItem('user_data');
+        if (userDataString && userTokenString) {
+          const parsedUserData = JSON.parse(userDataString) as UserData;
+          const parsedUserToken = JSON.parse(userDataString) as UserData;
+          setUser(parsedUserToken);
+          setUserData(parsedUserData);
           setIsLoggedIn(true);
+          logAllAsyncStorageData();
         }
       } catch (error) {
         console.error('Error restoring user data:', error);
@@ -58,6 +83,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
   const logoutUser = async () => {
     setUser(null);
+    setUserData(null);
     setIsLoggedIn(false);
     await AsyncStorage.removeItem('user_data');
   };

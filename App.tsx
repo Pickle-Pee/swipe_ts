@@ -71,7 +71,7 @@ export default function App() {
 }
 
 function AppContent() {
-  const { user } = useUserContext();
+  const { user, userData } = useUserContext();
 
   const AuthNavigator = () => (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
