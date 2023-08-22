@@ -15,9 +15,9 @@ import ChatScreen from './screens/ChatScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
 import TabNavigator from "./components/Navigation";
 import PersonPhoneNumberScreen from "./screens/PersonPhoneNumberScreen";
-import PersonDataScreen from "./screens/PersonDataScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackNavigationProp } from '@react-navigation/stack';
+import PersonNameScreen from "./screens/PersonNameScreen";
+import PersonBirthDateScreen from "./screens/PersonBirthDateScreen";
+import PersonGenderSelectScreen from "./screens/PersonGenderSelectScreen";
 
 type RootStackParamList = {
   AuthStack: undefined;
@@ -34,7 +34,9 @@ export type AuthStackParamList = {
   AuthScreen: undefined;
   RegistrationScreen: undefined;
   PersonPhoneNumberScreen: PersonPhoneNumberScreenProps;
-  PersonDataScreen: undefined;
+  PersonNameScreen: undefined;
+  PersonBirthDateScreen: undefined;
+  PersonGenderSelectScreen: undefined;
 };
 
 export type MainStackParamList = {
@@ -78,7 +80,9 @@ function AppContent() {
       <AuthStack.Screen name='AuthScreen' component={AuthScreen} />
       <AuthStack.Screen name='RegistrationScreen' component={RegistrationScreen} />
       <AuthStack.Screen name='PersonPhoneNumberScreen' component={PersonPhoneNumberScreen} />
-      <AuthStack.Screen name='PersonDataScreen' component={PersonDataScreen} />
+      <AuthStack.Screen name='PersonNameScreen' component={PersonNameScreen} />
+      <AuthStack.Screen name='PersonBirthDateScreen' component={PersonBirthDateScreen} />
+      <AuthStack.Screen name='PersonGenderSelectScreen' component={PersonGenderSelectScreen} />
     </AuthStack.Navigator>
   );
 

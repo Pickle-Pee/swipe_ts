@@ -20,45 +20,43 @@ import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import { useUserContext } from '../utils/UserContext';
 
-const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
-  const { phoneNumber } = route.params;
+const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const [textName, setTextName] = useState('');
   const [textSecondName, setTextSecondName] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [nameError, setNameError] = useState(false);
   const [secondNameError, setSecondNameError] = useState(false);
   const [error, setError] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [selectedGender, setSelectedGender] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
-  const saveToken = async (token: string) => {
-    try {
-      await AsyncStorage.setItem('access_token', token);
-    } catch (error) {
-      console.error('Error saving token:', error);
-    }
-  };
+  // const saveToken = async (token: string) => {
+  //   try {
+  //     await AsyncStorage.setItem('access_token', token);
+  //   } catch (error) {
+  //     console.error('Error saving token:', error);
+  //   }
+  // };
 
-  // Получение токена
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('access_token');
-      console.log('Access Token:', token);
-      return token;
-    } catch (error) {
-      console.error('Error getting token:', error);
-      return null;
-    }
-  };
+  // // Получение токена
+  // const getToken = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('access_token');
+  //     console.log('Access Token:', token);
+  //     return token;
+  //   } catch (error) {
+  //     console.error('Error getting token:', error);
+  //     return null;
+  //   }
+  // };
 
-  // Удаление токена
-  const removeToken = async () => {
-    try {
-      await AsyncStorage.removeItem('access_token');
-    } catch (error) {
-      console.error('Error removing token:', error);
-    }
-  };
+  // // Удаление токена
+  // const removeToken = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('access_token');
+  //   } catch (error) {
+  //     console.error('Error removing token:', error);
+  //   }
+  // };
 
   const clearInputName = () => {
     setTextName('');
@@ -94,11 +92,6 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
     setTextSecondName(filteredText);
   };
 
-  const handleDateChange = (event: any, selected: any) => {
-    const currentDate = selected || selectedDate;
-    setSelectedDate(currentDate);
-  };
-
   const handleContinue = async () => {
     if (textName.trim() === '') {
       setNameError(true);
@@ -109,48 +102,17 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
       setSecondNameError(true);
       return;
     }
-
-    console.log(getToken)
-
-    try {
-      const token = await getToken(); 
-      const response = await axios.post('http://193.164.150.223:1024/api/add_register_data', {
-        phone_number: phoneNumber,
-        first_name: textName,
-        last_name: textSecondName,
-        date_of_birth: selectedDate.toISOString().split('T')[0],
-        gender: selectedGender,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      });
-
-      if (response && response.data && response.data.message) {
-        const finalAccessToken = response.data;
-        console.log(finalAccessToken)
-
-        
-      } else {
-        setError('Ошибка при добавлении данных пользователя');
-      }
-    } catch (error) {
-      console.error('Error adding user data', error);
-      setError('Ошибка при добавлении данных пользователя');
-    }
+    navigation.navigate("PersonBirthDateScreen", { firstName: textName, lastName: textSecondName })
   };
 
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
-  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={{ height: '100%' }}>
-        <TouchableOpacity onPress={() => navigation.navigate('AuthScreen')}>
-          <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginLeft: 10, marginTop: 10 }} />
+        <TouchableOpacity
+          style={{ alignItems: "flex-end" }}
+          onPress={() => navigation.navigate('AuthScreen')}>
+          <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
         </TouchableOpacity>
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40}>
           <Text style={styles.topBigText}>
@@ -177,8 +139,8 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputName}
                 />
-              ) : null as ReactNode} 
-              />
+              ) : null as ReactNode}
+            />
             <Input
               style={styles.input}
               p={2}
@@ -195,37 +157,16 @@ const PersonDataScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
                 <IconButton
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputSecondName} />
-              )} 
-              />
-
-            <Select minWidth="300"
-              accessibilityLabel="Укажите ваш пол"
-              placeholder="Укажите ваш пол"
-              _selectedItem={{
-                endIcon: <CheckIcon size={5} />
-              }}
-              mt="1"
-              mb="1"
-              borderRadius={15}
-              onValueChange={selectedGender => setSelectedGender(selectedGender)}>
-              <Select.Item label="Мужской" value="male" />
-              <Select.Item label="Женский" value="female" />
-            </Select>
-
-
-            <Text style={{ fontSize: 16, paddingBottom: 10 }}>Выберите дату своего рождения</Text>
-            <DateTimePicker
-              value={selectedDate}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
+              )}
             />
 
           </Center>
         </KeyboardAvoidingView>
         <View style={{ alignItems: 'center' }}>
           <GradientButton
-            onPress={handleContinue}>
+            onPress={handleContinue}
+            disabled={isButtonDisabled}
+          >
             <Text fontSize="sm" p={2}>Продолжить</Text>
           </GradientButton>
         </View>
@@ -256,5 +197,5 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PersonDataScreen;
+export default PersonNameScreen;
 

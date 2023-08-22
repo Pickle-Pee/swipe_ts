@@ -26,6 +26,7 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
     const [phoneNumberExists, setPhoneNumberExists] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isCheckingPhoneNumber, setIsCheckingPhoneNumber] = useState(false);
+    const { firstName, lastName } = route.params;
 
     const saveToken = async (token: string) => {
         try {
@@ -56,6 +57,8 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
     };
 
     const handleTextChange = (text: string, rawText: string) => {
+
+        console.log(firstName, lastName);
         if (rawText.length === 11) {
             setError({ message: null });
             setIsButtonDisabled(false);
@@ -133,7 +136,7 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
                         const userData = { accessToken: finalAccessToken, phoneNumber: phoneNumber };
                         await AsyncStorage.setItem('user_data', JSON.stringify(userData));
                         await saveToken(finalAccessToken);
-                        navigation.navigate('PersonDataScreen', { phoneNumber: phoneNumber });
+                        // navigation.navigate('PersonDataScreen', { phoneNumber: phoneNumber });
                     } else {
                         setError({ message: 'Неверный код. Попробуйте еще раз.' });
                     }
@@ -164,8 +167,10 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView>
-                <TouchableOpacity onPress={() => navigation.navigate('AuthScreen')}>
-                    <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginLeft: 10, marginTop: 10 }} />
+                <TouchableOpacity
+                    style={{ alignItems: "flex-end" }}
+                    onPress={() => navigation.navigate('AuthScreen')}>
+                    <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
                 </TouchableOpacity>
                 <View style={styles.container}>
                     {authStep === 'phone' && (

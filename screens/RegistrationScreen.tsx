@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import PersonDataScreen from './PersonDataScreen';
+import PersonDataScreen from './PersonNameScreen';
 
 
 export default RegistrationScreen = ({ navigation }) => {

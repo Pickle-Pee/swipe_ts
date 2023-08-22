@@ -239,7 +239,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
             </GradientButton>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("PersonPhoneNumberScreen");
+                navigation.navigate("PersonNameScreen");
               }}
             >
               <Text fontSize="sm" pt={2}>
