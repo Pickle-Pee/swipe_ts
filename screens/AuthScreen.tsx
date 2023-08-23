@@ -20,7 +20,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
   const [isCheckingPhoneNumber, setIsCheckingPhoneNumber] = useState<boolean>(false);
   const { setUser, setUserData } = useUserContext();
 
-  const saveUserData = async (data: UserData, token: string) => {
+  const saveUserData = async (data: any, token: string) => {
     try {
       await AsyncStorage.setItem("user_full_data", JSON.stringify(data));
       await AsyncStorage.setItem("access_token", token);

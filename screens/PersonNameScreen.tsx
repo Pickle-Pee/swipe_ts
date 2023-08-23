@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -11,52 +11,15 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
-import { Input, Center, IconButton, Text, Select, CheckIcon } from 'native-base';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Input, Center, IconButton, Text } from 'native-base';
 import GradientButton from '../assets/elements/elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CitySearchInput from '../components/CitySearcInput';
-import axios from 'axios';
-import { Picker } from '@react-native-picker/picker';
-import { useUserContext } from '../utils/UserContext';
 
 const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const [textName, setTextName] = useState('');
   const [textSecondName, setTextSecondName] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [nameError, setNameError] = useState(false);
   const [secondNameError, setSecondNameError] = useState(false);
-  const [error, setError] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
-
-  // const saveToken = async (token: string) => {
-  //   try {
-  //     await AsyncStorage.setItem('access_token', token);
-  //   } catch (error) {
-  //     console.error('Error saving token:', error);
-  //   }
-  // };
-
-  // // Получение токена
-  // const getToken = async () => {
-  //   try {
-  //     const token = await AsyncStorage.getItem('access_token');
-  //     console.log('Access Token:', token);
-  //     return token;
-  //   } catch (error) {
-  //     console.error('Error getting token:', error);
-  //     return null;
-  //   }
-  // };
-
-  // // Удаление токена
-  // const removeToken = async () => {
-  //   try {
-  //     await AsyncStorage.removeItem('access_token');
-  //   } catch (error) {
-  //     console.error('Error removing token:', error);
-  //   }
-  // };
 
   const clearInputName = () => {
     setTextName('');
@@ -139,7 +102,7 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputName}
                 />
-              ) : null as ReactNode}
+              ) : undefined}
             />
             <Input
               style={styles.input}
@@ -153,11 +116,12 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
               keyboardType='default'
               variant="underlined"
               isInvalid={secondNameError}
-              InputRightElement={textSecondName !== '' && (
+              InputRightElement={textSecondName !== '' ? (
                 <IconButton
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
-                  onPress={clearInputSecondName} />
-              )}
+                  onPress={clearInputSecondName}
+                />
+              ) : undefined}
             />
 
           </Center>
