@@ -6,12 +6,12 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 
 
-const generateDaysArray = (year: any, month: any) => {
+const generateDaysArray = (year: number, month: number) : Array<string>  => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     return Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
 }
 
-const generateYearsArray = () => {
+const generateYearsArray = (): Array<string> => {
     const currentYear = new Date().getFullYear();
     return Array.from({ length: 100 }, (_, i) => (currentYear - i).toString());
 }
