@@ -2,41 +2,30 @@ import React, { useState, useEffect } from "react";
 import { Select, View } from "native-base";
 import { StyleSheet } from "react-native";
 
+const generateDaysArray = (year: any, month: any) => {
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    return Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
+}
+
+const generateYearsArray = () => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 100 }, (_, i) => (currentYear - i).toString());
+}
+
 const BirthdayPicker: React.FC = () => {
     const [selectedDay, setSelectedDay] = useState<string>('');
     const [selectedMonth, setSelectedMonth] = useState<string>('');
     const [selectedYear, setSelectedYear] = useState<string>('');
-    const [day, setDay] = useState<string[]>([]);
+    const [days, setDays] = useState<string[]>(generateDaysArray(2000, 0));
+    const [years, setYears] = useState<string[]>(generateYearsArray());
 
-    const daysInMonth = new Date(Number(selectedYear), Number(selectedMonth) + 1, 0).getDate();
-
-    const days = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
     const months = [
         'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
     ]
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 100 }, (_, i) => (currentYear - 1).toString());
-
-    const updateSelectedDay = (newValue: string) => {
-        const newDay = Math.min(Number(newValue), daysInMonth);
-        setSelectedDay(newDay.toString());
-    }
 
     useEffect(() => {
-        const daysInMonth = new Date(Number(selectedYear), Number(selectedMonth) + 1, 0).getDate();
-        const newDays = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
-
-        setDay(newDays);
-
+        setDays(generateDaysArray(Number(selectedYear), Number(selectedMonth)));
     }, [selectedYear, selectedMonth]);
-
-    useEffect(() => {
-        const newDaysInMonth = new Date(Number(selectedYear), Number(selectedMonth) + 1, 0).getDate();
-
-        if (Number(selectedDay) > newDaysInMonth) {
-            setSelectedDay('');
-        }
-    }, [selectedYear, selectedMonth, selectedDay])
 
     return (
         <View style={styles.container}>
@@ -53,7 +42,7 @@ const BirthdayPicker: React.FC = () => {
                 selectedValue={selectedMonth}
                 onValueChange={(itemValue) => {
                     setSelectedMonth(itemValue);
-                    updateSelectedDay(selectedDay);
+                    setSelectedDay('')
                 }} >
                 {months.map((month, index) => (
                     <Select.Item
@@ -74,7 +63,7 @@ const BirthdayPicker: React.FC = () => {
                 borderColor={'#000'}
                 style={styles.selectItem}
                 selectedValue={selectedDay}
-                onValueChange={(itemValue) => updateSelectedDay(itemValue)} >
+                onValueChange={(itemValue) => setSelectedDay(itemValue)} >
                 {days.map((day) => (
                     <Select.Item
                         key={day}
