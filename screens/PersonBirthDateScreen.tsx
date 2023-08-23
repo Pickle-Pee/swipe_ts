@@ -17,13 +17,18 @@ import BirthdayPicker from '../components/BirthdayPicker';
 
 const PersonBirthDateScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
     const { firstName, lastName } = route.params;
+    const [selectedBirthday, setSelectedBirthday] = useState('');
+
+    const handleBirthdaySelected = (formattedBirthday: string) => {
+        setSelectedBirthday(formattedBirthday);
+      };
 
     const handleContinue = async () => {
 
         navigation.navigate("PersonGenderSelectScreen", {
             firstName: firstName,
             lastName: lastName,
-            birthDate: route.birthDate
+            birthDate: selectedBirthday
         })
     };
 
@@ -42,7 +47,7 @@ const PersonBirthDateScreen: React.FC<{ navigation: any, route: any }> = ({ navi
                     <Text style={{ paddingTop: 20, textAlign: 'center' }}>
                         Выберите дату своего рождения
                     </Text>
-                        <BirthdayPicker />
+                        <BirthdayPicker onBirthdaySelected={handleBirthdaySelected}/>
                 </KeyboardAvoidingView>
                 <View style={{ alignItems: 'center' }}>
                     <GradientButton

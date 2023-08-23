@@ -14,11 +14,9 @@ interface ErrorType {
     message: string | null;
 }
 
-const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumberScreenProps) => {
+const PersonPhoneNumberScreen = ({ navigation, route }: PersonPhoneNumberScreenProps) => {
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [unMaskedValue, setUnmaskedValue] = useState("");
     const maskedInputRef = useRef(null);
-    const [loggedIn, setLoggedIn] = useState(false);
     const [error, setError] = useState<ErrorType>({ message: null });
     const { user, setUser } = useUserContext();
     const [verificationCode, setVerificationCode] = useState('');
@@ -26,7 +24,7 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
     const [phoneNumberExists, setPhoneNumberExists] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isCheckingPhoneNumber, setIsCheckingPhoneNumber] = useState(false);
-    const { firstName, lastName } = route.params;
+    const { firstName, lastName, birthDate, gender } = route.params;
 
     const saveToken = async (token: string) => {
         try {
@@ -36,29 +34,9 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
         }
     };
 
-    // Получение токена
-    const getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('access_token');
-            return token;
-        } catch (error) {
-            console.error('Error getting token:', error);
-            return null;
-        }
-    };
-
-    // Удаление токена
-    const removeToken = async () => {
-        try {
-            await AsyncStorage.removeItem('access_token');
-        } catch (error) {
-            console.error('Error removing token:', error);
-        }
-    };
-
     const handleTextChange = (text: string, rawText: string) => {
 
-        console.log(firstName, lastName);
+        console.log(firstName, lastName, birthDate, gender);
         if (rawText.length === 11) {
             setError({ message: null });
             setIsButtonDisabled(false);
@@ -128,15 +106,33 @@ const PersonPhoneNumberScreen = ({ navigation, onLogin, route }: PersonPhoneNumb
     const handleCodeChange = async (code: string) => {
         try {
             if (code.length === 6) {
-                const response = await axios.post(`http://193.164.150.223:1024/api/register?phone_number=${phoneNumber}&code=${code}`);
-                if (response && response.data && response.data.access_token) {
-                    const finalAccessToken = response.data.access_token;
+                const userData = {
+                    phone_number: phoneNumber,
+                    code: code,
+                    first_name: firstName,
+                    last_name: lastName,
+                    date_of_birth: birthDate,
+                    gender: gender
+                };
+                const responseRegistration = await axios.post(
+                    `http://193.164.150.223:1024/api/register?phone_number=${phoneNumber}&code=${code}`,
+                    userData,
+                    {
+                        headers: {
+                            "accept": "application/json",
+                            "Content-Type": "application/json"
+                        }
+                    });
+
+                console.log("Registration Response:", responseRegistration.data);
+
+                if (responseRegistration && responseRegistration.data && responseRegistration.data.access_token) {
+                    const finalAccessToken = responseRegistration.data.access_token;
                     if (finalAccessToken) {
-                        await saveToken(finalAccessToken);
+                        await saveToken(finalAccessToken)
                         const userData = { accessToken: finalAccessToken, phoneNumber: phoneNumber };
                         await AsyncStorage.setItem('user_data', JSON.stringify(userData));
                         await saveToken(finalAccessToken);
-                        // navigation.navigate('PersonDataScreen', { phoneNumber: phoneNumber });
                     } else {
                         setError({ message: 'Неверный код. Попробуйте еще раз.' });
                     }

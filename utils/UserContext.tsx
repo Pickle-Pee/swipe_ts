@@ -16,9 +16,10 @@ interface UserContextProps {
   user: UserData | null;
   isLoggedIn: boolean;
   userData: UserFullData;
-  setUser: (user: UserData | null) => void;
+  setUser: (user: UserData) => void;
   setIsLoggedIn: (loggedIn: boolean) => void;
   setUserData: (data: any) => void;
+  logoutUser: () => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -92,12 +93,12 @@ export function UserProvider({ children }: UserProviderProps) {
     <UserContext.Provider
       value={{
         user,
-        setUser: loginUser, // Use the new loginUser function
+        setUser: loginUser,
         isLoggedIn,
         setIsLoggedIn,
         userData,
         setUserData,
-        logoutUser, // Add the new logoutUser function
+        logoutUser,
       }}
     >
       {children}

@@ -10,20 +10,26 @@ import {
   Keyboard
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
-import { Input, Center, IconButton, Text, Select, CheckIcon } from 'native-base';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Text } from 'native-base';
 import GradientButton from '../assets/elements/elements';
 
 const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
-  const { firstName, lastName } = route.params;
+  const { firstName, lastName, birthDate } = route.params;
   const [selectedGender, setSelectedGender] = useState<string>('');
 
   const handleGenderSelect = (gender: string) => {
     setSelectedGender(gender);
+    console.log(birthDate)
   }
 
   const handleContinue = async () => {
-    navigation.navigate("PersonPhoneNumberScreen")
+    navigation.navigate("PersonPhoneNumberScreen", {
+      firstName,
+      lastName,
+      birthDate,
+      gender: selectedGender
+    })
   };
 
   return (
@@ -42,9 +48,9 @@ const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ n
             <TouchableOpacity
               style={[
                 styles.genderButton,
-                selectedGender === 'Мужчина' ? { borderColor: '#009ADA' } : {},
+                selectedGender === 'male' ? { borderColor: '#009ADA' } : {},
               ]}
-              onPress={() => handleGenderSelect('Мужчина')}>
+              onPress={() => handleGenderSelect('male')}>
               <Text>
                 Мужчина
               </Text>
@@ -52,9 +58,9 @@ const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ n
             <TouchableOpacity
               style={[
                 styles.genderButton,
-                selectedGender === 'Женщина' ? { borderColor: '#E62885' } : {},
+                selectedGender === 'female' ? { borderColor: '#E62885' } : {},
               ]}
-              onPress={() => handleGenderSelect('Женщина')}>
+              onPress={() => handleGenderSelect('female')}>
               <Text>
                 Женщина
               </Text>

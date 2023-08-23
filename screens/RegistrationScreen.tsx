@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import PersonDataScreen from './PersonNameScreen';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import PersonNameScreen from './PersonNameScreen';
+import { PersonNameScreenProps } from '../App';
 
+const RegistrationScreen = ({ navigation, route}: PersonNameScreenProps) => {
 
-export default RegistrationScreen = ({ navigation }) => {
-
-    return <PersonDataScreen />
+    return <PersonNameScreen navigation={navigation} route={route} />
 }
 
 const styles = StyleSheet.create({
@@ -20,3 +20,5 @@ const styles = StyleSheet.create({
         paddingTop: 50
     }
 })
+
+export default RegistrationScreen;
