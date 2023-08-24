@@ -32,7 +32,27 @@ const BirthdayPicker: React.FC = () => {
 
     const days = useMemo(() => generateDaysArray(Number(selectedYear), months.findIndex((el)=>el==selectedMonth)), [selectedYear, selectedMonth]);
     const years = useMemo(() => generateYearsArray(), []);
-    
+
+    const formatNumber = (number: string | number): string => {
+        return number.toString().padStart(2, '0');
+    };
+
+    const getFormattedBirthday = (): string => {
+        const formattedDay = formatNumber(selectedDay);
+        const selectedMonthIndex = months.indexOf(selectedMonth) + 1;
+        const formattedMonth = formatNumber(selectedMonthIndex);
+        const formattedYear = selectedYear;
+        
+        return `${formattedYear}-${formattedMonth}-${formattedDay}`;
+    };
+
+    useEffect(() => {
+       // setDays(generateDaysArray(Number(selectedYear), months.findIndex((el) => el == selectedMonth)));
+
+        const formattedBirthday = getFormattedBirthday();
+        onBirthdaySelected(formattedBirthday);
+
+    }, [selectedYear, selectedMonth]);
 
     return (
         <View style={styles.container}>
@@ -65,8 +85,10 @@ const BirthdayPicker: React.FC = () => {
                 marginX={3}
                 placeholderTextColor={'#000'}
                 borderWidth={0.5}
-                dropdownIcon={<FontAwesomeIcon icon={faChevronDown} size={15} color="black"/>}
+                
                 borderColor={'#000'}
+                variant="unstyled"
+                
                 style={styles.selectItem}
                 selectedValue={selectedDay}
                 onValueChange={(itemValue) => setSelectedDay(itemValue)} >
