@@ -26,7 +26,11 @@ type RootStackParamList = {
 
 export type PersonPhoneNumberScreenProps = {
   navigation: any;
-  onLogin: any;
+  route: any;
+};
+
+export type PersonNameScreenProps = {
+  navigation: any;
   route: any;
 };
 
@@ -34,7 +38,7 @@ export type AuthStackParamList = {
   AuthScreen: undefined;
   RegistrationScreen: undefined;
   PersonPhoneNumberScreen: PersonPhoneNumberScreenProps;
-  PersonNameScreen: undefined;
+  PersonNameScreen: PersonNameScreenProps;
   PersonBirthDateScreen: undefined;
   PersonGenderSelectScreen: undefined;
 };
