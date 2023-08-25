@@ -38,7 +38,7 @@ export type AuthStackParamList = {
   AuthScreen: undefined;
   RegistrationScreen: undefined;
   PersonPhoneNumberScreen: PersonPhoneNumberScreenProps;
-  PersonNameScreen: PersonNameScreenProps;
+  PersonNameScreen: undefined;
   PersonBirthDateScreen: undefined;
   PersonGenderSelectScreen: undefined;
 };
@@ -104,11 +104,8 @@ function AppContent() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!user ? (
-          <Stack.Screen name='AuthStack' component={AuthNavigator} />
-        ) : (
-          <Stack.Screen name='MainStack' component={MainNavigator} />
-        )}
+        <Stack.Screen name='AuthStack' component={AuthNavigator} />
+        <Stack.Screen name='MainStack' component={MainNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

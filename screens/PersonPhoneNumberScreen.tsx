@@ -125,8 +125,9 @@ const PersonPhoneNumberScreen = ({ navigation, route }: PersonPhoneNumberScreenP
                     });
 
                 console.log("Registration Response:", responseRegistration.data);
+                navigation.navigate("MainStack")
 
-                if (responseRegistration && responseRegistration.data && responseRegistration.data.access_token) {
+                if (responseRegistration ) {
                     const finalAccessToken = responseRegistration.data.access_token;
                     if (finalAccessToken) {
                         await saveToken(finalAccessToken)
