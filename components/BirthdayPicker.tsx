@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Select, View } from "native-base";
 import { StyleSheet } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-
-
-const generateDaysArray = (year: number, month: number) : Array<string>  => {
+const generateDaysArray = (year: any, month: any) => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     return Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
 }
 
-const generateYearsArray = (): Array<string> => {
+const generateYearsArray = () => {
     const currentYear = new Date().getFullYear();
     return Array.from({ length: 100 }, (_, i) => (currentYear - i).toString());
 }
@@ -22,14 +20,15 @@ const months = [
 
 interface BirthdayPickerProps {
     onBirthdaySelected: (formattedBirthday: string) => void;
+    // onContinuePressed: () => void;
   }
 
 const BirthdayPicker: React.FC<BirthdayPickerProps> = ({ onBirthdaySelected }) => {
     const [selectedDay, setSelectedDay] = useState<string>('1');
     const [selectedMonth, setSelectedMonth] = useState<string>(months[0]);
     const [selectedYear, setSelectedYear] = useState<string>('2000');
-    const days = useMemo(() => generateDaysArray(Number(selectedYear), months.findIndex((el)=>el==selectedMonth)), [selectedYear, selectedMonth]);
-    const years = useMemo(() => generateYearsArray(), []);
+    const [days, setDays] = useState<string[]>(generateDaysArray(2000, 0));
+    const [years, setYears] = useState<string[]>(generateYearsArray());
 
     const formatNumber = (number: string | number): string => {
         return number.toString().padStart(2, '0');
@@ -49,6 +48,7 @@ const BirthdayPicker: React.FC<BirthdayPickerProps> = ({ onBirthdaySelected }) =
 
         const formattedBirthday = getFormattedBirthday();
         onBirthdaySelected(formattedBirthday);
+        // onContinuePressed();
 
     }, [selectedYear, selectedMonth]);
 
@@ -78,7 +78,8 @@ const BirthdayPicker: React.FC<BirthdayPickerProps> = ({ onBirthdaySelected }) =
             </Select>
 
             <Select
-                dropdownIcon={<FontAwesomeIcon icon={faChevronDown} size={12} color="black" style={{ marginRight: 10 }}/>}
+                minWidth="60px"
+                accessibilityLabel="День"
                 placeholder="День"
                 marginX={3}
                 placeholderTextColor={'#000'}
