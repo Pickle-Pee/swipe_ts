@@ -15,9 +15,14 @@ interface ITokensResponse{
     refresh_token:string;
 }
 
+export interface ReturnedData{
+    code:number;
+    message:string;
+}
+
 export class UserHttp{
 
-    checkPhoneNumber=async(phone:string) : Promise<ISendCode|null>=>{
+    sendCode=async(phone:string) : Promise<ReturnedData>=>{
 
         try {
              //TODO: изменить с query на data
@@ -34,15 +39,25 @@ export class UserHttp{
             }
         }
        );
-       const returnedData : ISendCode={
-           verificationCode : response.data.verification_code
+       console.log(response.data.verification_code);
+       
+       const returnedData : ReturnedData={
+           code:0,
+           message:""
        }
-       console.log("code "+returnedData.verificationCode);
+       
        
        return returnedData;
         } catch (error) {
+            const typedError = error as IError;
+
+            console.log("send-code-number");
             console.log(error);
-           return null;
+                const returnedData : ReturnedData={
+                code: typedError.data.code,
+                message:typedError.data.message
+               }
+            return returnedData;
         }
 
     }
@@ -88,17 +103,7 @@ export class UserHttp{
 
         const response = await axiosUser.post<ITokensResponse>(
             `/api/register`,
-            
-                requestData,
-                
-            
-            {
-                data:{
-                    customData: 'some value to keep',
-                }
-            }
-            
-            
+            requestData,          
         );  
             console.log(response.data);
             
@@ -113,8 +118,72 @@ export class UserHttp{
             return -1;
         }
     }
+
+    async checkMobile(phoneNumber: string):Promise<ReturnedData>{
+        try {
+                //TODO изменить с query на data
+            const requestData={
+                "phone_number":phoneNumber,
+
+            }
+            const response = await axiosUser.post<ITokensResponse>(
+                `/api/check-phone?phone_number=${phoneNumber}`,
+                        
+            );  
+                console.log(response.data);
+
+               const returnedData : ReturnedData={
+                code: 0,
+                message:"succes"
+               }
+                return returnedData;
+        } catch  (error ) {
+            const typedError = error as IError;
+
+            console.log("check-number");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+    }     
+    
+
+    login = async (phoneNumber:string,code:string):Promise<ReturnedData>=>{
+        try {       
+                //TODO query->data
+            const requestData={
+            "phone_number":phoneNumber,
+            "code":code
+        }
+
+        const response = await axiosUser.post<ITokensResponse>(
+            `/api/login?phone_number=${phoneNumber}&code=${code}`,         
+        );  
+            console.log(response.data);
             
-
-
-        
+            
+            store.dispatch(updateUserToken({token:response.data?.access_token??""}))
+            await tokenStorage.saveRefreshToken(response.data?.refresh_token??"");
+            const returnedData : ReturnedData={
+                code:0,
+                message:""
+            }
+            return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+            console.log("login");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+    }
+    
 }
+
+

@@ -6,30 +6,26 @@ import { Text } from 'native-base';
 import { useUserContext } from '../../utils/UserContext';
 import GradientButton from '../../assets/elements/elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import tokenStorage from '../localStorage/tokenStorage';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 
-const ProfileScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
+const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any }> = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(false);
-  const { user, userData, setUser, setUserData } = useUserContext();
+
 
   useEffect(() => {
-    if (user && userData) {
-      setLoading(false);
-    }
-  }, [user, userData]);
+    
+  }, []);
 
 
   const handleLogoutPress = async () => {
-    try {
-      if (user) {
-        await AsyncStorage.clear();
-        // setUserData(null);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error('Ошибка выхода:', error);
-    }
+   await tokenStorage.deleteRefreshToken()
+   navigation.reset({
+    index:0,
+    routes:[{name:"Loader"}]
+   }) 
   };
 
   const calculateAge = (dateBirth: any) => {
@@ -38,7 +34,7 @@ const ProfileScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, 
     return currentYear - birthYear;
   };
 
-  const age = calculateAge(userData.dateBirth);
+  //const age = calculateAge(userData.dateBirth);
 
   if (loading) {
     return (
@@ -51,9 +47,9 @@ const ProfileScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Имя: {userData.firstName}</Text>
-      <Text style={styles.text}>Фамилия: {userData.lastName}</Text>
-      <Text style={styles.text}>Возраст: {age}</Text>
+      <Text style={styles.text}>Имя: {"userData.firstName"}</Text>
+      <Text style={styles.text}>Фамилия: {"userData.lastName"}</Text>
+      <Text style={styles.text}>Возраст: {30}</Text>
       <GradientButton onPress={handleLogoutPress}>
         <Text fontSize="sm" p={2}>Выйти</Text>
       </GradientButton>

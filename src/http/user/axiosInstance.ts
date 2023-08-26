@@ -34,6 +34,7 @@ export const axiosUser= axios.create({
    console.log(error.response?.status);
     
     const typedError : IError ={
+        data: error.response?.data,
         code:-1,
         statusCode:error.response?.status??10,
         message:error.message,

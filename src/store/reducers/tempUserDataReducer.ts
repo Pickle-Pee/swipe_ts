@@ -15,7 +15,7 @@ const initialState:IUserTempData={
     firstName: "",
     lastName: "",
     dateOfBirth: "",
-    gender: ""
+    gender: "male"
 
 
 }

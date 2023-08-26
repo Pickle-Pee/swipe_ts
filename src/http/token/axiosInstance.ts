@@ -30,15 +30,18 @@ export const axiosToken= axios.create({
  //interceptor response
 
   
-  export const responseTokenInterceptorError = (error:AxiosError) : IError => {
+  export const responseTokenInterceptorError = (error:AxiosError) : Promise<IError> => {
+    console.log(error);
+    
     const typedError : IError ={
+        data:error.response?.data,
         code:-1,
-        statusCode:error.response?.status??10,
+        statusCode:error.response?.status??-1,
         message:error.message,
         type:error.config?.data.type
 
     }
-   return typedError;
+   return  Promise.reject(typedError);;
   };   
 
 
