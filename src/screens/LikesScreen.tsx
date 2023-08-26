@@ -7,7 +7,7 @@ const LikesScreen = () => {
     return (
         <NativeBaseProvider>
             <Image
-                source={require('../assets/logo.png')}
+                source={require('../../assets/logo.png')}
                 alt='logo'
                 mb={0}
                 size={'xs'}

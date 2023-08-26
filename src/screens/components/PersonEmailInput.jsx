@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Button, Center, Text, KeyboardAvoidingView, View } from 'native-base';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import GradientButton from '../assets/elements/elements';
+import GradientButton from '../../../assets/elements/elements';
 import auth from '@react-native-firebase/auth';
 import { MaskedTextInput } from 'react-native-mask-text';
 import axios from 'axios';
-import { useUserContext } from "../utils/UserContext";
+import { useUserContext } from "../../../utils/UserContext";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { SafeAreaView } from "react-native-safe-area-context";

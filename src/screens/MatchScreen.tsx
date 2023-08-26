@@ -5,7 +5,7 @@ import Swiper from 'react-native-deck-swiper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHeartBroken, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Geolocation from '@react-native-community/geolocation';
-import { useUserContext } from '../utils/UserContext';
+import { useUserContext } from '../../utils/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 

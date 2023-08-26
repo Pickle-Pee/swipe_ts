@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import PersonNameScreen from './PersonNameScreen';
-import { PersonNameScreenProps } from '../App';
+import { PersonNameScreenProps } from '../../App';
 
 const RegistrationScreen = ({ navigation, route}: PersonNameScreenProps) => {
 

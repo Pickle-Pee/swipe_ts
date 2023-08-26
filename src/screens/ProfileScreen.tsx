@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Text } from 'native-base';
-import { useUserContext } from '../utils/UserContext';
-import GradientButton from '../assets/elements/elements';
+import { useUserContext } from '../../utils/UserContext';
+import GradientButton from '../../assets/elements/elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
