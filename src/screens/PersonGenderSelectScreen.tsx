@@ -10,11 +10,12 @@ import {
   Keyboard
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Text } from 'native-base';
 import GradientButton from '../../assets/elements/elements';
 import { useAppDispatch, useAppSelector } from '../store/typesHooks';
 import { updateUserGender } from '../store/reducers/tempUserDataReducer';
+import { AuthNavigationName } from '../../App';
 
 const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
 
@@ -32,11 +33,16 @@ const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ n
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={{ height: '100%' }}>
-        <TouchableOpacity
-          style={{ alignItems: "flex-end" }}
-          onPress={() => navigation.navigate('AuthScreen')}>
-          <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
-        </TouchableOpacity>
+      <View style={{display:"flex",justifyContent:"space-between",flexDirection:"row"}}>
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate(AuthNavigationName.personBirthDateScreen)}>
+                        <FontAwesomeIcon icon={faArrowLeft} size={30} color="black" style={{ marginLeft: 10, marginTop: 10 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate(AuthNavigationName.authScreen)}>
+                        <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
+                    </TouchableOpacity>
+                </View>
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40}>
           <Text style={styles.topBigText}>
             Укажи свой пол

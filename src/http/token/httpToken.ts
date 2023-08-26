@@ -7,13 +7,14 @@ import axios, { AxiosRequestConfig } from "axios";
 import { IError } from "../errors/models";
 import { UNHUNDLED_EXEPTION } from "../errors/listError";
 import { errorLoger } from "../errors/helpers";
+import { ReturnedData } from "../user/httpUser";
 
 
 
 
 class TokenHttp{
 
-    refreshToken=async():Promise<number>=>{
+    refreshToken=async():Promise<ReturnedData>=>{
 
       try {
           //TODO: изменить с query на data
@@ -29,27 +30,32 @@ class TokenHttp{
               },
               
           )
-          const retyrnedData:IRefresh={
+          const tokens:IRefresh={
               accessToken: response.data.access_token,
               refreshToken: response.data.refresh_token,
           }
-          AsyncStorage.setItem("refresh_token",retyrnedData.refreshToken)
-          store.dispatch(updateUserToken({token:retyrnedData.accessToken}))
+          AsyncStorage.setItem("refresh_token",tokens.refreshToken)
+          store.dispatch(updateUserToken({token:tokens.accessToken}))
        
-          console.log(retyrnedData);
-          return  0; 
+          console.log(tokens);
+          const retyrnedData : ReturnedData={
+            code:0,
+            message:""
+          }
+          return  retyrnedData; 
       } catch (error) {
 
-        let typedError: IError;
-        if (axios.isAxiosError(error)) {
-            typedError = responseTokenInterceptorError(error);
-          }else{
-            typedError=UNHUNDLED_EXEPTION;
-          }
-          errorLoger(typedError);
-        return -1
+        const typedError = error as IError;
+            console.log("refresh-token");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code??-1,
+                message:typedError.data.message
+               }
+            return returnedData;
       }   
 
     }
 }
 
+export default new TokenHttp();

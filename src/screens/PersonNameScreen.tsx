@@ -76,11 +76,13 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={{ height: '100%' }}>
-        <TouchableOpacity
-          style={{ alignItems: "flex-end" }}
-          onPress={() => navigation.navigate('AuthScreen')}>
-          <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
-        </TouchableOpacity>
+        <View style={{display:"flex",justifyContent:"space-between"}}>
+            <TouchableOpacity
+              style={{ alignItems: "flex-end" }}
+              onPress={() => navigation.navigate('AuthScreen')}>
+              <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
+            </TouchableOpacity>
+        </View>
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40}>
           <Text style={styles.topBigText}>
             Привет! Давай создадим твой профиль

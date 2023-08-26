@@ -7,8 +7,8 @@ import axios from 'axios';
 import { useUserContext } from "../../../utils/UserContext";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { PersonPhoneNumberScreenProps } from "../../../App";
+import { faArrowLeft, faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { AuthNavigationName, PersonPhoneNumberScreenProps } from "../../../App";
 import PhoneScene from "./Scene/PhoneScene";
 import { UserHttp } from "../../http/user/httpUser";
 import { ISendCode } from "../../http/user/models";
@@ -25,11 +25,16 @@ const PersonPhoneNumberScreen = ({ navigation, route }: PersonPhoneNumberScreenP
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView>
-                <TouchableOpacity
-                    style={{ alignItems: "flex-end" }}
-                    onPress={() => navigation.navigate('AuthScreen')}>
-                    <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
-                </TouchableOpacity>
+            <View style={{display:"flex",justifyContent:"space-between",flexDirection:"row"}}>
+                    <TouchableOpacity
+                    onPress={() => authStep=="phone"?navigation.navigate(AuthNavigationName.personNameScreen):setAuthStep("phone")}>
+                        <FontAwesomeIcon icon={faArrowLeft} size={30} color="black" style={{ marginLeft: 10, marginTop: 10 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate(AuthNavigationName.authScreen)}>
+                        <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.container}>
                     {
                     authStep === 'phone' 

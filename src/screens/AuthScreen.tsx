@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Button, Center, Text, KeyboardAvoidingView, View } from 'native-base';
-import { StyleSheet, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ViewStyle, TextStyle, SafeAreaView } from 'react-native';
 import GradientButton from '../../assets/elements/elements';
 import { MaskedTextInput } from 'react-native-mask-text';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from "../../utils/UserContext";
+import { AuthNavigationName } from "../../App";
 
 type AuthStep = "phone" | "code";
 
@@ -195,104 +196,91 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Center p="0" flex={1}>
+    <SafeAreaView style={{alignItems:"center",height:"100%"}}>
+
         <Image
           source={require("../../assets/logo.png")}
           alt="logo"
-          mb={50}
-          size="xl"
+          mt={175}
+          
+          w={101.12}
+          h={89}
         />
 
-        {authStep === "phone" && (
-          <>
             <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={40}>
-              <Text
+              {/* <Text
                 style={{ textAlign: "center", fontSize: 16, fontWeight: "600" }}
               >
-                Введите номер телефона
-              </Text>
+                SWAP - листай и влюбляйся!
+              </Text> */}
               <View style={styles.inputContainer}>
-                <MaskedTextInput
-                  mask="+7 (999) 999-99-99"
-                  placeholder="Номер телефона"
-                  placeholderTextColor={"#78716C"}
-                  onChangeText={(text, rawText) => {
-                    handleTextChange(text, rawText);
-                  }}
-                  keyboardType="numeric"
-                  style={styles.input}
-                  ref={maskedInputRef}
-                />
               </View>
             </KeyboardAvoidingView>
-            {/* <View>
-              {error && <Text style={styles.errorText}>{error}</Text>}
-            </View> */}
             <GradientButton
-              onPress={handleLogin}
-              disabled={isButtonDisabled || isCheckingPhoneNumber}
+              onPress={()=>{
+                navigation.navigate(AuthNavigationName.loginScreen);
+              }}
+              
             >
               <Text fontSize="sm" p={2}>
                 Войти
               </Text>
             </GradientButton>
             <TouchableOpacity
+            style={{marginTop:30}}
               onPress={() => {
-                navigation.navigate("PersonNameScreen");
+                navigation.navigate(AuthNavigationName.personNameScreen);
               }}
             >
               <Text fontSize="sm" pt={2}>
                 Зарегистрироваться
               </Text>
             </TouchableOpacity>
-          </>
-        )}
-
-        {authStep === "code" && (
-          <>
-            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={40}>
-              <Text
-                style={{ textAlign: "center", fontSize: 16, fontWeight: "600" }}
-              >
-                Введите код из СМС
-              </Text>
-              <MaskedTextInput
-                mask="999999"
-                placeholder="Код из СМС"
-                placeholderTextColor={"#78716C"}
-                keyboardType="numeric"
-                style={styles.input}
-                onChangeText={handleCodeChange}
-              />
-            </KeyboardAvoidingView>
-            <GradientButton onPress={handleLogin}>
-              <Text fontSize="sm" p={2}>
-                Отправить код повторно
-              </Text>
-            </GradientButton>
-            <TouchableOpacity onPress={showAlert}>
-              <Text>показать код</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </Center>
-    </TouchableWithoutFeedback>
+          
+              <View style={{position:"absolute",bottom:25}}>
+                <View style={{flexDirection:"row",marginBottom:10}}>
+                  <Text style={styles.bottomText}>Продолжая, вы принимаете условия</Text>
+                  <Text style={styles.bottomTextTap}> Соглашения</Text>
+                </View>
+                  <Text style={styles.bottomTextTap}>Конфиденциальность</Text>
+              </View>
+    </SafeAreaView>
   );
 };
 
 interface Styles {
+  bottomText: TextStyle;
+  bottomTextTap : TextStyle;
   inputContainer: ViewStyle;
   input: TextStyle;
   errorText: TextStyle;
 }
 
 const styles: Styles = {
+
+  bottomText:{
+    fontFamily:"Roboto",
+    fontSize:10,
+    fontWeight:"700",
+    lineHeight:11.72,
+    color:"#565656",
+    textAlign:"center"
+  },
+  bottomTextTap:{
+    fontFamily:"Roboto",
+    fontSize:10,
+    fontWeight:"700",
+    lineHeight:11.72,
+    color:"#009ADA",
+    textAlign:"center"
+  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 151,
+    
+    height:25
   },
   input: {
     width: 280,

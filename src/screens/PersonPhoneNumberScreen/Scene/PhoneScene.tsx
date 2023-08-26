@@ -6,9 +6,11 @@ import GradientButton from "../../../../assets/elements/elements";
 import { useAppDispatch, useAppSelector } from "../../../store/typesHooks";
 import { updateUserPhoneNumber } from "../../../store/reducers/tempUserDataReducer";
 import { getCode } from "../helpers/getCode";
+import { ReturnedData, UserHttp } from "../../../http/user/httpUser";
 
 interface ErrorType {
-    message: string | null;
+    isError: boolean;
+    message: string;
 }
 
 
@@ -19,27 +21,41 @@ interface IPhoneScene{
 const PhoneScene:FC<IPhoneScene>=({setAuthStep})=>{
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
-    const [error, setError] = useState<ErrorType>({ message: null });
+    const [error, setError] = useState<ErrorType>({ message: "",isError:false });
     const dispatch=useAppDispatch();
     const {phoneNumber}=useAppSelector(state=>state.tempUser)
 
-    const handleTextChange = (text: string, rawText: string) => {
-       
-        dispatch(updateUserPhoneNumber({phoneNumber:rawText}))
 
+    const handleTextChange = (text: string, rawText: string) => { 
+        
+        dispatch(updateUserPhoneNumber({phoneNumber:rawText}))
+        if(error.isError){
+            setError({
+                isError:false,
+                message:""
+            })
+        }
         if (rawText.length === 11) {
-            
-            setError({ message: null });
             setIsButtonDisabled(false);
-        } else {
-            setError({ message: null });
+        } else {  
             setIsButtonDisabled(true);
         }
         
     };
 
     const handleClick=async()=>{
+      const phoneValid : ReturnedData = await new UserHttp().checkMobile(phoneNumber);
+      if(phoneValid.code!=0){
+        console.log(phoneValid.code/100);
+        
+        if(phoneValid.code-phoneValid.code%100==600){
+            setError({
+                isError:true,
+                message:phoneValid.message
+            })
+        }
+        return;
+      }  
     const status : number =  await getCode(phoneNumber);
     if(status==0){
         setAuthStep("code");
@@ -68,13 +84,14 @@ const PhoneScene:FC<IPhoneScene>=({setAuthStep})=>{
                                         onChangeText={(text, rawText) => {
                                             handleTextChange(text, rawText);
                                         }}
+                                        value={phoneNumber}
                                         keyboardType="numeric"
                                         style={styles.input}
                                         
                                     />
                                 </KeyboardAvoidingView>
                             </View>
-
+                           
 
                             <GradientButton onPress={handleClick} disabled={isButtonDisabled}>
                                 <Text fontSize="sm" p={2}>Продолжить</Text>

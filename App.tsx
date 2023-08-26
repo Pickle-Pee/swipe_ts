@@ -20,10 +20,13 @@ import PersonBirthDateScreen from "./src/screens/PersonBirthDateScreen";
 import PersonGenderSelectScreen from "./src/screens/PersonGenderSelectScreen";
 import { Provider } from "react-redux";
 import { store } from "./src/store/store";
+import LoginScreen from "./src/screens/LoginScreen/LoginScreen";
+import Loader from "./src/screens/Loader/Loader";
 
 type RootStackParamList = {
   AuthStack: undefined;
   MainStack: undefined;
+  Loader:undefined;
 };
 
 export type PersonPhoneNumberScreenProps = {
@@ -43,6 +46,7 @@ export type AuthStackParamList = {
   PersonNameScreen: undefined;
   PersonBirthDateScreen: undefined;
   PersonGenderSelectScreen: undefined;
+  LoginScreen:undefined;
 };
 
 export type MainStackParamList = {
@@ -78,17 +82,28 @@ export default function App() {
   );
 }
 
+export enum AuthNavigationName{
+  authScreen="AuthScreen",
+  registrationScreen="RegistrationScreen",
+  personPhoneNumberScreen="PersonPhoneNumberScreen",
+  personNameScreen="PersonNameScreen",
+  personBirthDateScreen="PersonBirthDateScreen",
+  personGenderSelectScreen="PersonGenderSelectScreen",
+  loginScreen="LoginScreen",
+}
+
 function AppContent() {
   const { user, userData } = useUserContext();
 
   const AuthNavigator = () => (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthStack.Screen name='AuthScreen' component={AuthScreen} />
-      <AuthStack.Screen name='RegistrationScreen' component={RegistrationScreen} />
-      <AuthStack.Screen name='PersonPhoneNumberScreen' component={PersonPhoneNumberScreen} />
-      <AuthStack.Screen name='PersonNameScreen' component={PersonNameScreen} />
-      <AuthStack.Screen name='PersonBirthDateScreen' component={PersonBirthDateScreen} />
-      <AuthStack.Screen name='PersonGenderSelectScreen' component={PersonGenderSelectScreen} />
+    <AuthStack.Navigator screenOptions={{ headerShown: false }} >
+      <AuthStack.Screen name={AuthNavigationName.authScreen} component={AuthScreen} />
+      <AuthStack.Screen name={AuthNavigationName.registrationScreen} component={RegistrationScreen} />
+      <AuthStack.Screen name={AuthNavigationName.personPhoneNumberScreen} component={PersonPhoneNumberScreen} />
+      <AuthStack.Screen name={AuthNavigationName.personNameScreen} component={PersonNameScreen} />
+      <AuthStack.Screen name={AuthNavigationName.personBirthDateScreen} component={PersonBirthDateScreen} />
+      <AuthStack.Screen name={AuthNavigationName.personGenderSelectScreen} component={PersonGenderSelectScreen} />
+      <AuthStack.Screen name={AuthNavigationName.loginScreen} component={LoginScreen} />
     </AuthStack.Navigator>
   );
 
@@ -106,7 +121,8 @@ function AppContent() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Loader">
+      <Stack.Screen name='Loader' component={Loader} />
         <Stack.Screen name='AuthStack' component={AuthNavigator} />
         <Stack.Screen name='MainStack' component={MainNavigator} />
       </Stack.Navigator>
