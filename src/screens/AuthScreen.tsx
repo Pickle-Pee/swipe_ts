@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Button, Center, Text, KeyboardAvoidingView, View } from 'native-base';
 import { StyleSheet, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ViewStyle, TextStyle } from 'react-native';
-import GradientButton from '../assets/elements/elements';
+import GradientButton from '../../assets/elements/elements';
 import { MaskedTextInput } from 'react-native-mask-text';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUserContext } from "../utils/UserContext";
+import { useUserContext } from "../../utils/UserContext";
 
 type AuthStep = "phone" | "code";
 
@@ -198,7 +198,7 @@ const AuthScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, rou
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Center p="0" flex={1}>
         <Image
-          source={require("../assets/logo.png")}
+          source={require("../../assets/logo.png")}
           alt="logo"
           mb={50}
           size="xl"

@@ -12,21 +12,25 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { Input, Center, IconButton, Text } from 'native-base';
-import GradientButton from '../assets/elements/elements';
+import GradientButton from '../../assets/elements/elements';
+import { useAppDispatch, useAppSelector } from '../store/typesHooks';
+import { updateUserFirstName, updateUserLastName } from '../store/reducers/tempUserDataReducer';
 
 const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
-  const [textName, setTextName] = useState('');
-  const [textSecondName, setTextSecondName] = useState('');
+  
   const [nameError, setNameError] = useState(false);
   const [secondNameError, setSecondNameError] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
+  const dispatch=useAppDispatch();
+  const {firstName,lastName}=useAppSelector(state=>state.tempUser);
+  
   const clearInputName = () => {
-    setTextName('');
+    dispatch(updateUserFirstName({firstName:""}))
   };
 
   const clearInputSecondName = () => {
-    setTextSecondName('');
+    dispatch(updateUserLastName({lastName:""}))
   };
 
   const handleNameChange = (text: string) => {
@@ -39,7 +43,7 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
         { cancelable: false }
       );
     }
-    setTextName(filteredText);
+    dispatch(updateUserFirstName({firstName:filteredText}))
   };
 
   const handleSecondNameChange = (text: string) => {
@@ -52,20 +56,20 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
         { cancelable: false }
       );
     }
-    setTextSecondName(filteredText);
+    dispatch(updateUserLastName({lastName:filteredText}))
   };
 
   const handleContinue = async () => {
-    if (textName.trim() === '') {
+    if (firstName.trim() === '') {
       setNameError(true);
       return;
     }
 
-    if (textSecondName.trim() === '') {
+    if (lastName.trim() === '') {
       setSecondNameError(true);
       return;
     }
-    navigation.navigate("PersonBirthDateScreen", { firstName: textName, lastName: textSecondName })
+    navigation.navigate("PersonBirthDateScreen");
   };
 
 
@@ -92,12 +96,12 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
               mt={70}
               placeholder={nameError ? 'Это обязательное поле' : 'Имя'}
               placeholderTextColor={nameError ? 'red' : "#78716C"}
-              value={textName}
+              value={firstName}
               onChangeText={handleNameChange}
               keyboardType='default'
               variant="underlined"
               isInvalid={nameError}
-              InputRightElement={textName !== '' ? (
+              InputRightElement={firstName !== '' ? (
                 <IconButton
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputName}
@@ -111,12 +115,12 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
               mb={5}
               placeholder={secondNameError ? 'Это обязательное поле' : 'Фамилия'}
               placeholderTextColor={nameError ? 'red' : "#78716C"}
-              value={textSecondName}
+              value={lastName}
               onChangeText={handleSecondNameChange}
               keyboardType='default'
               variant="underlined"
               isInvalid={secondNameError}
-              InputRightElement={textSecondName !== '' ? (
+              InputRightElement={lastName !== '' ? (
                 <IconButton
                   icon={<FontAwesomeIcon icon={faXmarkCircle} size={15} color="black" />}
                   onPress={clearInputSecondName}

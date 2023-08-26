@@ -6,18 +6,20 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { UserProvider, useUserContext } from "./utils/UserContext";
-import AuthScreen from "./screens/AuthScreen";
-import MatchScreen from './screens/MatchScreen';
-import LikesScreen from './screens/LikesScreen';
-import CommunicationScreen from './screens/CommunicationScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import ChatScreen from './screens/ChatScreen';
-import RegistrationScreen from './screens/RegistrationScreen';
-import TabNavigator from "./components/Navigation";
-import PersonPhoneNumberScreen from "./screens/PersonPhoneNumberScreen";
-import PersonNameScreen from "./screens/PersonNameScreen";
-import PersonBirthDateScreen from "./screens/PersonBirthDateScreen";
-import PersonGenderSelectScreen from "./screens/PersonGenderSelectScreen";
+import AuthScreen from "./src/screens/AuthScreen";
+import MatchScreen from './src/screens/MatchScreen';
+import LikesScreen from './src/screens/LikesScreen';
+import CommunicationScreen from './src/screens/CommunicationScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import ChatScreen from './src/screens/ChatScreen';
+import RegistrationScreen from './src/screens/RegistrationScreen';
+import TabNavigator from "./src/screens/components/Navigation";
+import PersonPhoneNumberScreen from "./src/screens/PersonPhoneNumberScreen/PersonPhoneNumberScreen";
+import PersonNameScreen from "./src/screens/PersonNameScreen";
+import PersonBirthDateScreen from "./src/screens/PersonBirthDateScreen";
+import PersonGenderSelectScreen from "./src/screens/PersonGenderSelectScreen";
+import { Provider } from "react-redux";
+import { store } from "./src/store/store";
 
 type RootStackParamList = {
   AuthStack: undefined;
@@ -102,11 +104,14 @@ function AppContent() {
   );
 
   return (
-    <NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='AuthStack' component={AuthNavigator} />
         <Stack.Screen name='MainStack' component={MainNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
+    
   );
 }

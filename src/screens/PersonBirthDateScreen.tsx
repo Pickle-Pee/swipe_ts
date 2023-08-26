@@ -12,24 +12,23 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { Input, Center, IconButton, Text, Select, CheckIcon } from 'native-base';
-import GradientButton from '../assets/elements/elements';
-import BirthdayPicker from '../components/BirthdayPicker';
+import GradientButton from '../../assets/elements/elements';
+import BirthdayPicker from './components/BirthdayPicker';
+import { useAppDispatch, useAppSelector } from '../store/typesHooks';
+import { State } from 'react-native-gesture-handler';
+import { updateUserBirth } from '../store/reducers/tempUserDataReducer';
 
 const PersonBirthDateScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
-    const { firstName, lastName } = route.params;
-    const [selectedBirthday, setSelectedBirthday] = useState('');
+   
+    const dispatch=useAppDispatch();
 
     const handleBirthdaySelected = (formattedBirthday: string) => {
-        setSelectedBirthday(formattedBirthday);
+        dispatch(updateUserBirth({dateOfBirth:formattedBirthday}))
       };
 
     const handleContinue = async () => {
 
-        navigation.navigate("PersonGenderSelectScreen", {
-            firstName: firstName,
-            lastName: lastName,
-            birthDate: selectedBirthday
-        })
+        navigation.navigate("PersonGenderSelectScreen")
     };
 
     return (

@@ -44,7 +44,7 @@ const BirthdayPicker: React.FC<BirthdayPickerProps> = ({ onBirthdaySelected }) =
     };
 
     useEffect(() => {
-        setDays(generateDaysArray(Number(selectedYear), months.findIndex((el) => el == selectedMonth)));
+       // setDays(generateDaysArray(Number(selectedYear), months.findIndex((el) => el == selectedMonth)));
 
         const formattedBirthday = getFormattedBirthday();
         onBirthdaySelected(formattedBirthday);
@@ -84,9 +84,9 @@ const BirthdayPicker: React.FC<BirthdayPickerProps> = ({ onBirthdaySelected }) =
                 marginX={3}
                 placeholderTextColor={'#000'}
                 borderWidth={0.5}
+                
                 borderColor={'#000'}
                 variant="unstyled"
-                dropdownIcon={<FontAwesomeIcon icon={faChevronDown} size={12} color="black" style={{ marginRight: 10 }}/>}
                 style={styles.selectItem}
                 selectedValue={selectedDay}
                 onValueChange={(itemValue) => setSelectedDay(itemValue)} >

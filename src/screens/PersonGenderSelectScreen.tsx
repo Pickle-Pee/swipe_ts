@@ -12,24 +12,21 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Text } from 'native-base';
-import GradientButton from '../assets/elements/elements';
+import GradientButton from '../../assets/elements/elements';
+import { useAppDispatch, useAppSelector } from '../store/typesHooks';
+import { updateUserGender } from '../store/reducers/tempUserDataReducer';
 
 const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
-  const { firstName, lastName, birthDate } = route.params;
-  const [selectedGender, setSelectedGender] = useState<string>('');
+
+  const dispatch=useAppDispatch();
+  const {gender}=useAppSelector(state=>state.tempUser)
 
   const handleGenderSelect = (gender: string) => {
-    setSelectedGender(gender);
-    console.log(birthDate)
+    dispatch(updateUserGender({gender}))
   }
 
   const handleContinue = async () => {
-    navigation.navigate("PersonPhoneNumberScreen", {
-      firstName,
-      lastName,
-      birthDate,
-      gender: selectedGender
-    })
+    navigation.navigate("PersonPhoneNumberScreen");
   };
 
   return (
@@ -48,7 +45,7 @@ const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ n
             <TouchableOpacity
               style={[
                 styles.genderButton,
-                selectedGender === 'male' ? { borderColor: '#009ADA' } : {},
+                gender === 'male' ? { borderColor: '#009ADA' } : {},
               ]}
               onPress={() => handleGenderSelect('male')}>
               <Text>
@@ -58,7 +55,7 @@ const PersonGenderSelectScreen: React.FC<{ navigation: any, route: any }> = ({ n
             <TouchableOpacity
               style={[
                 styles.genderButton,
-                selectedGender === 'female' ? { borderColor: '#E62885' } : {},
+                gender === 'female' ? { borderColor: '#E62885' } : {},
               ]}
               onPress={() => handleGenderSelect('female')}>
               <Text>

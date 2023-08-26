@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MatchScreen from '../screens/MatchScreen';
-import LikesScreen from '../screens/LikesScreen';
-import CommunicationScreen from '../screens/CommunicationScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import MatchScreen from '../MatchScreen';
+import LikesScreen from '../LikesScreen';
+import CommunicationScreen from '../CommunicationScreen';
+import ProfileScreen from '../ProfileScreen';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHouse, faUser, faComment } from '@fortawesome/free-solid-svg-icons';
 
