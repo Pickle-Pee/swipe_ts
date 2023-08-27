@@ -1,6 +1,6 @@
-import { View,SafeAreaView, StyleSheet, TouchableOpacity, } from "react-native";
+import { View,SafeAreaView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard, } from "react-native";
 import { FC, useState } from "react";
-import { Center, Image,KeyboardAvoidingView,Text } from "native-base";
+import { Center, Image,KeyboardAvoidingView,ScrollView,Text } from "native-base";
 import GradientButton from "../../../assets/elements/elements";
 import { MaskedTextInput } from "react-native-mask-text";
 import { ReturnedData, UserHttp } from "../../http/user/httpUser";
@@ -34,8 +34,13 @@ const LoginScreen:FC<{navigation:StackNavigationProp<any>}> = ({navigation})=>{
     }
 
     return(
-            <SafeAreaView style={{alignItems:"center"}}>
-                 <View style={{display:"flex",justifyContent:"space-between",flexDirection:"row",height:30,width:"100%" }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView behavior="position" style={{flex:1}} keyboardVerticalOffset={0}>
+            
+                <ScrollView>
+                <SafeAreaView style={{alignItems:"center",flex:1,padding:24}}>
+                {/* <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40}> */}
+                <View style={{display:"flex",justifyContent:"space-between",flexDirection:"row",height:30,width:"100%" }}>
                     {step=="code"?  <TouchableOpacity
                                     onPress={() => setStep("phone")}>
                                         <FontAwesomeIcon icon={faArrowLeft} size={30} color="black" style={{ marginLeft: 10, marginTop: 10 }} />
@@ -57,7 +62,7 @@ const LoginScreen:FC<{navigation:StackNavigationProp<any>}> = ({navigation})=>{
                     h={89}
                     />
                     
-                 <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40} style={styles.borderBottom}>
+                 <View  style={styles.borderBottom}>
                  {step=="phone"
                     && 
                     <>
@@ -92,9 +97,9 @@ const LoginScreen:FC<{navigation:StackNavigationProp<any>}> = ({navigation})=>{
                     </>
                     }
                                    
-                                </KeyboardAvoidingView>
+                                </View>
                              
-               <View style={{marginTop:37}}>
+               <View style={{marginTop:37}} focusable={true}>
                     <GradientButton
                     disabled={
                        step=="phone" && phone.length!=10 || step=="code" && code.length!=6
@@ -103,13 +108,19 @@ const LoginScreen:FC<{navigation:StackNavigationProp<any>}> = ({navigation})=>{
                     
                     >
                         
-                    <Text fontSize={18} fontFamily={"Roboto"} fontWeight={400} color={"#1F2937"} p={2}>
+                    <Text fontSize={18} fontFamily={"SFProDisplay-Light"} fontWeight={300} color={"#1F2937"} p={2}>
                     Продолжить
                     </Text>
                     </GradientButton>
                </View>
+                {/* </KeyboardAvoidingView> */}
+                
             
             </SafeAreaView>
+            </ScrollView>
+               
+            </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
         
     )
 }
@@ -118,7 +129,7 @@ const styles = StyleSheet.create({
     input: {
         padding: 8,
         fontSize: 16,
-        fontFamily: "Roboto",
+        fontFamily: "SFProDisplay-Light",
         fontWeight: '400',
         color:"#1F2937"
     
@@ -127,7 +138,7 @@ const styles = StyleSheet.create({
         color:"#20BDFF",
         padding: 8,
         fontSize: 16,
-        fontFamily: "Roboto",
+        fontFamily: "SFProDisplay-Light",
         fontWeight: '400',
     },
     borderBottom:{

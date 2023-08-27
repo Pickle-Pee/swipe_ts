@@ -259,7 +259,7 @@ interface Styles {
 const styles: Styles = {
 
   bottomText:{
-    fontFamily:"Roboto",
+    fontFamily:"SFProDisplay-Light",
     fontSize:10,
     fontWeight:"700",
     lineHeight:11.72,
@@ -267,7 +267,7 @@ const styles: Styles = {
     textAlign:"center"
   },
   bottomTextTap:{
-    fontFamily:"Roboto",
+    fontFamily:"SFProDisplay-Light",
     fontSize:10,
     fontWeight:"700",
     lineHeight:11.72,

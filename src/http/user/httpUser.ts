@@ -31,7 +31,7 @@ export class UserHttp{
         }
 
        const response = await axiosUser.post<ISendCodeResponse>(
-           `/api/send-code?phone_number=${phone}`,
+           `/auth/send_code?phone_number=${phone}`,
            {},
            {
             headers:{
@@ -70,7 +70,7 @@ export class UserHttp{
         }
 
         const response = await axiosUser.post<ISendCodeResponse>(
-            `/api/check-code?phone_number=${phone}&verification_code=${code}`,
+            `/auth/check-code?phone_number=${phone}&verification_code=${code}`,
             {},
             {
                 headers:{
@@ -102,7 +102,7 @@ export class UserHttp{
         }
 
         const response = await axiosUser.post<ITokensResponse>(
-            `/api/register`,
+            `/auth/register`,
             requestData,          
         );  
             console.log(response.data);
@@ -127,7 +127,7 @@ export class UserHttp{
 
             }
             const response = await axiosUser.post<ITokensResponse>(
-                `/api/check-phone?phone_number=${phoneNumber}`,
+                `/auth/check-phone?phone_number=${phoneNumber}`,
                         
             );  
                 console.log(response.data);
@@ -160,7 +160,7 @@ export class UserHttp{
         }
 
         const response = await axiosUser.post<ITokensResponse>(
-            `/api/login?phone_number=${phoneNumber}&code=${code}`,         
+            `/auth/login?phone_number=${phoneNumber}&code=${code}`,         
         );  
             console.log(response.data);
             
