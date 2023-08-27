@@ -49,7 +49,7 @@ target 'Swipe' do
   pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker/'
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage/'
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker/'
-
+  pod 'ReactNativeART', :path => '../node_modules/@react-native-community/art'
 
   target 'SwipeTests' do
     inherit! :complete

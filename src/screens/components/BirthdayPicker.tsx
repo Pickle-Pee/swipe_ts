@@ -84,7 +84,7 @@ const BirthdayPicker: React.FC<BirthdayPickerProps> = ({ onBirthdaySelected }) =
                 marginX={3}
                 placeholderTextColor={'#000'}
                 borderWidth={0.5}
-                
+                dropdownIcon={<FontAwesomeIcon icon={faChevronDown} size={12} color="black" style={{ marginRight: 10 }}/>}
                 borderColor={'#000'}
                 variant="unstyled"
                 style={styles.selectItem}

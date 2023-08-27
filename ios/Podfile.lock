@@ -431,6 +431,8 @@ PODS:
     - React-jsi (= 0.72.2)
     - React-logger (= 0.72.2)
     - React-perflogger (= 0.72.2)
+  - ReactNativeART (1.2.0):
+    - React
   - RNCAsyncStorage (1.19.2):
     - React-Core
   - RNCMaskedView (0.2.9):
@@ -495,6 +497,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage/`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view/`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker/`)"
@@ -595,6 +598,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeART:
+    :path: "../node_modules/@react-native-community/art"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage/"
   RNCMaskedView:
@@ -658,6 +663,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: ad0bc7f900a76f47b932d6bd43496f62b3e2afe2
   React-utils: 913c6e18c049272fc02ae314c016e81481825b73
   ReactCommon: b654080bcdbbd9751aa5d280608491527421f40d
+  ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   RNCAsyncStorage: f57e929cd7757f2cb3dd8186d123c09e8281a1ad
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
@@ -669,6 +675,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: c79810ea24a2a73b7f39174e78d60f4e28261f33
 
-PODFILE CHECKSUM: a5e11be3815109593cfa613239fe3514664875dc
+PODFILE CHECKSUM: 91db415d0bc0ab98e79abbba8e1bf9bd7079fa4c
 
 COCOAPODS: 1.12.1

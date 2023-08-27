@@ -24,7 +24,7 @@ class TokenHttp{
           }
           
           const response =await axiosToken.post<IRefreshResponse>(
-              `/refresh-token?refresh_token=${token??""}`,
+              `/auth/refresh_token?refresh_token=${token??""}`,
               {
                 "type":"refresh"
               },
