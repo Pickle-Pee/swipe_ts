@@ -1197,6 +1197,11 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.47.0.tgz"
   integrity sha512-P6omY1zv5MItm93kLM8s2vr1HICJH8v0dvddDhysbIuZ+vcjOHg5Zbkf1mTkcmi2JA9oBG2anOkRnW8WJTS8Og==
 
+"@fanchenbao/react-native-scroll-indicator@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.npmjs.org/@fanchenbao/react-native-scroll-indicator/-/react-native-scroll-indicator-0.2.1.tgz"
+  integrity sha512-lg953d2xzvYn9wcI9UmFMEf7vY3tuiG3wBZoSOrmcpoqPqBPCOR6tGJHKnABCVBGC5p4Gjx4Be1uHSt184A8hg==
+
 "@formatjs/ecma402-abstract@1.17.0":
   version "1.17.0"
   resolved "https://registry.npmjs.org/@formatjs/ecma402-abstract/-/ecma402-abstract-1.17.0.tgz"
@@ -7204,6 +7209,11 @@ react-native-gesture-handler@^2.12.1:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-linear-gradient-text@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/react-native-linear-gradient-text/-/react-native-linear-gradient-text-0.3.1.tgz"
+  integrity sha512-6xgS6XdjXlLdXriUluwgA7J2Z1l2n0RPB+gsZCr33iQQFG4joOAgNaJlK95P8e0DH2lvejyA7UWglcL1ORauEw==
+
 react-native-linear-gradient@^2.8.2:
   version "2.8.2"
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.2.tgz"
@@ -7266,6 +7276,11 @@ react-native-svg@^12.1.1:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
+
+react-native-text-gradient@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.npmjs.org/react-native-text-gradient/-/react-native-text-gradient-0.1.7.tgz"
+  integrity sha512-QuEwW8TMKBNI5ejmDFu3/SDJh5CIzOi5eL1xNzq8yBEwU5wHaloBxhQ9K0zc16GPkr3KgSUDyU4olQtiYje4mw==
 
 react-native-vector-icons@^10.0.0:
   version "10.0.0"

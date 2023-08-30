@@ -50,7 +50,7 @@ target 'Swipe' do
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage/'
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker/'
   pod 'ReactNativeART', :path => '../node_modules/@react-native-community/art'
-
+  pod 'RNTextGradientView', :path => "../node_modules/react-native-text-gradient/RNTextGradientView.podspec"
   target 'SwipeTests' do
     inherit! :complete
     # Pods for testing

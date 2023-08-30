@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Button, Text, ScrollView } from 'native-base';
-import { StyleSheet, TouchableOpacity, PermissionsAndroid, Platform, ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet, TouchableOpacity, PermissionsAndroid, Platform, ViewStyle, TextStyle, Image, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHeartBroken, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,9 @@ import Geolocation from '@react-native-community/geolocation';
 import { useUserContext } from '../../utils/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { UserMatches } from '../http/matches/httpMatches';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import NavPanel, { ContextPanel } from './components/NavPanel';
 
 interface CardData {
     card: string;
@@ -18,10 +21,11 @@ interface CardData {
 
 const MatchScreen = () => {
 
-    const { user, userData } = useUserContext();
+    const [swipeX,setSwipeX]=useState(0);
+    
+    console.log("swipeX: ", swipeX);
 
-    console.log("user: ", user);
-    console.log("user data: ", userData);
+
 
     const getCurrentLocation = () => {
         if (Platform.OS === 'android') {
@@ -59,6 +63,7 @@ const MatchScreen = () => {
 
     useEffect(() => {
         getCurrentLocation();
+    
     }, []);
 
     const removeUser = async () => {
@@ -66,13 +71,26 @@ const MatchScreen = () => {
     }
 
     const getUsersResponse = async () => {
-        Response = await axios.get(`http://193.164.150.223:1024/api/users/${user.phoneNumber}`);
+        Response = await axios.get(`http://193.164.150.223:1024/api/users/`);
+    }
+
+    const wWidth=Dimensions.get("window").width
+    const hHidth=Dimensions.get("window").height
+
+    function handlerSwiped(x: number, y: number): void {
+        setSwipeX(x);
+        
     }
 
     return (
+       <SafeAreaView style={{flex:1,backgroundColor:"white"}}>
+         <NavPanel panel={ContextPanel.none}/>
+        <View style={{backgroundColor:"rgba(248, 87, 166, 0.2)"}}>
         <Swiper
+            
             cards={['Кирилл', 'Дмитрий', 'Сергей', 'Владислав', 'Райан']}
             cardYears={['12', '15', '25']}
+            //@ts-ignore
             renderCard={(card: any, cardYears: any, userStatus: any) => {
                 const getStatusColor = () => {
                     return userStatus === 'online' ? 'green' : 'red';
@@ -80,7 +98,15 @@ const MatchScreen = () => {
                 userStatus = 'online'
                 return (
                     <>
-                        <View style={styles.card}>
+                        <View style={[styles.card,{height:hHidth*0.73}]}>
+                            <Image
+                            style={{position:"absolute",top:0,borderRadius: 15,}}
+                            height={hHidth*0.73}
+                            width={wWidth-40}
+                                source={{
+                                    uri:"https://stihi.ru/pics/2011/02/26/2515.jpg"
+                                  }}
+                            />
                             <TouchableOpacity>
                                 <Text style={styles.text}>{card}, {cardYears}</Text>
                             </TouchableOpacity>
@@ -107,30 +133,34 @@ const MatchScreen = () => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.contentContainer}>
-                            <Text> TEST </Text>
-                            <Text> TEST </Text>
-                            <Text> TEST </Text>
-                            <Text> TEST </Text>
-                            <Text> TEST </Text>
-                            <Text> TEST </Text>
-                            <Text> TEST </Text>
-                        </View>
+                   
                     </>
                 )
             }}
-            onSwiped={(cardIndex) => { console.log(cardIndex, 'setIsLoggedIn:', user) }}
+           
+    
+            onSwipedAborted={()=>setSwipeX(0)}
+            onSwipedRight={()=>setSwipeX(0)}
+            onSwipedLeft={()=>setSwipeX(0)}
+            onSwiping={handlerSwiped}
+            onSwiped={(cardIndex) => { console.log(cardIndex, 'setIsLoggedIn:') }}
             onSwipedAll={() => { console.log('thats all') }}
             cardIndex={0}
+            disableTopSwipe={true}
             backgroundColor={'#fff'}
             cardStyle={{
-                height: '80%',
-                marginTop: 60
+                height: '100%',
+                marginTop: -41
             }}
             disableBottomSwipe={true}
+            verticalSwipe={false}
             overlayLabels={{
+                
                 left: {
-                    element: <FontAwesomeIcon style={styles.cardSwiperLikeText} icon={faXmark} size={80} color={"#20BDFF"} />,
+                    element: 
+                <View style={{alignItems:"center",height:hHidth*0.2,top:hHidth/2-80}}>
+                    <FontAwesomeIcon style={styles.cardSwiperLikeText} icon={faXmark} size={80} color={"#20BDFF"} /> 
+                </View>,
                     title: 'NOPE',
                     style: {
                         label: {
@@ -147,7 +177,10 @@ const MatchScreen = () => {
                     }
                 },
                 right: {
-                    element: <FontAwesomeIcon style={styles.cardSwiperLikeText} icon={faHeart} size={80} color={"#EB539F"} />,
+                    element: 
+                    <View style={{alignItems:"center",height:hHidth*0.2,top:300}}>
+                        <FontAwesomeIcon style={styles.cardSwiperLikeText} icon={faHeart} size={80} color={"#EB539F"} />
+                    </View>,
                     title: 'LIKE',
                     style: {
                         label: {
@@ -188,14 +221,20 @@ const MatchScreen = () => {
                 alignContent: 'center',
             }}
             stackSize={2}>
-        </Swiper>
+            </Swiper>
+            {swipeX>=95&&<View style={{backgroundColor:swipeX>=95?"rgba(248, 87, 166, 0.2)":"rgba(90, 200, 250, 0.0)",height:hHidth-29-86,width:"100%",position:"absolute"}}></View>}
+            {swipeX<=-95&&<View style={{backgroundColor:swipeX<=95?"rgba(90, 200, 250, 0.2)":"rgba(90, 200, 250, 0.0)",height:hHidth-29-86,width:"100%",position:"absolute"}}></View>}
+        </View>
+        
+       
+       </SafeAreaView>
     )
 }
 
 
 const styles = StyleSheet.create({
     card: {
-        flex: 1,
+        height:613,
         borderRadius: 15,
         borderWidth: 1,
         borderColor: "#E8E8E8",
@@ -229,7 +268,8 @@ const styles = StyleSheet.create({
     cardSwiperLikeText: {
         color: '#34D399',
         fontSize: 20,
-        fontWeight: "600"
+        fontWeight: "600",
+        alignSelf:'center'
     },
     cardSwiperDislikeText: {
         color: '#F43F5E',
