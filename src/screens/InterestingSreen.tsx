@@ -1,22 +1,23 @@
 
 import { GradientBorderView } from "@good-react-native/gradient-border";
 import { FlatList, KeyboardAvoidingView, StatusBar, Wrap } from "native-base";
-import { FC, useEffect, useState } from "react";
-import { Dimensions, Keyboard, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { FC, useEffect, useRef, useState } from "react";
+import { Animated, Dimensions, Keyboard, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { IInterest } from "../http/matches/httpMatches";
 import {ScrollViewIndicator} from '@fanchenbao/react-native-scroll-indicator';
 import SvgUri from "react-native-svg-uri";
+import LinearGradient from "react-native-linear-gradient";
 interface IInterestingScreen{
     listInteresting:Array<IInterest>;
 }
 
 const InterestingScreen:FC<IInterestingScreen>=({listInteresting})=>{
 
-    const [text, onChangeText] = useState<string>("");
     console.log(listInteresting);
     const [variableInteresting,setVariableInteresting]=useState<Array<number>>([]);
-    const currentInteresting=listInteresting.filter((el)=>el.interestText.indexOf(text.toLowerCase())>=0);
-
+    const [block,setBlock]=useState<boolean>(false);
+    const noCurrentInteresting=listInteresting.filter((el)=>variableInteresting.indexOf(el.id)>=0);
+    const currentInteresting=listInteresting.filter((el)=>variableInteresting.indexOf(el.id)<0);
     console.log(currentInteresting);
     
     const [focused,setFocused]=useState<boolean>(false);
@@ -31,106 +32,97 @@ const InterestingScreen:FC<IInterestingScreen>=({listInteresting})=>{
     }
 
     useEffect(()=>{
-
-        Keyboard.addListener("keyboardDidHide",()=>{
-            setFocused(false);
-        })
-        Keyboard.addListener("keyboardWillShow",()=>{
-            setFocused(true);
-        })
-    },[])
+        if(variableInteresting.length==5){
+            setBlock(true)
+        }else{
+            setBlock(false)
+        }
+    
+    },[variableInteresting])
 
     return (
-      <View style={{backgroundColor:"white",height:Dimensions.get("window").height}}>
+      <ScrollView style={{backgroundColor:"white",}} showsVerticalScrollIndicator={false}>
          <SafeAreaView style={{paddingHorizontal:38,backgroundColor:"white",}}> 
-          <KeyboardAvoidingView behavior="position" style={{}} keyboardVerticalOffset={0}>
-            <View style={{marginTop:105}}>
+            <View style={{marginTop:30}}>
                 <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:24,lineHeight:28.13,color:"#1F2937",textAlign:"center"}}>
                     Остался последний шаг! 
                 </Text>
                 <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:14,lineHeight:16.41,color:"#1F2937",textAlign:"center",marginTop:25}}>
                     Завершите настройку профиля{"\n"}
                     и расскажите подробнее о своих{"\n"}
-                    интересах и предпочтениях</Text>
+                    интересах и предпочтениях{"\n"}
+                    (выберите до 5 интересов)
+                    </Text>
             </View>
             <View style={{marginTop:35,flexDirection:"row"}}>
                 <Wrap flexDirection={"row"}>
-                    {variableInteresting.map(element=><InterestingElement deleted={handleInterestingPress} interest={listInteresting.filter(el=>el.id==element)[0]}/>)} 
+                    {noCurrentInteresting.map(element=><InterestingElement block={false} update={handleInterestingPress} interest={element} variable={true}/> )} 
                 </Wrap>
             </View>
-            <View style={{paddingHorizontal:15,marginTop:70}}>
-                <TextInput
-                    
-                    style={styles.input}
-                    onChangeText={onChangeText}
-                    value={text}
-                    placeholder="Например: Кино"
-                   
-                />
+            <View style={{height:1,width:'100%',backgroundColor:"#E5E5E5",marginTop:10,marginBottom:10}}>
             </View>
-            <View style={{marginHorizontal:23,height:300,paddingBottom:100}}>
-                {focused&&
-                       
-                            <FlatList    
-                        scrollIndicatorInsets={{ right: 0 }}
-                        
-                        indicatorStyle="black"
-                        disableScrollViewPanResponder={true}
-                        height={200}
-
-                            data={currentInteresting}
-                            renderItem={(item)=>{
-                              const isVariable:boolean =  variableInteresting.indexOf(item.item.id)>=0;
-                                return(
-                                <Pressable onPress={()=>handleInterestingPress(item.item.id)}  style={{paddingRight:10, height:34,paddingTop:10,flexDirection:'row',justifyContent:"space-between"}}>
-                                    <Text>{item.item.interestText[0].toUpperCase()+item.item.interestText.substring(1)}</Text>
-                                    <View style={{borderWidth:1,borderColor:"#E6E6E6",borderRadius:4, height:20,width:20,backgroundColor:isVariable?"#1490D3":"white",alignItems:"center",justifyContent:'center'}}>
-                                        {isVariable&&
-                                            <SvgUri
-                                                source={require("../../assets/svg/ok_icon.svg")}
-                                            />
-                                        }
-                                    </View>
-                                </Pressable>
-                                 )}
-                                
-                            }
-                        />
-                       
-                        
-                    
-                }
+            <View style={{marginTop:10,flexDirection:"row"}}>
+                <Wrap flexDirection={"row"}>
+                    {currentInteresting.map(element=><InterestingElement block={block} update={handleInterestingPress} interest={element} variable={false}/>)} 
+                </Wrap>
             </View>
             
-            </KeyboardAvoidingView>
+           
+            <LinearGradient
+            angleCenter={{x:0.5,y:0.5}}
+            useAngle={true}
+            angle={45}
+            style={{height:55,borderRadius:10,alignItems:"center",justifyContent:"center",marginBottom:10,marginTop:20}}
+            colors={["rgba(230, 40, 133, 1)","rgba(0, 154, 218, 1)"]}
+            start={{x:1,y:1}}
+            end={{x:0,y:0}}
+            >
+                <Text style={{fontFamily:"SF Pro Display",fontSize:15,fontWeight:"700",color:"white"}}>Готово</Text>
+            </LinearGradient>
         </SafeAreaView>
-        </View>
+        </ScrollView>
     )
 }
 
+interface IInterestingElement{
+    interest:IInterest;
+    update:(index:number)=>void;
+    variable:boolean;
+    block:boolean;
+}
+const InterestingElement:FC<IInterestingElement>=({interest,update,variable,block})=>{
+    const gradientColors = variable? ['#F857A6', '#20BDFF']:["#F0F6FA","#F0F6FA"];
 
-const InterestingElement:FC<{interest:IInterest,deleted:(index:number)=>void}>=({interest,deleted})=>{
-    const gradientColors =  ['#F857A6', '#20BDFF'];
+    const opacity = useRef(new Animated.Value(0.0)).current;
+
     return(
-        <GradientBorderView
-             gradientProps={{
-              colors: gradientColors
-            }}
-            style={[
-                styleInteresting.buttonContainer,
-              {
-                opacity:  1
-              }
-            ]}
-          >
-            <Text style={{ fontFamily:"SF Pro Display",fontWeight:"400",fontSize:15.04,lineHeight:17.62, color:"rgba(0, 0, 0, 1)"}}>{interest.interestText}</Text>
-            <Pressable onPress={()=>deleted(interest.id)} style={{paddingRight:12.37,paddingLeft:8.59,}}>
-                <SvgUri
-                    source={require("../../assets/svg/krest.svg")}
-                />
-            </Pressable>
+        <Pressable onPress={block?()=>{}:()=>update(interest.id)}>
+            <Animated.View style={{opacity:block?opacity:1}}>
+                <GradientBorderView
+                gradientProps={{
+                colors: gradientColors
+                }}
+                style={[
+                    styleInteresting.buttonContainer,
+                {
+                    backgroundColor:variable?"white":"#F0F6FA"
+                }
+                ]}
+            >
+                <Text style={{ fontFamily:"SF Pro Display",fontWeight:"400",fontSize:15.04,lineHeight:17.62, color:"rgba(0, 0, 0, 1)"}}>{interest.interestText}</Text>
+                <View  style={{paddingRight:12.37,paddingLeft:8.59,}}>
+                    <SvgUri
+                    width={10}
+                    height={10}
+                        source={variable?require("../../assets/svg/krest.svg"):require("../../assets/svg/plus.svg")}
+                    />
+                </View>
+                
+            </GradientBorderView>
+            </Animated.View>
             
-          </GradientBorderView>
+        </Pressable>
+       
     )
 }
 
@@ -138,7 +130,7 @@ const InterestingElement:FC<{interest:IInterest,deleted:(index:number)=>void}>=(
 const styles=StyleSheet.create({
     input:{
         padding:8,
-        height:40,
+        height:30,
         width:"100%",
         borderBottomColor:"#E5E5E5",
         borderBottomWidth:1,
@@ -152,16 +144,16 @@ const styles=StyleSheet.create({
 
 const styleInteresting=StyleSheet.create({
     buttonContainer:{
+        
         flexDirection:'row',
         borderWidth: 1,
-        height:42.96,
-        borderRadius: 9,
-        paddingLeft:12.89,
-        marginBottom:5.04,
-        
+        height:40,
+        borderRadius: 10,
+        paddingLeft:13.76,
+        marginBottom:8.42,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight:5.3
+        marginRight:9.97
     }
 })
 
