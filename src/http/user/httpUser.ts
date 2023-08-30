@@ -184,6 +184,32 @@ export class UserHttp{
         }
     }
     
+    whoami = async ():Promise<ReturnedData>=>{
+        try {       
+            
+        const response = await axiosUser.get<ITokensResponse>(
+            `/auth/whoami`,         
+        );  
+            console.log(response.data);
+            
+            
+      
+            const returnedData : ReturnedData={
+                code:0,
+                message:""
+            }
+            return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+            console.log("whoami error");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+    } 
 }
 
 

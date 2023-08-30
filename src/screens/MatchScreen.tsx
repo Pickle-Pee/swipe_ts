@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Button, Text, ScrollView } from 'native-base';
-import { StyleSheet, TouchableOpacity, PermissionsAndroid, Platform, ViewStyle, TextStyle, Image, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity, PermissionsAndroid, Platform, ViewStyle, TextStyle, Image, Dimensions, Pressable } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHeartBroken, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,7 @@ import axios from 'axios';
 import { UserMatches } from '../http/matches/httpMatches';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavPanel, { ContextPanel } from './components/NavPanel';
+import SvgUri from 'react-native-svg-uri';
 
 interface CardData {
     card: string;
@@ -19,10 +20,12 @@ interface CardData {
   }
 
 
+
+
 const MatchScreen = () => {
 
     const [swipeX,setSwipeX]=useState(0);
-    
+    const [matches,setMatches]=useState();
     console.log("swipeX: ", swipeX);
 
 
@@ -63,8 +66,17 @@ const MatchScreen = () => {
 
     useEffect(() => {
         getCurrentLocation();
-    
+        
     }, []);
+
+
+    const getMatches=async()=>{
+        new UserMatches().findMatches()
+    }
+
+    useEffect(()=>{
+        getMatches()
+    },[])
 
     const removeUser = async () => {
         await AsyncStorage.clear();
@@ -85,6 +97,7 @@ const MatchScreen = () => {
     return (
        <SafeAreaView style={{flex:1,backgroundColor:"white"}}>
          <NavPanel panel={ContextPanel.none}/>
+         
         <View style={{backgroundColor:"rgba(248, 87, 166, 0.2)"}}>
         <Swiper
             
@@ -107,9 +120,9 @@ const MatchScreen = () => {
                                     uri:"https://stihi.ru/pics/2011/02/26/2515.jpg"
                                   }}
                             />
-                            <TouchableOpacity>
+                            <View>
                                 <Text style={styles.text}>{card}, {cardYears}</Text>
-                            </TouchableOpacity>
+                            </View>
                             <View style={styles.statusRow}>
                                 <View style={[styles.statusIndicator, { backgroundColor: getStatusColor() }]} />
                                 <Text style={{
@@ -117,19 +130,26 @@ const MatchScreen = () => {
                                 }}>{userStatus === 'online' ? 'Онлайн' : 'Оффлайн'}</Text>
                             </View>
                             <View style={styles.actionsCardItem}>
-                                <TouchableOpacity
+                            <TouchableOpacity
                                     style={styles.button}
-                                    onPress={() => console.log('like')}>
-                                    <Text>
-                                        <FontAwesomeIcon icon={faHeart} size={40} color={"#EB539F"} />
-                                    </Text>
+                                    onPress={() => console.log('dislike')}>
+                                    <SvgUri
+                                        source={require("../../assets/svg/cancel.svg")}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.button,{marginHorizontal:13}]}
+                                    onPress={() => console.log('dislike')}>
+                                    <SvgUri
+                                        source={require("../../assets/svg/chat.svg")}
+                                    />
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.button}
                                     onPress={() => console.log('dislike')}>
-                                    <Text>
-                                        <FontAwesomeIcon icon={faXmark} size={50} color={"#20BDFF"} />
-                                    </Text>
+                                    <SvgUri
+                                        source={require("../../assets/svg/like.svg")}
+                                    />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -255,7 +275,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: 'center',
-        paddingVertical: 30
+        marginBottom:17
     },
     button: {
         backgroundColor: "transparent",

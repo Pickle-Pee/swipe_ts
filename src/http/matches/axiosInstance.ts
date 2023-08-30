@@ -15,6 +15,8 @@ export const axiosMatches= axios.create({
   const requestTokenInterceptor = (config:InternalAxiosRequestConfig) => {
     const token=store.getState().user.accessToken;
     config.headers.Authorization = `${token}`;
+    console.log(config);
+    
     return config;
   };
 

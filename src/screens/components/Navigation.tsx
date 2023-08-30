@@ -7,6 +7,7 @@ import CommunicationScreen from '../CommunicationScreen';
 import ProfileScreen from '../ProfileScreen';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHouse, faUser, faComment } from '@fortawesome/free-solid-svg-icons';
+import { UserHttp } from '../../http/user/httpUser';
 
 
 const Tab = createBottomTabNavigator();
@@ -14,7 +15,15 @@ const Stack = createStackNavigator();
 
 
 const TabNavigator:FC = () => {
-    
+
+
+    const getUserInfo=async()=>{
+      new  UserHttp().whoami()
+    }
+
+    useEffect(()=>{
+        getUserInfo()
+    },[])
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({

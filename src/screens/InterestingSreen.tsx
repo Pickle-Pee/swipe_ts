@@ -3,22 +3,23 @@ import { GradientBorderView } from "@good-react-native/gradient-border";
 import { FlatList, KeyboardAvoidingView, StatusBar, Wrap } from "native-base";
 import { FC, useEffect, useRef, useState } from "react";
 import { Animated, Dimensions, Keyboard, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { IInterest } from "../http/matches/httpMatches";
+import { IInterest, ReturnedData, UserMatches } from "../http/matches/httpMatches";
 import {ScrollViewIndicator} from '@fanchenbao/react-native-scroll-indicator';
 import SvgUri from "react-native-svg-uri";
 import LinearGradient from "react-native-linear-gradient";
 interface IInterestingScreen{
     listInteresting:Array<IInterest>;
+    navigation:any
 }
 
-const InterestingScreen:FC<IInterestingScreen>=({listInteresting})=>{
+const InterestingScreen:FC<IInterestingScreen>=({listInteresting,navigation})=>{
 
     console.log(listInteresting);
     const [variableInteresting,setVariableInteresting]=useState<Array<number>>([]);
     const [block,setBlock]=useState<boolean>(false);
     const noCurrentInteresting=listInteresting.filter((el)=>variableInteresting.indexOf(el.id)>=0);
     const currentInteresting=listInteresting.filter((el)=>variableInteresting.indexOf(el.id)<0);
-    console.log(currentInteresting);
+
     
     const [focused,setFocused]=useState<boolean>(false);
 
@@ -40,9 +41,18 @@ const InterestingScreen:FC<IInterestingScreen>=({listInteresting})=>{
     
     },[variableInteresting])
 
+    const handleInteresting=async()=>{
+        if(variableInteresting.length>0){
+           const status : ReturnedData=await new UserMatches().addInteresting(variableInteresting);
+           if(status.code==0){
+            navigation.navigate("TabNavigator")
+           }
+        }
+    }
+
     return (
-      <ScrollView style={{backgroundColor:"white",}} showsVerticalScrollIndicator={false}>
-         <SafeAreaView style={{paddingHorizontal:38,backgroundColor:"white",}}> 
+        <>
+            <ScrollView showsVerticalScrollIndicator={false} style={{paddingHorizontal:38}}>
             <View style={{marginTop:30}}>
                 <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:24,lineHeight:28.13,color:"#1F2937",textAlign:"center"}}>
                     Остался последний шаг! 
@@ -56,31 +66,37 @@ const InterestingScreen:FC<IInterestingScreen>=({listInteresting})=>{
             </View>
             <View style={{marginTop:35,flexDirection:"row"}}>
                 <Wrap flexDirection={"row"}>
-                    {noCurrentInteresting.map(element=><InterestingElement block={false} update={handleInterestingPress} interest={element} variable={true}/> )} 
+                    {noCurrentInteresting.map((element,i)=><InterestingElement key={i}  block={false} update={handleInterestingPress} interest={element} variable={true}/> )} 
                 </Wrap>
             </View>
             <View style={{height:1,width:'100%',backgroundColor:"#E5E5E5",marginTop:10,marginBottom:10}}>
             </View>
             <View style={{marginTop:10,flexDirection:"row"}}>
                 <Wrap flexDirection={"row"}>
-                    {currentInteresting.map(element=><InterestingElement block={block} update={handleInterestingPress} interest={element} variable={false}/>)} 
+                    {currentInteresting.map((element,i)=><InterestingElement key={i}  block={block} update={handleInterestingPress} interest={element} variable={false}/>)} 
                 </Wrap>
             </View>
+            </ScrollView>
+           <View style={{height:65,marginHorizontal:20}}>
+            <Pressable onPress={handleInteresting}>
+                <LinearGradient
+                    angleCenter={{x:0.5,y:0.5}}
+                    useAngle={true}
+                    angle={45}
+                    style={{height:55,borderRadius:10,alignItems:"center",justifyContent:"center",marginBottom:10,marginTop:10}}
+                    colors={variableInteresting.length>0?["rgba(230, 40, 133, 1)","rgba(0, 154, 218, 1)"]:["gray","gray"]}
+                    start={{x:1,y:1}}
+                    end={{x:0,y:0}}
+                >
+                    <Text style={{fontFamily:"SF Pro Display",fontSize:15,fontWeight:"700",color:"white"}}>Готово</Text>
+                </LinearGradient>
+            </Pressable>
             
-           
-            <LinearGradient
-            angleCenter={{x:0.5,y:0.5}}
-            useAngle={true}
-            angle={45}
-            style={{height:55,borderRadius:10,alignItems:"center",justifyContent:"center",marginBottom:10,marginTop:20}}
-            colors={["rgba(230, 40, 133, 1)","rgba(0, 154, 218, 1)"]}
-            start={{x:1,y:1}}
-            end={{x:0,y:0}}
-            >
-                <Text style={{fontFamily:"SF Pro Display",fontSize:15,fontWeight:"700",color:"white"}}>Готово</Text>
-            </LinearGradient>
-        </SafeAreaView>
-        </ScrollView>
+           </View>
+           </>
+         
+            
+       
     )
 }
 
@@ -93,7 +109,7 @@ interface IInterestingElement{
 const InterestingElement:FC<IInterestingElement>=({interest,update,variable,block})=>{
     const gradientColors = variable? ['#F857A6', '#20BDFF']:["#F0F6FA","#F0F6FA"];
 
-    const opacity = useRef(new Animated.Value(0.0)).current;
+    const opacity = useRef(new Animated.Value(0.6)).current;
 
     return(
         <Pressable onPress={block?()=>{}:()=>update(interest.id)}>
