@@ -14,7 +14,7 @@ export const axiosUser= axios.create({
   //interceptor request
   const requestTokenInterceptor = (config:InternalAxiosRequestConfig) => {
     const token=store.getState().user.accessToken;
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `${token}`;
     return config;
   };
 

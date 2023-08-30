@@ -11,6 +11,7 @@ import tokenStorage from "../../localStorage/tokenStorage";
 
 
 interface IInterestResponse{
+    user_id?:number;
     interests:Array<{interest_text:string;id:number;}>
 }
 
@@ -25,9 +26,14 @@ export interface ReturnedData{
     message:string;
 }
 
+export interface IUserMatch{
+    user_id:number;
+    match_percentage:number;
+}
+
 export class UserMatches{
 
-    findMatches=async() : Promise<ReturnedData>=>{
+    findMatches=async() : Promise<Array<IUserMatch>>=>{
 
         try {
              //TODO: изменить с query на data
@@ -35,18 +41,15 @@ export class UserMatches{
            
         }
 
-       const response = await axiosMatches.get<ISendCodeResponse>(
+       const response = await axiosMatches.get<Array<IUserMatch>>(
            `/match/find_matches`,
        );
        console.log(response.data);
        
-       const returnedData : ReturnedData={
-           code:0,
-           message:""
-       }
+     
        
        
-       return returnedData;
+       return response.data;
         } catch (error) {
             const typedError = error as IError;
 
@@ -56,7 +59,7 @@ export class UserMatches{
                 code: typedError.data.code??-1,
                 message:typedError.data.message
                }
-            return returnedData;
+            return [];
         }
     }
 
@@ -93,7 +96,71 @@ export class UserMatches{
 
     }
 
-    
+    addInteresting=async(interests:Array<number>) : Promise<ReturnedData>=>{
+
+        try {
+             //TODO: изменить с query на data
+         const requestData={
+           "interest_ids":interests
+        }
+
+       const response = await axiosMatches.post(
+           `/interest/add_interests`,
+           requestData
+       );
+       console.log(response.data);
+       
+       const returnedData : ReturnedData={
+        code: 0,
+        message:"succes"
+       }
+       
+       return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+
+            console.log("add interesting error");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code??-1,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+
+    }
+
+    userInterest=async() : Promise<ReturnedData>=>{
+
+        try {
+          
+      
+
+       const response = await axiosMatches.get<IInterestResponse>(
+           `/interest/user_interests`,
+           
+       );
+       console.log(response.data);
+       
+       const returnedData : ReturnedData={
+        code: 0,
+        message:"succes"
+       }
+       
+       return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+
+            console.log("user interesting error");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code??-1,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+
+    }
 }
 
 
