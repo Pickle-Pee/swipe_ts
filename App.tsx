@@ -22,7 +22,8 @@ import { Provider } from "react-redux";
 import { store } from "./src/store/store";
 import LoginScreen from "./src/screens/LoginScreen/LoginScreen";
 import Loader from "./src/screens/Loader/Loader";
-
+import MainLoader from "./src/screens/MainLoader/MainLoader";
+//import { getStatusBarHeight } from 'react-native-status-bar-height';
 type RootStackParamList = {
   AuthStack: undefined;
   MainStack: undefined;
@@ -56,6 +57,7 @@ export type MainStackParamList = {
   LikesScreen: undefined;
   MatchScreen: undefined;
   ProfileScreen: undefined;
+  MainLoader:undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -108,7 +110,8 @@ function AppContent() {
   );
 
   const MainNavigator = () => (
-    <MainStack.Navigator screenOptions={{ headerShown: false }}>
+    <MainStack.Navigator screenOptions={{ headerShown: false}} >
+      <MainStack.Screen name='MainLoader' component={MainLoader} />
       <MainStack.Screen name='TabNavigator' component={TabNavigator} />
       <MainStack.Screen name='Chat' component={ChatScreen} />
       <MainStack.Screen name='CommunicationScreen' component={CommunicationScreen} />

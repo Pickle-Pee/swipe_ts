@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fanchenbao/react-native-scroll-indicator": "^0.2.1",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
@@ -37,6 +38,7 @@
     "react-native-eject": "^0.2.0",
     "react-native-gesture-handler": "^2.12.1",
     "react-native-linear-gradient": "^2.8.2",
+    "react-native-linear-gradient-text": "^0.3.1",
     "react-native-mask-text": "^0.14.2",
     "react-native-masked-view": "^0.2.0",
     "react-native-neomorph-shadows": "^1.1.2",
@@ -45,6 +47,7 @@
     "react-native-screens": "^3.24.0",
     "react-native-svg": "^12.1.1",
     "react-native-svg-uri": "^1.2.3",
+    "react-native-text-gradient": "^0.1.7",
     "react-native-vector-icons": "^10.0.0",
     "react-native-web": "^0.19.7",
     "react-redux": "^8.1.2"

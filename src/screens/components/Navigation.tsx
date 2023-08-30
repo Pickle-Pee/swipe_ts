@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MatchScreen from '../MatchScreen';
 import LikesScreen from '../LikesScreen';
 import CommunicationScreen from '../CommunicationScreen';
@@ -13,11 +13,13 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 
-export default TabNavigator = ({ navigation }) => {
-
+const TabNavigator:FC = () => {
+    
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
+                tabBarStyle: {height:86,backgroundColor:""},
+                headerStatusBarHeight:120,
                 headerShown: false,
                 tabBarIcon: ({ color, size }) => {
                     let iconName;
@@ -31,7 +33,7 @@ export default TabNavigator = ({ navigation }) => {
                         iconName = faUser;
                     }
 
-                    return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
+                    return <FontAwesomeIcon icon={iconName!} size={size} color={color} />;
                 },
                 tabBarActiveTintColor: "#f9a8d4",
                 tabBarInactiveTintColor: "black",
@@ -45,3 +47,4 @@ export default TabNavigator = ({ navigation }) => {
     )
 }
 
+export default  TabNavigator;

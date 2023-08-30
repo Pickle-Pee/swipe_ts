@@ -24,8 +24,7 @@ const NavPanel:FC<INavPanel>=({panel,children})=>{
                     h={33}
                     />
                     <View style={styles.contextPanel}>
-                        
-                        <SettingPanel/>
+                        {panel==ContextPanel.profile && <SettingPanel/>}
                     </View>
                    
         </View>
