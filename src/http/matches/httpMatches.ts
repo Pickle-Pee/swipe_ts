@@ -24,11 +24,16 @@ export interface IInterest{
 export interface ReturnedData{
     code:number;
     message:string;
+
 }
 
 export interface IUserMatch{
     user_id:number;
     match_percentage:number;
+    last_name:string;
+    first_name:string;
+    date_of_birth:string;
+    year:Date;
 }
 
 export class UserMatches{
@@ -44,12 +49,13 @@ export class UserMatches{
        const response = await axiosMatches.get<Array<IUserMatch>>(
            `/match/find_matches`,
        );
-       console.log(response.data);
+       const returnedData:Array<IUserMatch> = response.data.map(el=>({...el,year:new Date(Date.parse(el.date_of_birth)) }))
+       console.log(returnedData);
        
      
        
        
-       return response.data;
+       return returnedData;
         } catch (error) {
             const typedError = error as IError;
 

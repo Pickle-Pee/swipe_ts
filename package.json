@@ -41,6 +41,7 @@
     "react-native-linear-gradient-text": "^0.3.1",
     "react-native-mask-text": "^0.14.2",
     "react-native-masked-view": "^0.2.0",
+    "react-native-modal": "^13.0.1",
     "react-native-neomorph-shadows": "^1.1.2",
     "react-native-reanimated": "^3.4.2",
     "react-native-safe-area-context": "^3.3.2",

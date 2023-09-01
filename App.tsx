@@ -13,7 +13,7 @@ import CommunicationScreen from './src/screens/CommunicationScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
-import TabNavigator from "./src/screens/components/Navigation";
+import TabNavigator from "./src/screens/components/TabNavigation";
 import PersonPhoneNumberScreen from "./src/screens/PersonPhoneNumberScreen/PersonPhoneNumberScreen";
 import PersonNameScreen from "./src/screens/PersonNameScreen";
 import PersonBirthDateScreen from "./src/screens/PersonBirthDateScreen";
