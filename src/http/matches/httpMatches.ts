@@ -8,6 +8,7 @@ import { IUserTempData } from "../../store/reducers/tempUserDataReducer";
 import { store } from "../../store/store";
 import { updateUserToken } from "../../store/reducers/userReducer";
 import tokenStorage from "../../localStorage/tokenStorage";
+import { IUser } from "../user/httpUser";
 
 
 interface IInterestResponse{
@@ -34,6 +35,18 @@ export interface IUserMatch{
     first_name:string;
     date_of_birth:string;
     year:Date;
+    avatar_url:string;
+}
+
+export interface IMatch{
+    id: 0,
+    first_name: string,
+    last_name: string,
+    date_of_birth: string,
+    gender: string,
+    verify: boolean,
+    is_subscription: boolean;
+    year:Date;
 }
 
 export class UserMatches{
@@ -50,7 +63,7 @@ export class UserMatches{
            `/match/find_matches`,
        );
        const returnedData:Array<IUserMatch> = response.data.map(el=>({...el,year:new Date(Date.parse(el.date_of_birth)) }))
-       console.log(returnedData);
+      
        
      
        
@@ -167,6 +180,90 @@ export class UserMatches{
         }
 
     }
+
+    like=async(userId : number) : Promise<ReturnedData>=>{
+
+        try {
+       const response = await axiosMatches.post(
+           `/likes/like/${userId}`,
+       );
+       console.log(response.data);
+       
+       const returnedData : ReturnedData={
+        code: 0,
+        message:"succes"
+       }
+       
+       return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+
+            console.log("like is error");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code??-1,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+
+    }
+
+    dislike=async(userId : number) : Promise<ReturnedData>=>{
+
+        try {
+       const response = await axiosMatches.post(
+           `/likes/dislike/${userId}`,
+       );
+       console.log(response.data);
+       
+       const returnedData : ReturnedData={
+        code: 0,
+        message:"succes"
+       }
+       
+       return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+
+            console.log("dislike is error");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code??-1,
+                message:typedError.data.message
+               }
+            return returnedData;
+        }
+
+    }
+    likedUsers=async() : Promise<Array<IUser>>=>{
+
+        try {
+       const response = await axiosMatches.get<Array<IUser>>(
+           `/likes/liked_users`,
+       );
+      
+       console.log(response.data);
+       
+       const returnedData = response.data.map<IUser>(el=>({...el,birth:new Date(Date.parse(el.date_of_birth))}))
+        
+        
+       return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+
+            console.log("likedUsers error");
+            console.log(error);
+                const returnedData : ReturnedData={
+                code: typedError.data.code??-1,
+                message:typedError.data.message
+               }
+            return [];
+        }
+
+    }
+
+
 }
 
 

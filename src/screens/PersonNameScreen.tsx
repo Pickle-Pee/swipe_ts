@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
-import { Input, Center, IconButton, Text } from 'native-base';
+import { Input, Center, IconButton, Text, Pressable } from 'native-base';
 import GradientButton from '../../assets/elements/elements';
 import { useAppDispatch, useAppSelector } from '../store/typesHooks';
 import { updateUserFirstName, updateUserLastName } from '../store/reducers/tempUserDataReducer';
@@ -75,15 +75,15 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={{ height: '100%' }}>
-        <View style={{display:"flex",justifyContent:"space-between"}}>
-            <TouchableOpacity
-              style={{ alignItems: "flex-end" }}
+      <SafeAreaView style={{ height: '100%',backgroundColor:"white" }}>
+        <View style={{display:"flex",justifyContent:"space-between",backgroundColor:"white",zIndex:5}}>
+            <Pressable
+              style={{ alignItems: "flex-start" }}
               onPress={() => navigation.navigate('AuthScreen')}>
-              <FontAwesomeIcon icon={faXmark} size={30} color="black" style={{ marginRight: 10, marginTop: 10 }} />
-            </TouchableOpacity>
+              <FontAwesomeIcon icon={faXmark} size={30} color="black"  style={{ marginLeft: 10, marginTop: 10 }} />
+            </Pressable>
         </View>
-        <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={40}>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={40}>
           <Text style={styles.topBigText}>
             Привет! Давай создадим твой профиль
           </Text>
@@ -131,8 +131,7 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
             />
 
           </Center>
-        </KeyboardAvoidingView>
-        <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center' }}>
           <GradientButton
             onPress={handleContinue}
             disabled={isButtonDisabled}
@@ -140,6 +139,8 @@ const PersonNameScreen: React.FC<{ navigation: any, route: any }> = ({ navigatio
             <Text fontSize="sm" p={2}>Продолжить</Text>
           </GradientButton>
         </View>
+        </KeyboardAvoidingView>
+        
       </SafeAreaView>
     </TouchableWithoutFeedback >
   );

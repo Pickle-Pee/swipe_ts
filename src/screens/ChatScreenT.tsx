@@ -18,7 +18,7 @@ type Props = {
   navigation: ChatScreenNavigationProp;
 };
 
-const ChatScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
+const ChatScreenT: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const { chatId, title } = route.params;
 
   return (
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatScreen;
+export default ChatScreenT;

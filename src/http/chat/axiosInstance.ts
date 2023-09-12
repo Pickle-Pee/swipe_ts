@@ -4,7 +4,7 @@ import { IError } from "../errors/models";
 
 const BASE_URL="http://193.164.150.223:1024";
 
-export const axiosMatches= axios.create({
+export const axiosChat= axios.create({
     baseURL: BASE_URL,
     headers: {
       'accept': 'application/json',
@@ -15,12 +15,10 @@ export const axiosMatches= axios.create({
   const requestTokenInterceptor = (config:InternalAxiosRequestConfig) => {
     const token=store.getState().user.accessToken;
     config.headers.Authorization = `${token}`;
-  
-    
     return config;
   };
 
-  axiosMatches.interceptors.request.use(
+  axiosChat.interceptors.request.use(
     requestTokenInterceptor,
       error => {
         return Promise.reject(error);
@@ -47,7 +45,7 @@ export const axiosMatches= axios.create({
   };   
 
 
-  axiosMatches.interceptors.response.use(
+  axiosChat.interceptors.response.use(
     (response)=>{
 
       

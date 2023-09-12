@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MatchScreen from '../MatchScreen';
-import LikesScreen from '../LikesScreen';
+import MatchScreen from '../MatchScreen/MatchScreen';
+import LikesScreen from '../LikesScreen/LikesScreen';
 import CommunicationScreen from '../CommunicationScreen';
 import ProfileScreen from '../ProfileScreen';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -27,7 +27,7 @@ const TabNavigator:FC = () => {
     useEffect(()=>{
         getUserInfo()
         setTimeout(()=>{
-            setBunnerVisible(true);
+            //setBunnerVisible(true);
         },5000)
     },[bunnerVisible])
     return (

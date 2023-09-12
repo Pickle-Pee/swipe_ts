@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./reducers/userReducer";
 import tempUserDataReducer from "./reducers/tempUserDataReducer";
+import likesReducer from "./reducers/likesReducer";
 
 const rootReducer=combineReducers({
     user:userReducer,
-    tempUser:tempUserDataReducer
+    tempUser:tempUserDataReducer,
+    like:likesReducer
 })
 
 export const store=configureStore({

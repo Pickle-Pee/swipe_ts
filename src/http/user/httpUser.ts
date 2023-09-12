@@ -20,6 +20,24 @@ export interface ReturnedData{
     message:string;
 }
 
+export interface IUser{
+    "id": number;
+    "first_name": string;
+    "last_name": string;
+    "date_of_birth": string;
+    "birth":Date;
+    "gender": string;
+    "verify": boolean;
+    "is_subscription": boolean;
+    "city_id": string;
+    "city_name":string;
+    "is_favorite": boolean,
+    "about_me": string;
+    "status": string;
+    "avatar_url": string;
+    "score": number;
+}
+
 export class UserHttp{
 
     sendCode=async(phone:string) : Promise<ReturnedData>=>{
@@ -70,7 +88,7 @@ export class UserHttp{
         }
 
         const response = await axiosUser.post<ISendCodeResponse>(
-            `/auth/check-code?phone_number=${phone}&verification_code=${code}`,
+            `/auth/check_code?phone_number=${phone}&verification_code=${code}`,
             {},
             {
                 headers:{
@@ -127,7 +145,7 @@ export class UserHttp{
 
             }
             const response = await axiosUser.post<ITokensResponse>(
-                `/auth/check-phone?phone_number=${phoneNumber}`,
+                `/auth/check_phone?phone_number=${phoneNumber}`,
                         
             );  
                 console.log(response.data);
@@ -210,6 +228,26 @@ export class UserHttp{
             return returnedData;
         }
     } 
+    userInfo = async (userId:number):Promise<IUser|null>=>{
+        try {       
+            
+        const response = await axiosUser.get<IUser>(
+            `/user/${userId}`,         
+        );  
+            console.log(response.data);
+            
+            
+            const returnedData=response.data;
+            returnedData.birth=new Date(Date.parse(returnedData.date_of_birth))
+            
+            return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+            console.log("userInfo error");
+            console.log(error);
+                
+            return null;
+        }
+    } 
+
 }
-
-

@@ -1,72 +1,62 @@
-import React, { FC, useState } from 'react';
-import { View, Text, NativeBaseProvider, ScrollView, Center, HStack, Image } from 'native-base';
+import React, { FC, useEffect, useState } from 'react';
+import { View, Text, NativeBaseProvider, ScrollView, Center, HStack, Image, FlatList } from 'native-base';
 import { TouchableOpacity, StyleSheet, SafeAreaView, Pressable } from 'react-native';
-import NavPanel, { ContextPanel } from './components/NavPanel';
+import NavPanel, { ContextPanel } from '../components/NavPanel';
 import { LinearGradientText } from 'react-native-linear-gradient-text';
 import SvgUri from 'react-native-svg-uri';
-import Logo from '../Logo';
+import Logo from '../../Logo';
+import { useFocusEffect } from '@react-navigation/native';
+import { useLikes } from './hooks/useLikes';
+import { useAppDispatch, useAppSelector } from '../../store/typesHooks';
+import { updateLikes } from '../../store/reducers/likesReducer';
+import { IUser } from '../../http/user/httpUser';
+import HPanel from './HPanel/HPanel';
+import { ChatHttp } from '../../http/chat/httpUser';
 //import { LinearTextGradient } from "react-native-text-gradient";
-const LikesScreen:FC = () => {
+const LikesScreen:FC<any> = ({navigation}) => {
 
-    const [punkVariable,setPunkVariable]=useState<number>(0);
-
-    
-
+  
+    const {likes,update}=useLikes()
+        const [punkVariable,setPunkVariable]=useState<number>(0);
+       
 
     return (
         <SafeAreaView style={{backgroundColor:"white",flex:1}}> 
             <NavPanel panel={ContextPanel.none}/>
-            <View style={styles.punkWrapper}>
-                <Pressable 
-                    style={[styles.punk,styles.leftRadius ,{backgroundColor: punkVariable==0?"#F4F4F4":"#D9D9D9"}]} 
-                    onPress={()=>setPunkVariable(0)}
-                > 
-                    <LinearGradientText 
-                        text='Ты нравишься'
-                        textStyle={styles.punktText}
-                        colors={punkVariable==0?["#E62885", "#009ADA"]:["black"]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                    />
-                </Pressable>
-                <Pressable 
-                    style={[styles.punk,{backgroundColor: punkVariable==1?"#F4F4F4":"#D9D9D9"}]}
-                    onPress={()=>setPunkVariable(1)}
-                >
-                      <LinearGradientText 
-                        text='Твои лайки'
-                        textStyle={styles.punktText}
-                        colors={punkVariable==1?["#E62885", "#009ADA"]:["black"]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                    />
-                </Pressable>
-                <Pressable 
-                    style={[styles.punk,styles.rightRadius,{backgroundColor: punkVariable==2?"#F4F4F4":"#D9D9D9"}]}
-                    onPress={()=>setPunkVariable(2)}
-                >
-                      <LinearGradientText 
-                        text='Избранное'
-                        textStyle={styles.punktText}
-                        colors={punkVariable==2?["#E62885", "#009ADA"]:["black"]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                    />
-                </Pressable>
-            </View>
-            <ScrollView style={{marginTop:15,paddingHorizontal:15}}>
-                <LikeElement/>
-            </ScrollView>
+            <HPanel punkVariable={punkVariable} setPunkVariable={setPunkVariable}/>
+            <FlatList
+                style={{marginTop:15,paddingHorizontal:15}}
+                data={punkVariable==1?likes:[]}
+                renderItem={({item,index})=><LikeElement navigation={navigation} key={index} user={item}/>}
+            />
+            {/* <ScrollView style={{marginTop:15,paddingHorizontal:15}}>
+                
+                {currentListUsers.map((el,index)=>
+                    <LikeElement key={index} user={el}/>
+                )}
+                
+            </ScrollView> */}
         </SafeAreaView>
     )
 }
 
-const LikeElement:FC=()=>{
+interface ILikeElement{
+    user:IUser
+    navigation:any;
+}
+
+const LikeElement:FC<ILikeElement>=({user,navigation})=>{
+    
+    const createChat=async()=>{
+          const chatId : number=await  new ChatHttp().createChat(user.id);
+            console.log(chatId);
+            navigation.navigate("ChatScreen")
+    }
     return(
         <View style={elementStyles.container}>
             <Image
                     source={{
-                        uri:"https://stihi.ru/pics/2011/02/26/2515.jpg"
+                        uri:user.avatar_url
                       }}
                       borderRadius={10}       
                     alt="logo"
@@ -74,14 +64,14 @@ const LikeElement:FC=()=>{
                     h={165}
                     />
                     <View style={elementStyles.information}>
-                        <Text style={elementStyles.informationName}>Кирилл, 12</Text>
+                        <Text style={elementStyles.informationName}>{user.first_name+`, ${new Date().getFullYear()-user.birth.getFullYear()}`}</Text>
                         <View style={elementStyles.status}>
                             <View style={elementStyles.online}></View>
                             <Text style={elementStyles.textStatus}>онлайн</Text>
                             <SvgUri
                             width={6}
                             height={8}
-                            source={require("../../assets/svg/geo_icon.svg")}
+                            source={require("../../../assets/svg/geo_icon.svg")}
                             />
                             <Text style={elementStyles.city}>г. Оосака</Text>
                         </View>
@@ -96,12 +86,12 @@ const LikeElement:FC=()=>{
                             </ScrollView>
                             
                         </View>
-                        <View style={{borderRadius:10, alignItems:"center",paddingHorizontal:12, flexDirection:"row",justifyContent:"space-between", position:"absolute",bottom:0,height:30,backgroundColor:"#7760AF",width:"100%"}}>
+                        <Pressable onPress={createChat} style={{borderRadius:10, alignItems:"center",paddingHorizontal:12, flexDirection:"row",justifyContent:"space-between", position:"absolute",bottom:0,height:30,backgroundColor:"#7760AF",width:"100%"}}>
                                 <Text style={elementStyles.chat}>Перейти в чат</Text>
                                 <SvgUri
-                                    source={require("../../assets/svg/chat_icon.svg")}
+                                    source={require("../../../assets/svg/chat_icon.svg")}
                                 />
-                        </View>
+                        </Pressable>
                         
                     </View>                
         </View>

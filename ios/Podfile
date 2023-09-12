@@ -51,6 +51,9 @@ target 'Swipe' do
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker/'
   pod 'ReactNativeART', :path => '../node_modules/@react-native-community/art'
   pod 'RNTextGradientView', :path => "../node_modules/react-native-text-gradient/RNTextGradientView.podspec"
+  pod 'react-native-blur', :path => "../node_modules/@react-native-community/blur"
+  pod 'react-native-webview', :path => "../node_modules/react-native-webview"
+ 
   target 'SwipeTests' do
     inherit! :complete
     # Pods for testing

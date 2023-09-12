@@ -7,11 +7,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { UserProvider, useUserContext } from "./utils/UserContext";
 import AuthScreen from "./src/screens/AuthScreen";
-import MatchScreen from './src/screens/MatchScreen';
-import LikesScreen from './src/screens/LikesScreen';
+import MatchScreen from './src/screens/MatchScreen/MatchScreen';
+import LikesScreen from './src/screens/LikesScreen/LikesScreen';
 import CommunicationScreen from './src/screens/CommunicationScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
-import ChatScreen from './src/screens/ChatScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import TabNavigator from "./src/screens/components/TabNavigation";
 import PersonPhoneNumberScreen from "./src/screens/PersonPhoneNumberScreen/PersonPhoneNumberScreen";
@@ -23,6 +22,8 @@ import { store } from "./src/store/store";
 import LoginScreen from "./src/screens/LoginScreen/LoginScreen";
 import Loader from "./src/screens/Loader/Loader";
 import MainLoader from "./src/screens/MainLoader/MainLoader";
+import ChatScreenT from "./src/screens/ChatScreenT";
+import ChatScreen from "./src/screens/ChatScreen/ChatScreen";
 //import { getStatusBarHeight } from 'react-native-status-bar-height';
 type RootStackParamList = {
   AuthStack: undefined;
@@ -58,6 +59,7 @@ export type MainStackParamList = {
   MatchScreen: undefined;
   ProfileScreen: undefined;
   MainLoader:undefined;
+  ChatScreen:undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -113,11 +115,12 @@ function AppContent() {
     <MainStack.Navigator screenOptions={{ headerShown: false}} >
       <MainStack.Screen name='MainLoader' component={MainLoader} />
       <MainStack.Screen name='TabNavigator' component={TabNavigator} />
-      <MainStack.Screen name='Chat' component={ChatScreen} />
+      <MainStack.Screen name='Chat' component={ChatScreenT} />
       <MainStack.Screen name='CommunicationScreen' component={CommunicationScreen} />
       <MainStack.Screen name='LikesScreen' component={LikesScreen} />
       <MainStack.Screen name='MatchScreen' component={MatchScreen} />
       <MainStack.Screen name='ProfileScreen' component={ProfileScreen} />
+      <MainStack.Screen name='ChatScreen' component={ChatScreen} />
     </MainStack.Navigator>
   );
 

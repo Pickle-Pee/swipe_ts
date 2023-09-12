@@ -47,10 +47,10 @@ class TokenHttp{
 
         const typedError = error as IError;
             console.log("refresh-token");
-            console.log(error);
+            console.log(typedError.message);
                 const returnedData : ReturnedData={
-                code: typedError.data.code??-1,
-                message:typedError.data.message
+                code: typedError.data?.code??-1,
+                message:typedError.data?.message??typedError.message
                }
             return returnedData;
       }   
