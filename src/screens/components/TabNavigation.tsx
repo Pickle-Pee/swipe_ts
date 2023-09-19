@@ -11,6 +11,10 @@ import { UserHttp } from '../../http/user/httpUser';
 import Modal from "react-native-modal";
 import { View } from 'react-native';
 import BannerVip from '../popup/BunnerVip/BunnerVip';
+import {  socketClient } from '../../socket/socketClient';
+import { ChatHttp, IChats } from '../../http/chat/httpChats';
+import { useAppDispatch } from '../../store/typesHooks';
+import { addChats } from '../../store/reducers/messageReducer';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -19,13 +23,25 @@ const Stack = createStackNavigator();
 const TabNavigator:FC = () => {
 
     const [bunnerVisible,setBunnerVisible]=useState<boolean>(false);
+    const dispatch=useAppDispatch()
 
-    const getUserInfo=async()=>{
-      new  UserHttp().whoami()
+    const getChats=async()=>{
+       const chats:Array<IChats> | null =await new ChatHttp().getChats();
+       if(chats==null||chats.length==0){
+        return;
+       }
+       dispatch(addChats(chats))
+
     }
-
+    const getUserInfo=async()=>{
+     await new  UserHttp().whoami()
+      getChats()
+    }
+    
     useEffect(()=>{
+        socketClient.createSocketConnection();
         getUserInfo()
+        
         setTimeout(()=>{
             //setBunnerVisible(true);
         },5000)

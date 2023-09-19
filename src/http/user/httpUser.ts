@@ -6,7 +6,7 @@ import { ISendCode, ISendCodeResponse } from "./models"
 import { errorLoger } from "../errors/helpers";
 import { IUserTempData } from "../../store/reducers/tempUserDataReducer";
 import { store } from "../../store/store";
-import { updateUserToken } from "../../store/reducers/userReducer";
+import { setUserId, updateUserToken } from "../../store/reducers/userReducer";
 import tokenStorage from "../../localStorage/tokenStorage";
 
 
@@ -205,10 +205,11 @@ export class UserHttp{
     whoami = async ():Promise<ReturnedData>=>{
         try {       
             
-        const response = await axiosUser.get<ITokensResponse>(
+        const response = await axiosUser.get<{id:number}>(
             `/auth/whoami`,         
         );  
             console.log(response.data);
+            console.log("whoami");
             
             
       
@@ -216,6 +217,7 @@ export class UserHttp{
                 code:0,
                 message:""
             }
+            store.dispatch(setUserId(response.data["id"]))
             return returnedData;
         } catch (error) {
             const typedError = error as IError;
@@ -234,7 +236,7 @@ export class UserHttp{
         const response = await axiosUser.get<IUser>(
             `/user/${userId}`,         
         );  
-            console.log(response.data);
+           
             
             
             const returnedData=response.data;

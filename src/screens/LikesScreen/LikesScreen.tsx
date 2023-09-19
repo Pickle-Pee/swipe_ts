@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../store/typesHooks';
 import { updateLikes } from '../../store/reducers/likesReducer';
 import { IUser } from '../../http/user/httpUser';
 import HPanel from './HPanel/HPanel';
-import { ChatHttp } from '../../http/chat/httpUser';
+import { ChatHttp } from '../../http/chat/httpChats';
 //import { LinearTextGradient } from "react-native-text-gradient";
 const LikesScreen:FC<any> = ({navigation}) => {
 
@@ -50,7 +50,7 @@ const LikeElement:FC<ILikeElement>=({user,navigation})=>{
     const createChat=async()=>{
           const chatId : number=await  new ChatHttp().createChat(user.id);
             console.log(chatId);
-            navigation.navigate("ChatScreen")
+            navigation.navigate("ChatScreen",{chatId,userId:user.id})
     }
     return(
         <View style={elementStyles.container}>

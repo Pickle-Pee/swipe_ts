@@ -145,7 +145,7 @@ const MatchScreen = () => {
     const getMatches=async()=>{
 
        const listMatches :Array<IUserMatch>=await  new UserMatches().findMatches()
-       console.log(listMatches);
+    
        const newMatches=matches.concat(listMatches)
        setMatches(newMatches);
     }

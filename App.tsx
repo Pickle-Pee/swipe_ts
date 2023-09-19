@@ -1,6 +1,7 @@
 import React from "react";
 import {
   NativeBaseProvider,
+  StatusBar,
   extendTheme,
 } from "native-base";
 import { NavigationContainer } from '@react-navigation/native';
@@ -126,6 +127,7 @@ function AppContent() {
 
   return (
     <Provider store={store}>
+     
       <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Loader">
       <Stack.Screen name='Loader' component={Loader} />
