@@ -53,7 +53,8 @@ target 'Swipe' do
   pod 'RNTextGradientView', :path => "../node_modules/react-native-text-gradient/RNTextGradientView.podspec"
   pod 'react-native-blur', :path => "../node_modules/@react-native-community/blur"
   pod 'react-native-webview', :path => "../node_modules/react-native-webview"
- 
+  pod "RNSound", :path => "../node_modules/react-native-sound"
+  pod "RNCPushNotificationIOS", :path => '../node_modules/@react-native-community/push-notification-ios'
   target 'SwipeTests' do
     inherit! :complete
     # Pods for testing
