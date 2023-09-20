@@ -38,7 +38,10 @@ const userTempDataSlice=createSlice({
         },
         updateUserGender:(state,action:PayloadAction<{gender:string}>)=>{
             state.gender=action.payload.gender;
-        }
+        },
+        RESET_TEMP_USER_REDUCER(state){
+            state=initialState;
+           }
     }
 }
 )
@@ -48,6 +51,7 @@ export const {
     updateUserFirstName,
     updateUserLastName ,
     updateUserBirth,
-    updateUserGender
+    updateUserGender,
+    RESET_TEMP_USER_REDUCER
 } = userTempDataSlice.actions;
 export default userTempDataSlice.reducer;

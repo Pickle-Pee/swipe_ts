@@ -32,7 +32,10 @@ const likesSlice=createSlice({
     reducers:{
         updateDepricated(state,action: PayloadAction<boolean>){
           state.depricated=action.payload;
-        }
+        },
+        RESET_LIKE_REDUCER(state){
+          state=initialState;
+         }
     },
     extraReducers: (builder)=>{
         builder
@@ -43,5 +46,5 @@ const likesSlice=createSlice({
     }
 }
 )
-export const {updateDepricated}=likesSlice.actions;
+export const {updateDepricated,RESET_LIKE_REDUCER}=likesSlice.actions;
 export default likesSlice.reducer;

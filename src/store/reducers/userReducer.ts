@@ -21,10 +21,13 @@ const userSlice=createSlice({
         },
         setUserId(state,action:PayloadAction<number>){
             state.userId=action.payload
-        }
+        },
+        RESET_USER_REDUCER(state){
+            state=initialState;
+           }
     }
 }
 )
 
-export const { updateUserToken,setUserId } = userSlice.actions;
+export const { updateUserToken,setUserId,RESET_USER_REDUCER } = userSlice.actions;
 export default userSlice.reducer;

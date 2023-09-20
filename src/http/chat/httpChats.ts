@@ -42,7 +42,7 @@ export class ChatHttp{
                 `/communication/${chatId}`
             )
             console.log("ChatINFo");
-           // console.log(response.data);
+           console.log(response.data);
             return response.data;
         } catch (error) {
             const typedError = error as IError;
@@ -58,11 +58,29 @@ export class ChatHttp{
     }
     async getChats():Promise<Array<IChats>|null>{
         try {
-            const response=await axiosChat.get<Array<IChats>>(
+            const response=await axiosChat.get<Array<IChatsNoCast>>(
                 `/communication/get_chats`
             )
-            //console.log(response.data);
-            return response.data
+            console.log(response.data);
+            
+            
+            const chat: Array<IChats> = response.data.map(element=>{
+                    return ({
+                        chatId:element.chat_id,
+                        chatInfo:{
+                            statusMessage:element.last_message_status,
+                            userId:element.last_message_sender_id,
+                            age:20,
+                            avatar_url:element.user.avatar_url,
+                            countUnread:element.unread_count,
+                            first_name:element.user.first_name,
+                            lastMessage:element.last_message,
+                            status:"online"
+                        },
+
+                    })
+            }) 
+            return chat
         } catch (error) {
             const typedError = error as IError;
 
@@ -76,8 +94,24 @@ export class ChatHttp{
         }
     }
 }
+    interface IUserInChats{
+        userId:number;
+        first_name:string;
+        avatar_url:string;
+        status:string
+        
+    }
+ interface IChatsNoCast{
+    user:IUserInChats;
+    chat_id:number;
+    last_message:string;
+    unread_count:number;
+    last_message_status:number;
+    last_message_sender_id:number;
+
+}
 
 export interface IChats{
     chatId:number;
-    user:IChatInfo;
+    chatInfo:IChatInfo
 }

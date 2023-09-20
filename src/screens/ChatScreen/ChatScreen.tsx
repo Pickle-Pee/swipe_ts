@@ -6,13 +6,16 @@ import SvgChevronLeft from "./svg/chevronLeft";
 import SvgScrepka from "./svg/Screpka";
 import SvgSendButton from "./svg/SendButton";
 import { socketClient } from "../../socket/socketClient";
-import { useAppSelector } from "../../store/typesHooks";
+import { useAppDispatch, useAppSelector } from "../../store/typesHooks";
 import SvgMessageBottomItemRight from "./svg/messageBottomItemRight";
 import SvgMessageBottomItemLeft from "./svg/messageBottomItemLeft";
 import SvgIconsAllDone from "./svg/Icon_all_done";
 import SvgIconDone from "./svg/IconDone";
 import SvgIconWait from "./svg/IconWait";
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faClock } from '@fortawesome/free-regular-svg-icons'
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { markReadAllMessage } from "../../store/reducers/messageReducer";
 
 interface IChatScreen{
     navigation:any;
@@ -25,15 +28,38 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     const [msg,setMsg]=useState<string>("")
     const {userId}=useAppSelector(state=>state.user)
     const currentMessages=useAppSelector(state=>state.message.listMessage[chatId])
-    console.log(currentMessages);
+    const dispatch=useAppDispatch()
+   // console.log(currentMessages);
     
   const sendMessage=()=>{
+        if(msg.length>0){
+           // console.log(userId);
+            
+            socketClient.sendMessage(chatId,msg,userId)
+        }
+        setMsg("")
         
-        socketClient.sendMessage(chatId,msg,userId)
     }
 
-    useEffect(()=>{    
+    const getMessage=()=>{
+        socketClient.getMessagesInChat(chatId)
+    }
+
+    useEffect(()=>{ 
+
+        if(!currentMessages || currentMessages?.length==0){
+            console.log("GET");
+            
+            getMessage()
+        }
+        
+       
     },[])
+
+    useEffect(()=>{
+        socketClient.readingMessageInChat(chatId)
+        dispatch(markReadAllMessage(chatId))
+    },[currentMessages])
 
     const handleBack=()=>{
         navigation.goBack()
@@ -80,7 +106,10 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                                {item.msg}
                             </Text>
                             <View style={{position:"absolute",bottom:0,left:-20}}>
-                                 {status==-1&& <SvgIconWait/>}
+                                 {status==0&& <SvgIconDone/>}
+                                 {status-1==1&& <SvgIconsAllDone/>}
+                                 {status==-1&&<FontAwesomeIcon color="#EB539F4D" size={14} icon={ faClock } />}
+                                 {status==-2&&<FontAwesomeIcon color="red" size={14} icon={ faExclamationCircle } />}
                             </View>
                         </View>
                         <View style={{paddingHorizontal:32, alignSelf}}>
