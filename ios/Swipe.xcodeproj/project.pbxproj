@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* SwipeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SwipeTests.m */; };
+		068657342ABCD6010054CA0C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 068657332ABCD6010054CA0C /* GoogleService-Info.plist */; };
 		06A5E1052ABAD96A00988F65 /* send.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06A5E1032ABAD96A00988F65 /* send.mp3 */; };
 		06A5E1072ABAE23000988F65 /* sent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06A5E1062ABAE23000988F65 /* sent.mp3 */; };
 		0743C0605C1A42DBAC2EDA30 /* SF-Pro-Display-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A77E73072F434B5EB206B69D /* SF-Pro-Display-HeavyItalic.otf */; };
@@ -57,6 +58,8 @@
 		00E356EE1AD99517003FC87E /* SwipeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwipeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SwipeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwipeTests.m; sourceTree = "<group>"; };
+		068657332ABCD6010054CA0C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Swipe/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		068657352ABCDFC00054CA0C /* Swipe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Swipe.entitlements; path = Swipe/Swipe.entitlements; sourceTree = "<group>"; };
 		06A5E1032ABAD96A00988F65 /* send.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = send.mp3; path = ../assets/music/send.mp3; sourceTree = "<group>"; };
 		06A5E1062ABAE23000988F65 /* sent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sent.mp3; path = ../../../../../Downloads/sent.mp3; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Swipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +143,7 @@
 		13B07FAE1A68108700A75B9A /* Swipe */ = {
 			isa = PBXGroup;
 			children = (
+				068657352ABCDFC00054CA0C /* Swipe.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -204,6 +208,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				068657332ABCD6010054CA0C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Swipe */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SwipeTests */,
@@ -348,6 +353,7 @@
 				3D0EEB285746440BBC7E59B0 /* SF-Pro-Display-SemiboldItalic.otf in Resources */,
 				13F146B17C414284814FD12B /* SF-Pro-Display-Thin.otf in Resources */,
 				E1E909D8865E43FDA9E0A264 /* SF-Pro-Display-ThinItalic.otf in Resources */,
+				068657342ABCD6010054CA0C /* GoogleService-Info.plist in Resources */,
 				C06EBD94850F4D2FBF4D0F63 /* SF-Pro-Display-Ultralight.otf in Resources */,
 				BAF12C538BCF4022A4B09BED /* SF-Pro-Display-UltralightItalic.otf in Resources */,
 				1FE28D12B6214770A1136E99 /* SF-Pro-Text-Bold.otf in Resources */,
@@ -602,8 +608,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Swipe/Swipe.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9AJNMK52Q6;
+				DEVELOPMENT_TEAM = 8A989BQUS4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Swipe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Свайп!";
@@ -617,7 +624,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kirillka564.swiper;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kirillka564.swipe;
 				PRODUCT_NAME = Swipe;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -632,8 +639,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Swipe/Swipe.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9AJNMK52Q6;
+				DEVELOPMENT_TEAM = 8A989BQUS4;
 				INFOPLIST_FILE = Swipe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Свайп!";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -646,7 +654,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kirillka564.swiper;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kirillka564.swipe;
 				PRODUCT_NAME = Swipe;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

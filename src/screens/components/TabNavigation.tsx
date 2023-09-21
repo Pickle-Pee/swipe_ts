@@ -9,15 +9,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faHouse, faUser, faComment } from '@fortawesome/free-solid-svg-icons';
 import { UserHttp } from '../../http/user/httpUser';
 import Modal from "react-native-modal";
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import BannerVip from '../popup/BunnerVip/BunnerVip';
 import {  socketClient } from '../../socket/socketClient';
 import { ChatHttp, IChats } from '../../http/chat/httpChats';
 import { useAppDispatch } from '../../store/typesHooks';
 import { addChats } from '../../store/reducers/messageReducer';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
+
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
 
 
 const TabNavigator:FC = () => {
@@ -37,29 +39,13 @@ const TabNavigator:FC = () => {
      await new  UserHttp().whoami()
       getChats()
     }
-    const onRemoteNotification = (notification:any) => {
-        const isClicked = notification.getData().userInteraction === 1;
-    
-        if (isClicked) {
-          // Navigate user to another screen
-        } else {
-          // Do something else with push notification
-        }
-        // Use the appropriate result based on what you needed to do for this notification
-        const result = PushNotificationIOS.FetchResult.NoData;
-        notification.finish(result);
-      };
-   const createSOSpush=async()=>{
-    await PushNotificationIOS.requestPermissions()
-    const type = 'notification';
-    PushNotificationIOS.addEventListener(type, onRemoteNotification);
+   
 
-   }
+
 
     useEffect(()=>{
         socketClient.createSocketConnection();
         getUserInfo()
-        createSOSpush()
         setTimeout(()=>{
             //setBunnerVisible(true);
         },5000)

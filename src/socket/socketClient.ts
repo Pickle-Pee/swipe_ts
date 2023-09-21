@@ -143,7 +143,7 @@ export interface IOnGetMessage{
             
         }
         store.dispatch(addMessage(addMessageInfo))
-        if(store.getState().message.chatInfo[newMessage.chat_id]==null){
+        if(store.getState().message.chatInfo[newMessage.chat_id]?.first_name==null){
             store.dispatch(updateChatInfo(newMessage.chat_id))
         }
     }

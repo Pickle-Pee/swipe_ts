@@ -137,7 +137,7 @@ const messageSlice=createSlice({
                     }
                   });
                });
-               state.chatInfo[chatId]!.statusMessage=0;
+               state.chatInfo[chatId]!.statusMessage=1;
 
        },
        allRead(state,action:PayloadAction<IFullRead>){
@@ -145,13 +145,9 @@ const messageSlice=createSlice({
        },
        addChats(state,action:PayloadAction<Array<IChats>>){
             action.payload.forEach(element => {
-                console.log("added");
-                
-                console.log(element);
                 
                 state.chatInfo[element.chatId]=element.chatInfo
-                
-                
+  
             });
        },
        addFullMessage(state,action:PayloadAction<IOnGetMessage>){

@@ -102,7 +102,7 @@ const CommunicationScreen: React.FC<{ navigation: any, route: any }> = ({ naviga
                       <Text style={{fontFamily:"SF Pro Display",fontSize:10,fontWeight:"400",lineHeight:11.72,color:"#FFFFFF"}}>{item.chatInfo.countUnread}</Text>
                     </View>
                     :userId!=item.chatInfo.userId?<View></View>
-                    :item.chatInfo.statusMessage==0?<SvgIconDone/>
+                    :item.chatInfo.statusMessage==1?<SvgIconDone/>
                     :item.chatInfo.statusMessage==2?<SvgIconsAllDone/>
                     :item.chatInfo.statusMessage==-1?<FontAwesomeIcon color="#EB539F4D" size={14} icon={ faClock } />
                     :<View style={{width:10,height:10,backgroundColor:'red'}}></View>

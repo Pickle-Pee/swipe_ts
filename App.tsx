@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   NativeBaseProvider,
   StatusBar,
@@ -26,6 +26,13 @@ import MainLoader from "./src/screens/MainLoader/MainLoader";
 import ChatScreenT from "./src/screens/ChatScreenT";
 import ChatScreen from "./src/screens/ChatScreen/ChatScreen";
 //import { getStatusBarHeight } from 'react-native-status-bar-height';
+import firebase from '@react-native-firebase/app';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import { Alert } from "react-native";
+
+
+
+
 type RootStackParamList = {
   AuthStack: undefined;
   MainStack: undefined;
@@ -125,6 +132,55 @@ function AppContent() {
     </MainStack.Navigator>
   );
 
+  async function requestUserPermission() {
+
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+      
+   
+   
+    }
+  }
+
+    const register=async()=>{
+      // await firebase.initializeApp({
+      //   clientId: '',
+      //   appId: '',
+      //   apiKey: '',
+      //   databaseURL: '',
+      //   storageBucket: '',
+      //   messagingSenderId: '',
+      //   projectId: '',
+      // })
+   await requestUserPermission()
+   const fff= await  messaging().isSupported()
+   console.log("IS_SUP "+fff);
+
+    const token = await messaging().getAPNSToken()
+    const fcmToken=await messaging().getToken()
+    console.log("TOKEN_FB "+token);
+    console.log("TOKEN_FB_FCM "+token);
+    }
+       
+    messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      console.log(remoteMessage);
+      
+      
+    });
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+
+  useEffect(()=>{
+    register()
+  
+  },[])
   return (
     <Provider store={store}>
      

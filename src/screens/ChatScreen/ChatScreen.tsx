@@ -29,7 +29,7 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     const {userId}=useAppSelector(state=>state.user)
     const currentMessages=useAppSelector(state=>state.message.listMessage[chatId])
     const dispatch=useAppDispatch()
-   // console.log(currentMessages);
+   console.log(currentMessages);
     
   const sendMessage=()=>{
         if(msg.length>0){
@@ -57,7 +57,7 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     },[])
 
     useEffect(()=>{
-        socketClient.readingMessageInChat(chatId)
+       socketClient.readingMessageInChat(chatId)
         dispatch(markReadAllMessage(chatId))
     },[currentMessages])
 
@@ -106,8 +106,8 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                                {item.msg}
                             </Text>
                             <View style={{position:"absolute",bottom:0,left:-20}}>
-                                 {status==0&& <SvgIconDone/>}
-                                 {status-1==1&& <SvgIconsAllDone/>}
+                                 {status==1&& <SvgIconDone/>}
+                                 {status==2&& <SvgIconsAllDone/>}
                                  {status==-1&&<FontAwesomeIcon color="#EB539F4D" size={14} icon={ faClock } />}
                                  {status==-2&&<FontAwesomeIcon color="red" size={14} icon={ faExclamationCircle } />}
                             </View>

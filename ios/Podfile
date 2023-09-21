@@ -29,6 +29,7 @@ target 'Swipe' do
   inherit! :complete
   use_modular_headers!
   use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
   # $RNFirebaseAsStaticFramework = true
   react_native_path = '../node_modules/react-native'
 
@@ -55,8 +56,12 @@ target 'Swipe' do
   pod 'react-native-webview', :path => "../node_modules/react-native-webview"
   pod "RNSound", :path => "../node_modules/react-native-sound"
   pod "RNCPushNotificationIOS", :path => '../node_modules/@react-native-community/push-notification-ios'
+  pod "RNFBApp", :path => "../node_modules/@react-native-firebase/app"
+  pod "RNFBMessaging", :path => "../node_modules/@react-native-firebase/messaging"
+
   target 'SwipeTests' do
     inherit! :complete
+    
     # Pods for testing
   end
 
