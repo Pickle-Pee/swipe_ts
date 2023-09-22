@@ -28,8 +28,8 @@ import ChatScreen from "./src/screens/ChatScreen/ChatScreen";
 //import { getStatusBarHeight } from 'react-native-status-bar-height';
 import firebase from '@react-native-firebase/app';
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
-import { Alert } from "react-native";
-
+import { Alert, NativeModules } from "react-native";
+import {Notification, NotificationAction, NotificationBackgroundFetchResult, NotificationCategory, Notifications, RegisteredPushKit} from 'react-native-notifications';
 
 
 
@@ -148,25 +148,75 @@ function AppContent() {
   }
 
     const register=async()=>{
-      // await firebase.initializeApp({
-      //   clientId: '',
-      //   appId: '',
-      //   apiKey: '',
-      //   databaseURL: '',
-      //   storageBucket: '',
-      //   messagingSenderId: '',
-      //   projectId: '',
-      // })
+
    await requestUserPermission()
+    Notifications.registerRemoteNotifications();
+
+   Notifications.events().registerNotificationReceivedForeground((notification: Notification, completion) => {
+     console.log(`Notification received in foreground: ${notification.title} : ${notification.body}`);
+     completion({alert: false, sound: false, badge: false});
+   });
+
+   Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
+     console.log(`Notification opened: ${notification.payload}`);
+     completion();
+   });
+   Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
+    completion(NotificationBackgroundFetchResult.NO_DATA);
+  });
+  Notifications.ios.events().appNotificationSettingsLinked(() => {
+    console.warn('App Notification Settings Linked')
+  });
+  let upvoteAction = new NotificationAction(
+    "UPVOTE_ACTION",
+    "background",
+    String.fromCodePoint(0x1F44D),
+    false,
+    {
+      buttonTitle: 'title',
+      placeholder: 'placeholder text'
+    }
+  );
+  
+
+  const category=new NotificationCategory(
+    "EXAMPLE_CATEGORY",
+    [upvoteAction]
+  )
+  Notifications.setCategories([category])
+
+   let localNotification = Notifications.postLocalNotification ({
+    
+     body: "Local notification!",
+     title: "Local Notification Title",
+     sound: "chime.aiff",
+     identifier: "0",
+     payload: {
+      
+      category:"EXAMPLE_CATEGORY",
+     },
+     badge: 0,
+     type: "",
+     thread: ""
+   });
    const fff= await  messaging().isSupported()
    console.log("IS_SUP "+fff);
-
+     messaging().onTokenRefresh(t=>{
+      console.log(t);
+      
+     })
     const token = await messaging().getAPNSToken()
     const fcmToken=await messaging().getToken()
     console.log("TOKEN_FB "+token);
-    console.log("TOKEN_FB_FCM "+token);
+    console.log("TOKEN_FB_FCM "+fcmToken);
     }
+       const {PushNotificationModule}=NativeModules
+       console.log("NM ");
        
+    console.log(NativeModules);
+    
+
+
     messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
       console.log(remoteMessage);

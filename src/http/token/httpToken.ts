@@ -56,6 +56,35 @@ class TokenHttp{
       }   
 
     }
+    sendFCMToken=async(fcm:string):Promise<number>=>{
+
+      try {
+          
+         
+          
+          const response =await axiosToken.post<IRefreshResponse>(
+              `/auth/refresh_token?}`,
+              {
+                token:fcm
+              },
+              
+          )
+         
+          
+          return 0 ; 
+      } catch (error) {
+
+        const typedError = error as IError;
+            console.log("refresh-token");
+            console.log(typedError.message);
+                const returnedData : ReturnedData={
+                code: typedError.data?.code??-1,
+                message:typedError.data?.message??typedError.message
+               }
+            return -1;
+      }   
+
+    }
 }
 
 export default new TokenHttp();

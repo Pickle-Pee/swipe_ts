@@ -11,6 +11,7 @@
 		068657342ABCD6010054CA0C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 068657332ABCD6010054CA0C /* GoogleService-Info.plist */; };
 		06A5E1052ABAD96A00988F65 /* send.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06A5E1032ABAD96A00988F65 /* send.mp3 */; };
 		06A5E1072ABAE23000988F65 /* sent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06A5E1062ABAE23000988F65 /* sent.mp3 */; };
+		06EC84622ABDBAC400B3C300 /* PushNotificationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EC84612ABDBAC400B3C300 /* PushNotificationModule.swift */; };
 		0743C0605C1A42DBAC2EDA30 /* SF-Pro-Display-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A77E73072F434B5EB206B69D /* SF-Pro-Display-HeavyItalic.otf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -62,6 +63,8 @@
 		068657352ABCDFC00054CA0C /* Swipe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Swipe.entitlements; path = Swipe/Swipe.entitlements; sourceTree = "<group>"; };
 		06A5E1032ABAD96A00988F65 /* send.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = send.mp3; path = ../assets/music/send.mp3; sourceTree = "<group>"; };
 		06A5E1062ABAE23000988F65 /* sent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sent.mp3; path = ../../../../../Downloads/sent.mp3; sourceTree = "<group>"; };
+		06EC84602ABDBAC300B3C300 /* Swipe-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Swipe-Bridging-Header.h"; sourceTree = "<group>"; };
+		06EC84612ABDBAC400B3C300 /* PushNotificationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationModule.swift; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Swipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Swipe/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Swipe/AppDelegate.mm; sourceTree = "<group>"; };
@@ -208,6 +211,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				06EC84612ABDBAC400B3C300 /* PushNotificationModule.swift */,
 				068657332ABCD6010054CA0C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Swipe */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -216,6 +220,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				236E0AAFB16643D198D50D81 /* Resources */,
+				06EC84602ABDBAC300B3C300 /* Swipe-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -301,7 +306,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1430;
 					};
 				};
 			};
@@ -535,6 +540,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				06EC84622ABDBAC400B3C300 /* PushNotificationModule.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -554,6 +560,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-Swipe-SwipeTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -581,6 +588,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-Swipe-SwipeTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = SwipeTests/Info.plist;
@@ -626,6 +634,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kirillka564.swipe;
 				PRODUCT_NAME = Swipe;
+				SWIFT_OBJC_BRIDGING_HEADER = "Swipe-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -656,6 +665,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kirillka564.swipe;
 				PRODUCT_NAME = Swipe;
+				SWIFT_OBJC_BRIDGING_HEADER = "Swipe-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
