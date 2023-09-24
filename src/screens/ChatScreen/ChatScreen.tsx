@@ -1,7 +1,7 @@
 import { NavigationProp } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
-import { FC, useEffect, useState } from "react";
-import { FlatList, Image, KeyboardAvoidingView, Pressable, SafeAreaView, ScrollView, StatusBar, Text, TextInput, View, useWindowDimensions } from "react-native";
+import { FC, useEffect, useRef, useState } from "react";
+import { Animated, Dimensions, FlatList, Image, KeyboardAvoidingView, Pressable, SafeAreaView, ScrollView, StatusBar, StatusBarStyle, Text, TextInput, View, useWindowDimensions } from "react-native";
 import SvgChevronLeft from "./svg/chevronLeft";
 import SvgScrepka from "./svg/Screpka";
 import SvgSendButton from "./svg/SendButton";
@@ -13,10 +13,13 @@ import SvgIconsAllDone from "./svg/Icon_all_done";
 import SvgIconDone from "./svg/IconDone";
 import SvgIconWait from "./svg/IconWait";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faClock } from '@fortawesome/free-regular-svg-icons'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { faShare,faXmark} from '@fortawesome/free-solid-svg-icons'
 import { markReadAllMessage } from "../../store/reducers/messageReducer";
-
+import { PanResponder } from "react-native";
+import MessageItem from "./MessageItem";
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob'
+import Modal from "react-native-modal";
 interface IChatScreen{
     navigation:any;
     route:any;
@@ -26,11 +29,45 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     const chatId=route.params.chatId;
     const {width,height}=useWindowDimensions()
     const [msg,setMsg]=useState<string>("")
-    const {userId}=useAppSelector(state=>state.user)
+    const {userId,accessToken}=useAppSelector(state=>state.user)
     const currentMessages=useAppSelector(state=>state.message.listMessage[chatId])
+    const textInputRef = useRef<TextInput>(null);
     const dispatch=useAppDispatch()
-   console.log(currentMessages);
+    const [file,setFile]=useState<Array<string>>([])
+    const replyViewHeight=useRef(new Animated.Value(0)).current
+    const replyViewClose=()=>{
+        Animated.timing(replyViewHeight,{
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: false,
+        }).start()
+    }
+    const replyViewOpen=()=>{
+        Animated.timing(replyViewHeight,{
+            toValue: 75,
+            duration: 200,
+            useNativeDriver: false,
+        }).start()
+    }
+    const [isReplay,editReplay]=useState<string>("")
+    const focusTextInput = () => {
+        if (textInputRef.current) {
+          textInputRef.current.focus();
+        }
+      };
+    useEffect(()=>{
+        console.log("repl");
+        
+        isReplay&&focusTextInput();
+        isReplay&&replyViewOpen()
+        !isReplay&&replyViewClose()
+    },[isReplay])
+  
+
+  const onRelease = () => {
+    console.log("RELEASE");
     
+  };
   const sendMessage=()=>{
         if(msg.length>0){
            // console.log(userId);
@@ -64,8 +101,45 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     const handleBack=()=>{
         navigation.goBack()
     }
+   
+    const [photoVisibleUri,setPhotoVisibleUri]=useState<string>("")
+    const [visibleNav,setVisibleNav]=useState<boolean>(false);
+    const animVisibleNav=useRef(new Animated.Value(0)).current
+
+    useEffect(()=>{
+        if(visibleNav){
+            
+            StatusBar.setBarStyle("dark-content")
+            Animated.timing(animVisibleNav,{
+                toValue:-100,
+                useNativeDriver:false,
+                duration:50
+            }).start()
+        }else{
+          
+            StatusBar.setBarStyle("light-content")
+            Animated.timing(animVisibleNav,{
+                toValue:0,
+                useNativeDriver:false,
+                duration:50
+            }).start()
+        }
+    },[visibleNav])
     return(
         <SafeAreaView style={{flex:1,backgroundColor:"white",zIndex:200}}>
+            <Modal isVisible={photoVisibleUri.length>0} animationIn={"fadeIn"} style={{padding:0,backgroundColor:"white",margin:0}}>
+                <SafeAreaView style={{backgroundColor:"black",flex:1,alignItems:'center',justifyContent:"center"}}>
+                    <Animated.View style={{position:"absolute",top:animVisibleNav,height:100,zIndex:2, width:"100%",backgroundColor:"#000000aa",justifyContent:'flex-end',padding:20}}>
+                        <Pressable onPress={()=>setPhotoVisibleUri("")}>
+                            <FontAwesomeIcon icon={faXmark} size={30} color="white"/>
+                        </Pressable>
+                    </Animated.View>
+                    <Pressable onPress={()=>setVisibleNav(v=>!v)}>
+                        <Image source={{uri:photoVisibleUri}} style={{width:Dimensions.get("window").width,aspectRatio: 1 / 2}}  resizeMode="contain" />
+                    </Pressable>
+                       
+                </SafeAreaView>
+            </Modal>
             <View style={{position:"absolute",top:0,height:61,width:width,backgroundColor:"white",zIndex:5}}>
             </View>
             <View style={{height:61,flexDirection:"row",backgroundColor:"white", justifyContent:"space-between",zIndex:5}}>
@@ -89,48 +163,87 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                 </Pressable>
             </View>
             <KeyboardAvoidingView  behavior="position" shouldRasterizeIOS={true} style={{backgroundColor:"white"}}>
-                <View  style={{ paddingHorizontal:10, height:height*0.75,backgroundColor:"#DEF4FE"}} >
+                <View  style={{ paddingHorizontal:10, height:height*0.75-(file.length>0?90:0),backgroundColor:"#DEF4FE"}} >
                    <FlatList
+                   keyboardShouldPersistTaps={true}
                    showsVerticalScrollIndicator={false}
                    inverted
                    style={{height:height*0.75,paddingBottom:10}}
                    contentContainerStyle={{paddingTop:10}}
                    data={currentMessages??[]}
                    renderItem={({item})=>{
-                    const alignSelf=item.userId==userId?"flex-end":"flex-start"
-                    const status:number=item.status
+                    
                     return (
-                        <View style={{alignSelf}}>
-                        <View style={{ marginTop:10, backgroundColor:"white",borderRadius:10, minWidth:100,maxWidth:200, paddingLeft:13,paddingRight:13,paddingTop:7,paddingBottom:8}}>
-                            <Text style={{fontFamily:"SF Pro Display",fontSize:12,fontWeight:"400",lineHeight:14.06}}>
-                               {item.msg}
-                            </Text>
-                            <View style={{position:"absolute",bottom:0,left:-20}}>
-                                 {status==1&& <SvgIconDone/>}
-                                 {status==2&& <SvgIconsAllDone/>}
-                                 {status==-1&&<FontAwesomeIcon color="#EB539F4D" size={14} icon={ faClock } />}
-                                 {status==-2&&<FontAwesomeIcon color="red" size={14} icon={ faExclamationCircle } />}
-                            </View>
-                        </View>
-                        <View style={{paddingHorizontal:32, alignSelf}}>
-                            {item.userId==userId&&<SvgMessageBottomItemRight/>}
-                            {item.userId!=userId&&<SvgMessageBottomItemLeft/>}
-                            
-                        </View>
-                        
-                    </View>
+                        <MessageItem message={item} editReplay={editReplay} />
                     
                     )
                    }}
                    />
+                   
                 </View>
-                <View style={{height:75,flexDirection:"row",alignItems:"center"}}>
-                    <Pressable style={{width:width*0.133,height:75,justifyContent:'center',alignItems:'flex-end',paddingRight:12}}>
+                {file.length>0&&
+                <View style={{backgroundColor:"#DEF4FE",borderBottomColor:"#00000030",borderBottomWidth:1}}>
+                    <View style={{flexDirection:"row",height:90, backgroundColor:"#ffffff",width:"100%",alignItems:'center',paddingHorizontal:10}}>
+                    {file.map((el,i)=><Pressable onPress={()=>setPhotoVisibleUri(el)}><Image style={{marginHorizontal:5}} key={i} source={{uri:el}} width={Dimensions.get("window").width/5-20} height={70}/></Pressable>)}
+                  
+                </View>
+                </View>
+                }
+                <Animated.View style={{position:"absolute",bottom:replyViewHeight,backgroundColor:"white",width:"100%",flexDirection:"row",alignItems:"center",borderBottomColor:"#00000030",borderBottomWidth:1,paddingVertical:10}}>
+                   <View style={{width:60,alignItems:"center"}}>
+                        <FontAwesomeIcon icon={faShare} color="#EB539F"/>
+                   </View>
+                   <View style={{flex:1,overflow:"hidden"}}>
+                        <Text style={{color:"#EB539F"}}>Ответить на</Text>
+                        <Text style={{overflow:"hidden",width:"100%"}}>{isReplay.length>25?isReplay.substring(0,25)+"...":isReplay}</Text>
+                   </View>
+                   <Pressable onPress={()=>editReplay("")} style={{width:80,height:"100%" ,alignItems:"center",justifyContent:"center"}}>
+                        <FontAwesomeIcon icon={faXmark} size={23} color="#EB539F"/>
+                   </Pressable>
+                </Animated.View>
+                <View style={{height:75,flexDirection:"row",alignItems:"center",backgroundColor:"white"}}>
+                    <Pressable onPress={async()=>{
+                       
+                       const result = await launchImageLibrary({
+                        mediaType:"photo",
+                        selectionLimit:5
+                       });
+                       console.log(result.assets);
+                       console.log(result.assets![0].uri!);
+                       const path="var/mobile/Containers/Data/Application/8B0CA0E4-554A-460F-BFF4-0B94DA655781/tmp/8AF9CA2E-DC2E-470E-95E7-20F627EED4EF.png"
+                     const file :Blob=await  RNFetchBlob.fs.readFile(path, 'base64')
+                    // const formData=new FormData()
+                    //  formData.append('image',{
+                    //     uri:result.assets![0].uri!,
+                    //     type: 'image/png',
+                    // })
+                    //  axios.post(
+                    //     "http://193.164.150.223:1024/service/upload",
+                    //     {file:formData},
+                    //     {
+                    //         headers: {
+                    //             'Authorization':accessToken,
+                    //             'Content-Type': 'multipart/form-data', // Указываем тип содержимого как многопартовую форму
+                    //         },
+                    //     }
+                    //  ).catch((e)=>console.log(e)
+                    //  )
+                    const listUri:Array<string>=[]
+                       if(result.assets){
+                        result.assets.map(el=>{
+                            listUri.push(el.uri!)
+                        })
+                       }
+                       setFile(listUri)
+                         
+                         
+                    }} style={{width:width*0.133,height:75,justifyContent:'center',alignItems:'flex-end',paddingRight:12}}>
                         <SvgScrepka/>
                     </Pressable>
                     <View style={{width:width*0.70}}>
-                        <TextInput onSubmitEditing={sendMessage} blurOnSubmit={false} placeholder="Введите сообщение..." value={msg} onChangeText={setMsg} style={{paddingLeft:19, borderColor:"#DDDDDD",borderWidth:1,height:42,borderRadius:10}}/>
+                        <TextInput ref={textInputRef} onSubmitEditing={sendMessage} blurOnSubmit={msg.length<1} placeholder="Введите сообщение..." value={msg} onChangeText={setMsg} style={{paddingLeft:19, borderColor:"#DDDDDD",borderWidth:1,height:42,borderRadius:10}}/>
                     </View> 
+                    
                     <Pressable onPress={sendMessage} style={{flex:1,paddingLeft:8}}> 
                         <SvgSendButton/>
                     </Pressable>

@@ -4,11 +4,8 @@
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
 #import "RNFBMessagingModule.h"
-#import "RNNotifications.h"
-#import "Swipe-Bridging-Header.h"
-#import "RCT112Call.h"
+@implementation AppDelegate
 
-@implementation AppDelegate 
 // Required for the register event.
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
@@ -39,13 +36,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"Swipe";
-
-  [RNNotifications startMonitorNotifications]; 
   [FIRApp configure];
   [RNFBMessagingModule load];
   
- 
- 
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   UNNotificationAction *callAction = [UNNotificationAction
