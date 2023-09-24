@@ -59,6 +59,7 @@ target 'Swipe' do
   pod "RNFBApp", :path => "../node_modules/@react-native-firebase/app"
   pod "RNFBMessaging", :path => "../node_modules/@react-native-firebase/messaging"
   pod "react-native-notifications", :path => "../node_modules/react-native-notifications"
+  pod "RNBackgroundFetch", :path => "../node_modules/react-native-background-fetch"
   target 'SwipeTests' do
     inherit! :complete
     

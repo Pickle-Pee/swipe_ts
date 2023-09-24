@@ -1,12 +1,24 @@
-//
-//  RCT112Call.h
-//  Swipe
-//
-//  Created by Gost on 24.09.2023.
-//
+#import <React/RCTBridgeModule.h>
 
-#ifndef RCT112Call_h
-#define RCT112Call_h
+@interface RCT112Call : NSObject
+- (void)makeCallTo112;
+@end
+
+@implementation RCT112Call
+
+- (void)makeCallTo112 {
+  NSString *phoneNumber = @"112";
+  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", phoneNumber]];
+  UIApplication *application = [UIApplication sharedApplication];
+
+  if ([application canOpenURL:url]) {
+    [application openURL:url options:@{} completionHandler:nil];
+  }
+}
+
+@end
 
 
-#endif /* RCT112Call_h */
+
+
+

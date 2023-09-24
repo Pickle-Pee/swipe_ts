@@ -73,6 +73,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>NSCallKitUsageDescription</key>
+	<string>We need access to the phone to make the emergency call.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

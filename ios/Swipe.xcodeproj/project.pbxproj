@@ -12,6 +12,8 @@
 		06A5E1052ABAD96A00988F65 /* send.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06A5E1032ABAD96A00988F65 /* send.mp3 */; };
 		06A5E1072ABAE23000988F65 /* sent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06A5E1062ABAE23000988F65 /* sent.mp3 */; };
 		06EC84622ABDBAC400B3C300 /* PushNotificationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EC84612ABDBAC400B3C300 /* PushNotificationModule.swift */; };
+		06EC846A2ABDE35400B3C300 /* RCTCallModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EC84692ABDE35400B3C300 /* RCTCallModule.m */; };
+		06F65F0E2AC0153100F3DAA7 /* RCT112Call.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F65F0D2AC0153100F3DAA7 /* RCT112Call.m */; };
 		0743C0605C1A42DBAC2EDA30 /* SF-Pro-Display-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A77E73072F434B5EB206B69D /* SF-Pro-Display-HeavyItalic.otf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -65,6 +67,10 @@
 		06A5E1062ABAE23000988F65 /* sent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sent.mp3; path = ../../../../../Downloads/sent.mp3; sourceTree = "<group>"; };
 		06EC84602ABDBAC300B3C300 /* Swipe-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Swipe-Bridging-Header.h"; sourceTree = "<group>"; };
 		06EC84612ABDBAC400B3C300 /* PushNotificationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationModule.swift; sourceTree = "<group>"; };
+		06EC84682ABDE33100B3C300 /* RCTCallModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTCallModule.h; sourceTree = "<group>"; };
+		06EC84692ABDE35400B3C300 /* RCTCallModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCallModule.m; sourceTree = "<group>"; };
+		06F65F0C2AC0150900F3DAA7 /* RCT112Call.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCT112Call.h; sourceTree = "<group>"; };
+		06F65F0D2AC0153100F3DAA7 /* RCT112Call.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCT112Call.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Swipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Swipe/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Swipe/AppDelegate.mm; sourceTree = "<group>"; };
@@ -153,6 +159,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				06EC84682ABDE33100B3C300 /* RCTCallModule.h */,
+				06EC84692ABDE35400B3C300 /* RCTCallModule.m */,
+				06F65F0C2AC0150900F3DAA7 /* RCT112Call.h */,
+				06F65F0D2AC0153100F3DAA7 /* RCT112Call.m */,
 			);
 			name = Swipe;
 			sourceTree = "<group>";
@@ -540,6 +550,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				06F65F0E2AC0153100F3DAA7 /* RCT112Call.m in Sources */,
+				06EC846A2ABDE35400B3C300 /* RCTCallModule.m in Sources */,
 				06EC84622ABDBAC400B3C300 /* PushNotificationModule.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);

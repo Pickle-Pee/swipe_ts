@@ -1,7 +1,7 @@
 // ProfileScreen.js
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, SafeAreaView, Dimensions, Pressable } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, SafeAreaView, Dimensions, Pressable,NativeModules, TaskProvider } from 'react-native';
 import { Image, ScrollView, Text, Wrap } from 'native-base';
 import { useUserContext } from '../../utils/UserContext';
 import GradientButton from '../../assets/elements/elements';
@@ -11,13 +11,18 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import NavPanel, { ContextPanel } from './components/NavPanel';
 import { GradientBorderView } from '@good-react-native/gradient-border';
 import { socketClient } from '../socket/socketClient';
-import PushNotificationIOS, { NotificationRequest } from '@react-native-community/push-notification-ios';
-import { NativeModules } from 'react-native';
+import PushNotificationIOS, { NotificationAction, NotificationCategory, NotificationRequest } from '@react-native-community/push-notification-ios';
 import { useAppDispatch } from '../store/typesHooks';
 import { RESET_MESSAGE_REDUCER } from '../store/reducers/messageReducer';
 import { RESET_LIKE_REDUCER } from '../store/reducers/likesReducer';
 import { RESET_TEMP_USER_REDUCER } from '../store/reducers/tempUserDataReducer';
 import { RESET_USER_REDUCER } from '../store/reducers/userReducer';
+//@ts-ignore
+
+
+
+
+
 
 
 const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any }> = ({ navigation, route }) => {
@@ -26,6 +31,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any
   const dispatch=useAppDispatch()
 
   useEffect(() => {
+
     
   }, []);
 
@@ -62,27 +68,43 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any
   const ScreenWidth = Dimensions.get('window').width;
   console.log(ScreenWidth);
   const gradientColors =  ['#F857A6', '#20BDFF'];
-  const onRemoteNotification = (notification:any) => {
-    const isClicked = notification.getData().userInteraction === 1;
-
-    if (isClicked) {
-        NativeModules.SOSCallModule.makeSOSCall();
-    } else {
-      // Do something else with push notification
-    }
-    // Use the appropriate result based on what you needed to do for this notification
-    const result = PushNotificationIOS.FetchResult.NoData;
-    notification.finish(result);
-  };
+  
   const onPress=()=>{
     console.log("push");
     
-    const type = 'notification';
-    PushNotificationIOS.addEventListener(type, onRemoteNotification);
+   
+    
+   
+    const ac:NotificationAction={
+      id:"ACTION_E",
+      title:"SOS",
+      
+      textInput:{
+        buttonTitle:"send",
+        placeholder:"sendeeer"
+      },
+      
+    }
+    const ac1:NotificationAction={
+      id:"CALL_112_ACTION1",
+      title:"call",
+    }
+    const cat:NotificationCategory={
+      id:"EMERGENCY_CATEGORY1",
+      actions:[ac1]
+    }
+    PushNotificationIOS.setNotificationCategories([cat])
     const notReq:NotificationRequest={
       id:"1",
-      title:"SOS-кнопка"
+      title:"SOS-кнопка",
+      category:"EMERGENCY_CATEGORY1",
+      userInfo:{
+        "rew":"dsds"
+      }
+      
+      
     }
+    
     PushNotificationIOS.addNotificationRequest(notReq)
   }
 
