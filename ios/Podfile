@@ -58,7 +58,8 @@ target 'Swipe' do
   pod "RNCPushNotificationIOS", :path => '../node_modules/@react-native-community/push-notification-ios'
   pod "RNFBApp", :path => "../node_modules/@react-native-firebase/app"
   pod "RNFBMessaging", :path => "../node_modules/@react-native-firebase/messaging"
-
+  pod "react-native-image-picker", :path => "../node_modules/react-native-image-picker" 
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
   target 'SwipeTests' do
     inherit! :complete
     
@@ -66,6 +67,10 @@ target 'Swipe' do
   end
 
   post_install do |installer|
+
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES"] = true
+    end
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,

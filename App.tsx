@@ -120,7 +120,7 @@ function AppContent() {
   );
 
   const MainNavigator = () => (
-    <MainStack.Navigator screenOptions={{ headerShown: false}} >
+    <MainStack.Navigator screenOptions={{ headerShown: false}} initialRouteName="TabNavigator">
       <MainStack.Screen name='MainLoader' component={MainLoader} />
       <MainStack.Screen name='TabNavigator' component={TabNavigator} />
       <MainStack.Screen name='Chat' component={ChatScreenT} />
