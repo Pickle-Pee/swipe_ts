@@ -14,6 +14,8 @@
 	<array>
 		<string>com.kirillka564.swipe</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key> 
+	<string>Предоставьте $(PRODUCT_NAME) разрешение на использование вашего микрофона. Ваша запись не будет передана без вашего разрешения.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ru</string>
 	<key>CFBundleDisplayName</key>

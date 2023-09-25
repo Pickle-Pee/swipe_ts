@@ -29,7 +29,7 @@ import ChatScreen from "./src/screens/ChatScreen/ChatScreen";
 import firebase from '@react-native-firebase/app';
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { Alert } from "react-native";
-import {Notification, NotificationAction, NotificationBackgroundFetchResult, NotificationCategory, Notifications, RegisteredPushKit} from 'react-native-notifications';
+//import {Notification, NotificationAction, NotificationBackgroundFetchResult, NotificationCategory, Notifications, RegisteredPushKit} from 'react-native-notifications';
 
 
 
@@ -120,7 +120,7 @@ function AppContent() {
   );
 
   const MainNavigator = () => (
-    <MainStack.Navigator screenOptions={{ headerShown: false}} initialRouteName="TabNavigator">
+    <MainStack.Navigator screenOptions={{ headerShown: false}} >
       <MainStack.Screen name='MainLoader' component={MainLoader} />
       <MainStack.Screen name='TabNavigator' component={TabNavigator} />
       <MainStack.Screen name='Chat' component={ChatScreenT} />
@@ -148,59 +148,7 @@ function AppContent() {
   }
 
     const register=async()=>{
-      let upvoteAction = new NotificationAction(
-        "UPVOTE_ACTION",
-        "background",
-        "dsdsd",
-        true,
-        {
-          buttonTitle: 'title',
-          placeholder: 'placeholder text'
-        }
-      );
       
-    
-      const category=new NotificationCategory(
-        "EXAMPLE_CATEGORY",
-        [upvoteAction]
-      )
-      Notifications.setCategories([category])
-    
-   await requestUserPermission()
-    Notifications.registerRemoteNotifications();
-
-   Notifications.events().registerNotificationReceivedForeground((notification: Notification, completion) => {
-     console.log(`Notification received in foreground: ${notification.title} : ${notification.body}`);
-     completion({alert: notification.payload.showAlert, sound: true, badge: true});
-   });
-
-   Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
-     console.log(`Notification opened: ${notification.payload}`);
-     completion();
-   });
-   Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
-    
-    completion(NotificationBackgroundFetchResult.NEW_DATA);
-  });
-  Notifications.ios.events().appNotificationSettingsLinked(() => {
-    console.warn('App Notification Settings Linked')
-  });
-  
-   let localNotification = Notifications.postLocalNotification ({
-    
-     body: "Local notification!",
-     title: "Local Notification Title",
-     sound: "chime.aiff",
-     identifier: "0",
-     payload: {
-      
-      category:"EXAMPLE_CATEGORY",
-     },
-     
-     badge: 0,
-     type: "EMERGENCY_CATEGORY",
-     thread: ""
-   });
    const fff= await  messaging().isSupported()
    console.log("IS_SUP "+fff);
      messaging().onTokenRefresh(t=>{

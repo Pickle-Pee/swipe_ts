@@ -9,20 +9,20 @@
 // Required for the register event.
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-  [RNNotifications didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+ // [RNNotifications didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
   
 }
 // Required for the notification event. You must call the completion handler after handling the remote notification.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-  [RNNotifications didReceiveBackgroundNotification:userInfo withCompletionHandler:completionHandler];
+  //[RNNotifications didReceiveBackgroundNotification:userInfo withCompletionHandler:completionHandler];
  
 }
 // Required for the registrationError event.
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-  [RNNotifications didFailToRegisterForRemoteNotificationsWithError:error];
+ // [RNNotifications didFailToRegisterForRemoteNotificationsWithError:error];
   
 }
 // Required for localNotification event
@@ -69,8 +69,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
           
           if ([actionIdentifier isEqualToString:@"CALL_112_ACTION"]) {
             NSLog(@"PUUUSH/////");
-            RCT112Call *callModule = [RCT112Call new];
-            [callModule makeCallTo112];
+          
           }
       } else {
           // Обрабатываем другие типы ответов, если это необходимо

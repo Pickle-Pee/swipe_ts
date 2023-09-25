@@ -493,9 +493,9 @@ PODS:
     - React-perflogger (= 0.72.2)
   - ReactNativeART (1.2.0):
     - React
-  - RNBackgroundFetch (2.0.0):
-    - React
   - rn-fetch-blob (0.12.0):
+    - React-Core
+  - RNAudioRecorderPlayer (3.6.0):
     - React-Core
   - RNCAsyncStorage (1.19.2):
     - React-Core
@@ -583,6 +583,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
+  - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage/`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view/`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker/`)"
@@ -708,6 +709,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/art"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
+  RNAudioRecorderPlayer:
+    :path: "../node_modules/react-native-audio-recorder-player"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage/"
   RNCMaskedView:
@@ -796,6 +799,7 @@ SPEC CHECKSUMS:
   ReactCommon: b654080bcdbbd9751aa5d280608491527421f40d
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNAudioRecorderPlayer: 4690a7cd9e4fd8e58d9671936a7bc3b686e59051
   RNCAsyncStorage: f57e929cd7757f2cb3dd8186d123c09e8281a1ad
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
@@ -812,6 +816,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: c79810ea24a2a73b7f39174e78d60f4e28261f33
 
-PODFILE CHECKSUM: 3920a33c1c2913c57244651fc833d7adcbdcf5e9
+PODFILE CHECKSUM: ea74d164b13b464fded2e5b1f2eec67345847b8f
 
 COCOAPODS: 1.12.1

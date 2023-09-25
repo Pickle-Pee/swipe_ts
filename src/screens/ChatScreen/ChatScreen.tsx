@@ -1,29 +1,27 @@
 import { NavigationProp } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
-import { FC, useEffect, useRef, useState } from "react";
-import { Animated, Dimensions, FlatList, Image, KeyboardAvoidingView, Pressable, SafeAreaView, ScrollView, StatusBar, StatusBarStyle, Text, TextInput, View, useWindowDimensions } from "react-native";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { Animated, Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, PanResponder, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StatusBarStyle, Text, TextInput, View, useWindowDimensions } from "react-native";
 import SvgChevronLeft from "./svg/chevronLeft";
 import SvgScrepka from "./svg/Screpka";
 import SvgSendButton from "./svg/SendButton";
 import { socketClient } from "../../socket/socketClient";
 import { useAppDispatch, useAppSelector } from "../../store/typesHooks";
-import SvgMessageBottomItemRight from "./svg/messageBottomItemRight";
-import SvgMessageBottomItemLeft from "./svg/messageBottomItemLeft";
-import SvgIconsAllDone from "./svg/Icon_all_done";
-import SvgIconDone from "./svg/IconDone";
-import SvgIconWait from "./svg/IconWait";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faShare,faXmark} from '@fortawesome/free-solid-svg-icons'
+import { faShare,faXmark,faMicrophone,faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import { } from '@fortawesome/free-regular-svg-icons'
 import { markReadAllMessage } from "../../store/reducers/messageReducer";
-import { PanResponder } from "react-native";
 import MessageItem from "./MessageItem";
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob'
 import Modal from "react-native-modal";
+import fsvoice from "../../fs/voise/fsvoice";
+import { vibrateShort } from "../../nativeIOS/vibration";
 interface IChatScreen{
     navigation:any;
     route:any;
 }
+let interval:string | number | NodeJS.Timeout | undefined;
 
 const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     const chatId=route.params.chatId;
@@ -44,7 +42,7 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     }
     const replyViewOpen=()=>{
         Animated.timing(replyViewHeight,{
-            toValue: 75,
+            toValue: file.length>0?165:75,
             duration: 200,
             useNativeDriver: false,
         }).start()
@@ -105,7 +103,7 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
     const [photoVisibleUri,setPhotoVisibleUri]=useState<string>("")
     const [visibleNav,setVisibleNav]=useState<boolean>(false);
     const animVisibleNav=useRef(new Animated.Value(0)).current
-
+  
     useEffect(()=>{
         if(visibleNav){
             
@@ -115,6 +113,7 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                 useNativeDriver:false,
                 duration:50
             }).start()
+         
         }else{
           
             StatusBar.setBarStyle("light-content")
@@ -125,9 +124,91 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
             }).start()
         }
     },[visibleNav])
+    const [tempPath,setTempPath]=useState<string>("")
+    const [path,setPath]=useState<string[]>([])
+    
+    const [recorded,setRecordet]=useState<boolean>(false)
+    const [secondMetr,setSecondMetr]=useState<number>(0)
+    useEffect(()=>{
+       
+        if(recorded){
+            
+          interval = setInterval(()=>{
+            setSecondMetr(s=>s+100)
+          },100)
+          startAnimatedVoice("start")
+        }else{
+            startAnimatedVoice("stop")
+            clearInterval(interval)
+            setSecondMetr(0)
+        }
+    },[recorded])
+
+    const animatedVoice=useRef(new Animated.Value(0)).current
+    const anima=Animated.loop(
+        Animated.sequence([
+            Animated.timing(animatedVoice,{
+                toValue:1,
+                useNativeDriver:false,
+                duration:400,
+                isInteraction:false
+                
+            }),
+            Animated.timing(animatedVoice,{
+                toValue:0,
+                useNativeDriver:false,
+                duration:400,
+                isInteraction:false
+            })
+        ])
+    )
+    const startAnimatedVoice=(type:string)=>{
+        if(type=="start"){
+            anima.start()
+        }else{
+            anima.stop()
+        }
+   }  
+
+   const xPosition=useRef(new Animated.Value(0)).current
+   const [deleted,setDeleted]=useState<boolean>(false)
+   useEffect(()=>{
+        deleted&&vibrateShort()
+   },[deleted])
+   const [panResponder, setPanResponder] = useState(
+    PanResponder.create({
+        onStartShouldSetPanResponder: ()=> {
+            setRecordet(true)
+            vibrateShort()
+           return true;
+        },
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (event, gestureState) => {
+          // Вызывается при движении
+          
+          let dx = gestureState.dx;
+          console.log(dx);
+          if(dx<=-150){
+            setDeleted(true)
+          }else{
+            setDeleted(false)
+          }
+          if(dx<=-160){
+            
+          }else{
+            xPosition.setValue(-dx);
+          }
+          
+        },
+        onPanResponderRelease: () => {
+            setRecordet(false)
+            xPosition.setValue(0)
+        },
+      })
+);
     return(
         <SafeAreaView style={{flex:1,backgroundColor:"white",zIndex:200}}>
-            <Modal isVisible={photoVisibleUri.length>0} animationIn={"fadeIn"} style={{padding:0,backgroundColor:"white",margin:0}}>
+            <Modal avoidKeyboard={false} isVisible={photoVisibleUri.length>0} animationIn={"fadeIn"} style={{padding:0,backgroundColor:"white",margin:0}}>
                 <SafeAreaView style={{backgroundColor:"black",flex:1,alignItems:'center',justifyContent:"center"}}>
                     <Animated.View style={{position:"absolute",top:animVisibleNav,height:100,zIndex:2, width:"100%",backgroundColor:"#000000aa",justifyContent:'flex-end',padding:20}}>
                         <Pressable onPress={()=>setPhotoVisibleUri("")}>
@@ -182,12 +263,22 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                    
                 </View>
                 {file.length>0&&
-                <View style={{backgroundColor:"#DEF4FE",borderBottomColor:"#00000030",borderBottomWidth:1}}>
+                <View style={{backgroundColor:"#DEF4FE",borderBottomColor:"#00000030",borderBottomWidth:1,zIndex:0}}>
                     <View style={{flexDirection:"row",height:90, backgroundColor:"#ffffff",width:"100%",alignItems:'center',paddingHorizontal:10}}>
-                    {file.map((el,i)=><Pressable onPress={()=>setPhotoVisibleUri(el)}><Image style={{marginHorizontal:5}} key={i} source={{uri:el}} width={Dimensions.get("window").width/5-20} height={70}/></Pressable>)}
+                    {file.map((el,i)=><Pressable onPress={()=>{setPhotoVisibleUri(el);   Keyboard.dismiss()}}><Image style={{marginHorizontal:5}} key={i} source={{uri:el}} width={Dimensions.get("window").width/5-20} height={70}/></Pressable>)}
                   
+                    </View>
                 </View>
+                }
+                {path.length>0&&
+                <View style={{flexDirection:"row"}}>
+                        {path.map(element=><Pressable onPress={async()=>{
+                                fsvoice.playVoise(element);
+                        }} style={{backgroundColor:"blue",width:50,height:20,marginHorizontal:10}}>
+
+                                            </Pressable>)}
                 </View>
+                   
                 }
                 <Animated.View style={{position:"absolute",bottom:replyViewHeight,backgroundColor:"white",width:"100%",flexDirection:"row",alignItems:"center",borderBottomColor:"#00000030",borderBottomWidth:1,paddingVertical:10}}>
                    <View style={{width:60,alignItems:"center"}}>
@@ -211,7 +302,7 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                        console.log(result.assets);
                        console.log(result.assets![0].uri!);
                        const path="var/mobile/Containers/Data/Application/8B0CA0E4-554A-460F-BFF4-0B94DA655781/tmp/8AF9CA2E-DC2E-470E-95E7-20F627EED4EF.png"
-                     const file :Blob=await  RNFetchBlob.fs.readFile(path, 'base64')
+                    // const file :Blob=await  RNFetchBlob.fs.readFile(path, 'base64')
                     // const formData=new FormData()
                     //  formData.append('image',{
                     //     uri:result.assets![0].uri!,
@@ -236,17 +327,50 @@ const ChatScreen:FC<IChatScreen>=({navigation,route})=>{
                        }
                        setFile(listUri)
                          
-                         
-                    }} style={{width:width*0.133,height:75,justifyContent:'center',alignItems:'flex-end',paddingRight:12}}>
-                        <SvgScrepka/>
+                         //
+                    }} style={{width:width*0.14,height:75,justifyContent:'center',alignItems:'flex-end',paddingRight:12}}>
+                       {!recorded
+                       ?<SvgScrepka/>
+                       :<Animated.View style={{opacity:xPosition.interpolate({inputRange:[0,140,160],outputRange:[0,0.2,1]})}}>
+                            <FontAwesomeIcon icon={faTrashCan} size={25} color="red"/>
+                        </Animated.View>}
                     </Pressable>
                     <View style={{width:width*0.70}}>
-                        <TextInput ref={textInputRef} onSubmitEditing={sendMessage} blurOnSubmit={msg.length<1} placeholder="Введите сообщение..." value={msg} onChangeText={setMsg} style={{paddingLeft:19, borderColor:"#DDDDDD",borderWidth:1,height:42,borderRadius:10}}/>
+                        {recorded
+                        ?<View style={{flexDirection:"row",alignItems:"center"}}>
+                            <Animated.View style={{opacity:animatedVoice,backgroundColor:"red",width:10,height:10,borderRadius:10,marginRight:30}}></Animated.View>
+                            <Text style={{width:50}}>{(secondMetr>=60000?Math.floor(secondMetr/60000)+":":"")+((secondMetr/1000)%60).toString()+(secondMetr%1000==0?".0":"")}</Text>
+                            <Text style={{flex:1,}}>{"< - Для отмены"}</Text>
+                        </View>
+                        : <TextInput ref={textInputRef} onSubmitEditing={sendMessage} blurOnSubmit={msg.length<1} placeholder="Введите сообщение..." value={msg} onChangeText={setMsg} style={{paddingLeft:19, borderColor:"#DDDDDD",borderWidth:1,height:42,borderRadius:10}}/>
+                        }
+                       
                     </View> 
-                    
-                    <Pressable onPress={sendMessage} style={{flex:1,paddingLeft:8}}> 
+                    {msg.length>1
+                    ?(<Pressable  onPress={sendMessage} style={{flex:1,paddingLeft:8}}>
                         <SvgSendButton/>
-                    </Pressable>
+                    </Pressable>)
+                    :(<Animated.View {...panResponder.panHandlers} style={{position:"absolute",right:xPosition,width:recorded?75:width*0.16,backgroundColor:recorded?"#EB539F":"white",height:75,alignItems:'center',justifyContent:"center",borderRadius:recorded?75:0}}>
+                         {/* < Pressable  onPressIn={async()=>{
+                        
+                    //  const result:string= await fsvoice.recordVoise(userId,chatId)
+                    //  console.log(result);
+                        
+                    //    setTempPath(result)
+                    }} onPressOut={async()=>{
+                        setRecordet(false)
+                    //    await fsvoice.stopRecord();
+                    //      setPath([...path,tempPath])
+                        //const result:number= await fsvoice.playVoise(path);
+                       
+                    }} style={{flex:1,paddingLeft:8}}>
+                       
+                    </Pressable> */}
+                        <FontAwesomeIcon icon={faMicrophone} size={23} color="#000000aa"/>
+                    </Animated.View>
+                   )
+                    }
+                    
                 </View>
                 
             </KeyboardAvoidingView>
