@@ -15,6 +15,8 @@ import {  socketClient } from '../../socket/socketClient';
 import { ChatHttp, IChats } from '../../http/chat/httpChats';
 import { useAppDispatch } from '../../store/typesHooks';
 import { addChats } from '../../store/reducers/messageReducer';
+import fsvoice from '../../fs/voise/fsvoice';
+import fsimage from '../../fs/image/fsimage';
 
 
 const Tab = createBottomTabNavigator();
@@ -45,11 +47,13 @@ const TabNavigator:FC = () => {
 
     useEffect(()=>{
         socketClient.createSocketConnection();
+        fsvoice.createVoiceDir();
+        fsimage.createImageDir()
         getUserInfo()
         setTimeout(()=>{
-            //setBunnerVisible(true);
+            setBunnerVisible(true);
         },5000)
-    },[bunnerVisible])
+    },[])
     return (
         <View style={{flex:1}}>
             <Modal isVisible={bunnerVisible} style={{padding:0,backgroundColor:"white",margin:0}}>

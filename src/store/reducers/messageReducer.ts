@@ -3,7 +3,16 @@ import { ChatHttp, IChats } from "../../http/chat/httpChats";
 import { store } from "../store";
 import { ICompleterMessage, IFullRead, IOnGetMessage } from "../../socket/socketClient";
 import Sound from 'react-native-sound';
+import UUIDGenerator from 'react-native-uuid';
+import fsvoice from "../../fs/voise/fsvoice";
+import fsimage from "../../fs/image/fsimage";
 Sound.setCategory('Playback');
+
+export enum ETypeMessage{
+    text="text",
+    voice="voice",
+    image="image"
+}
 
 export interface IMessage{
     msg:string;
@@ -11,6 +20,27 @@ export interface IMessage{
     userId:number;
     uuid:string;
     id:number;
+    type:ETypeMessage.text;
+}
+export interface IVoiceMessage{
+    path:string;
+    status:number;
+    userId:number;
+    uuid:string;
+    id:number;
+    type:ETypeMessage.voice;
+}
+export interface IPatchComplete{
+    path:string;
+    complete:boolean;
+}
+export interface IImageMessage{
+    paths:IPatchComplete[];
+    status:number;
+    userId:number;
+    uuid:string;
+    id:number;
+    type:ETypeMessage.image
 }
 export interface IChatInfo{
     first_name?:string;
@@ -24,7 +54,7 @@ export interface IChatInfo{
   
 }
 type ChatData = {
-    [chatId: number]: IMessage[];
+    [chatId: number]: (IMessage|IVoiceMessage|IImageMessage)[]
   };
   type ChatInfo = {
     [chatId: number]: IChatInfo|null;
@@ -70,6 +100,7 @@ const messageSlice=createSlice({
        socketDisconnect(state){
         state.connection=false;
        },
+
         addMessage(state,action:PayloadAction<IAddMessage>){
             
         if( !state.listMessage[action.payload.chatId]){
@@ -94,17 +125,32 @@ const messageSlice=createSlice({
                });
             });
         }
+        
          state.listMessage[action.payload.chatId].unshift(action.payload.message)
+
+         const lastMessage=
+         action.payload.message.type=="text"
+             ?action.payload.message.msg
+             :action.payload.message.type=="image"
+                 ?"Фото":"Голосовое сообщение"
+
             if(!state.chatInfo[action.payload.chatId]){
+
+                const lastMessage=
+                    action.payload.message.type=="text"
+                        ?action.payload.message.msg
+                        :action.payload.message.type=="image"
+                            ?"Фото":"Голосовое сообщение"
+
                 state.chatInfo[action.payload.chatId]={
-                    lastMessage:action.payload.message.msg,
+                    lastMessage,
                     countUnread:1,
                     statusMessage:-1,
                     userId:action.payload.message.userId
                 }
                 
             }else{
-                state.chatInfo[action.payload.chatId]!.lastMessage=action.payload.message.msg
+                state.chatInfo[action.payload.chatId]!.lastMessage=lastMessage,
                 state.chatInfo[action.payload.chatId]!.statusMessage=-1
                 state.chatInfo[action.payload.chatId]!.userId=action.payload.message.userId
                 state.chatInfo[action.payload.chatId]!.countUnread!+=1
@@ -116,7 +162,7 @@ const messageSlice=createSlice({
             const uuid:string=action.payload.external_message_id;     
 
             
-                const element:IMessage|undefined= state.listMessage[chatId].find(el=>el.uuid==uuid);
+                const element:IMessage|IImageMessage|IVoiceMessage|undefined= state.listMessage[chatId].find(el=>el.uuid==uuid);
                 if(element){
                     element.status=action.payload.status
                     element.id=action.payload.id
@@ -152,16 +198,44 @@ const messageSlice=createSlice({
        },
        addFullMessage(state,action:PayloadAction<IOnGetMessage>){
             const chatId:number=action.payload.chatId;
-            const arr:Array<IMessage>=[];
+            const arr:Array<IMessage|IVoiceMessage|IImageMessage>=[];
            action.payload.messages.forEach(element=>{
-            arr.unshift( {
-                id:element.message_id,
-                msg:element.content,
-                status:element.status,
-                userId:element.sender_id,
-                uuid:"new"
-            })
-            })
+            
+                if(element.message_type==ETypeMessage.text){
+                    const textMessage:IMessage={
+                        id:element.message_id,
+                        msg:element.message!,
+                        status:element.status,
+                        userId:element.sender_id,
+                        uuid:UUIDGenerator.v4().toString(),
+                        type:ETypeMessage.text
+                    };
+                    arr.unshift(textMessage);
+                }
+                if(element.message_type==ETypeMessage.voice){
+                    const voiceMessage:IVoiceMessage={
+                        id:element.message_id,
+                        status:element.status,
+                        type:ETypeMessage.voice,
+                        uuid:UUIDGenerator.v4().toString(),
+                        userId:element.sender_id,
+                        path:element.media_urls![0]
+                    }
+                    arr.unshift(voiceMessage);
+                }
+                if(element.message_type==ETypeMessage.image){
+                    const paths:IPatchComplete[]=element.media_urls!.map(el=>({complete:false,path:el}));
+                    const imageMessage:IImageMessage={
+                        id:element.message_id,
+                        status:element.status,
+                        type:ETypeMessage.image,
+                        uuid:UUIDGenerator.v4().toString(),
+                        userId:element.sender_id,
+                        paths:paths
+                    }
+                    arr.unshift(imageMessage);
+              }
+            });
             state.listMessage[chatId]=arr;
             
        },
@@ -177,6 +251,67 @@ const messageSlice=createSlice({
                 element.status=2;
             })
             state.chatInfo[chatId]!.statusMessage=2;
+       },
+       updateStatusImage(state,action:PayloadAction<IUpdateStatusImage>){
+            state.listMessage[action.payload.chatId]
+            let isUpdate=false;
+            for( let chatItem of state.listMessage[action.payload.chatId]){
+                    if(chatItem.type=="image"){
+                        chatItem.paths.forEach((element)=>{
+                            if(element.path==action.payload.path){
+                                element.complete=true;
+                                isUpdate=true;
+                               return;
+                            }
+                        })
+                    }
+                    if(isUpdate) break;
+            }
+       },
+       deleteMessage(state,action:PayloadAction<{chat_id:number,message_id:number}>){
+           const list= state.listMessage[action.payload.chat_id];
+           for (let i=0;i<list.length;i++){
+             if(list[i].id==action.payload.message_id){
+                console.log("find message!!");
+                console.log(i+"_index");
+                const currentMessage=list[i];
+                const next=list[i+1];
+                if(!next){
+                    state.chatInfo[action.payload.chat_id]!.lastMessage="";
+                }else{
+                    switch(next.type){
+                        case ETypeMessage.text:
+                            state.chatInfo[action.payload.chat_id]!.lastMessage=next.msg;
+                            break;
+                        case ETypeMessage.voice:
+                            state.chatInfo[action.payload.chat_id]!.lastMessage="Голосовое сообщение";
+                            break;
+                        case ETypeMessage.image:
+                            state.chatInfo[action.payload.chat_id]!.lastMessage="Картинка";
+                            break;
+                                    
+                    } 
+                }
+                    
+                    
+              
+                
+                if( currentMessage.type==ETypeMessage.image){
+                    console.log("this image");
+                    
+                    currentMessage.paths.forEach(el=>{
+                        fsimage.deleteImage(el.path)
+                    })
+                    
+                }else if(currentMessage.type==ETypeMessage.voice){
+                    fsvoice.deleteVoice(currentMessage.path)
+                }
+                break;
+             }
+           }
+           
+           
+           state.listMessage[action.payload.chat_id]=state.listMessage[action.payload.chat_id].filter(el=>el.id!=action.payload.message_id)
        },
        RESET_MESSAGE_REDUCER(state){
         state=initialState;
@@ -209,12 +344,19 @@ export const
     allRead,
     addFullMessage,
     markReadAllMessage,
+    updateStatusImage,
+    deleteMessage,
     RESET_MESSAGE_REDUCER
     }=messageSlice.actions;
 export default messageSlice.reducer;
 
 export interface IAddMessage{
     chatId:number;
-    message:IMessage;
+    message:IMessage|IVoiceMessage|IImageMessage;
     
+}
+
+export interface IUpdateStatusImage{
+    chatId:number,
+    path:string;
 }

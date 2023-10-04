@@ -42,7 +42,7 @@ export class ChatHttp{
                 `/communication/${chatId}`
             )
             console.log("ChatINFo");
-           console.log(response.data);
+           
             return response.data;
         } catch (error) {
             const typedError = error as IError;
@@ -61,6 +61,7 @@ export class ChatHttp{
             const response=await axiosChat.get<Array<IChatsNoCast>>(
                 `/communication/get_chats`
             )
+           
             console.log(response.data);
             
             

@@ -15,7 +15,7 @@ interface ChatList{
   chatId:number;
   id:number;
 }
-function stringToColor(str:string) {
+export function stringToColor(str:string) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -36,7 +36,7 @@ function stringToColor(str:string) {
 const CommunicationScreen: React.FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
 
   const {chatInfo}=useAppSelector(state=>state.message)
-  const {userId}=useAppSelector(state=>state.user)
+  const {userId,accessToken}=useAppSelector(state=>state.user)
   const dispatch=useAppDispatch()
   //console.log(userId);
   
@@ -52,7 +52,7 @@ const CommunicationScreen: React.FC<{ navigation: any, route: any }> = ({ naviga
     const toChat=(chatId:number)=>{
       navigation.navigate("ChatScreen",{chatId})
     }
-    console.log(chatInfo);
+ 
     
   return (
     <SafeAreaView style={{ flex: 1,backgroundColor:"white" }}>
@@ -75,7 +75,17 @@ const CommunicationScreen: React.FC<{ navigation: any, route: any }> = ({ naviga
                  
                   <Pressable style={{width:82,height:84,justifyContent:'center',paddingLeft:20}}>
                     {item.chatInfo.avatar_url
-                    ?<Image source={{uri:item.chatInfo.avatar_url}} borderRadius={23}  width={46} height={46}/>
+                    ?<Image 
+                      source={{
+                        uri:item.chatInfo.avatar_url,
+                        headers:{
+                          "Authorization":accessToken!
+                        }
+                      }}
+                      alt='error'
+                      borderRadius={23}  
+                      width={46} 
+                      height={46}/>
                     :<View style={{width:46,height:46,backgroundColor:stringToColor(item.chatInfo.first_name??""),borderRadius:23,justifyContent:"center",alignItems:"center"}}>
                        <Text style={{fontFamily:"SF Pro Display",fontSize:25,fontWeight:"500"}}>{item.chatInfo.first_name?.[0]??""}</Text>
                     </View>
@@ -91,7 +101,7 @@ const CommunicationScreen: React.FC<{ navigation: any, route: any }> = ({ naviga
                           </View>
                       </View>
                       <View style={{marginBottom:15}}>
-                         <Text style={{fontFamily:"SF Pro Display",fontSize:10,fontWeight:"400",lineHeight:11.72,color:'#5C5C5C'}}>{item.chatInfo.lastMessage?.length>15?item.chatInfo.lastMessage?.substring(0,15)+"...":item.chatInfo.lastMessage??""}</Text>
+                         <Text style={{fontFamily:"SF Pro Display",fontSize:10,fontWeight:"400",lineHeight:11.72,color:'#5C5C5C'}}>{item.chatInfo.lastMessage?.length>19?item.chatInfo.lastMessage?.substring(0,19)+"...":item.chatInfo.lastMessage??""}</Text>
                          
                       </View>
                      

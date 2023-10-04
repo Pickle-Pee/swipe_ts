@@ -8,6 +8,7 @@ import { IUserTempData } from "../../store/reducers/tempUserDataReducer";
 import { store } from "../../store/store";
 import { setUserId, updateUserToken } from "../../store/reducers/userReducer";
 import tokenStorage from "../../localStorage/tokenStorage";
+import { IInterest } from "../matches/httpMatches";
 
 
 interface ITokensResponse{
@@ -20,22 +21,23 @@ export interface ReturnedData{
     message:string;
 }
 
-export interface IUser{
-    "id": number;
-    "first_name": string;
-    "last_name": string;
-    "date_of_birth": string;
-    "birth":Date;
-    "gender": string;
-    "verify": boolean;
-    "is_subscription": boolean;
-    "city_id": string;
-    "city_name":string;
-    "is_favorite": boolean,
-    "about_me": string;
-    "status": string;
-    "avatar_url": string;
-    "score": number;
+export interface IUserProfile{
+    id: number;
+    first_name: string;
+    last_name: string;
+    date_of_birth: string;
+    birth:Date;
+    gender: string;
+    verify: boolean;
+    is_subscription: boolean;
+    city_id: string;
+    city_name:string;
+    is_favorite: boolean,
+    about_me: string;
+    status: string;
+    avatar_url: string;
+    score: number;
+    interests: {interest_id: number, interest_text:string}[];
 }
 
 export class UserHttp{
@@ -230,10 +232,10 @@ export class UserHttp{
             return returnedData;
         }
     } 
-    userInfo = async (userId:number):Promise<IUser|null>=>{
+    userInfo = async (userId:number):Promise<IUserProfile|null>=>{
         try {       
             
-        const response = await axiosUser.get<IUser>(
+        const response = await axiosUser.get<IUserProfile>(
             `/user/${userId}`,         
         );  
            
@@ -252,4 +254,27 @@ export class UserHttp{
         }
     } 
 
+    meInfo = async ():Promise<IUserProfile|null>=>{
+        try {       
+            
+        const response = await axiosUser.get<IUserProfile>(
+            `/user/me`,         
+        );  
+           
+            
+            
+            const returnedData=response.data;
+            console.log(returnedData);
+            
+            returnedData.birth=new Date(Date.parse(returnedData.date_of_birth))
+            
+            return returnedData;
+        } catch (error) {
+            const typedError = error as IError;
+            console.log("userInfo error");
+            console.log(error);
+                
+            return null;
+        }
+    } 
 }

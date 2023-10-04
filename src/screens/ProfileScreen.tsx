@@ -12,11 +12,12 @@ import NavPanel, { ContextPanel } from './components/NavPanel';
 import { GradientBorderView } from '@good-react-native/gradient-border';
 import { socketClient } from '../socket/socketClient';
 import PushNotificationIOS, { NotificationAction, NotificationCategory, NotificationRequest } from '@react-native-community/push-notification-ios';
-import { useAppDispatch } from '../store/typesHooks';
+import { useAppDispatch, useAppSelector } from '../store/typesHooks';
 import { RESET_MESSAGE_REDUCER } from '../store/reducers/messageReducer';
 import { RESET_LIKE_REDUCER } from '../store/reducers/likesReducer';
 import { RESET_TEMP_USER_REDUCER } from '../store/reducers/tempUserDataReducer';
-import { RESET_USER_REDUCER } from '../store/reducers/userReducer';
+import { RESET_USER_REDUCER, updateUserProfile } from '../store/reducers/userReducer';
+import { IUserProfile, UserHttp } from '../http/user/httpUser';
 //@ts-ignore
 
 
@@ -28,12 +29,21 @@ import { RESET_USER_REDUCER } from '../store/reducers/userReducer';
 const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any }> = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(false);
+  const  {profile}=useAppSelector(state=>state.user)
+  
   const dispatch=useAppDispatch()
-
+  
   useEffect(() => {
 
-    
-  }, []);
+    if(profile==null){
+      new UserHttp().meInfo().then(value=>{
+        if(value!=null){
+          dispatch(updateUserProfile(value!))
+        }
+      })
+    }
+
+}, []);
 
 
   const handleLogoutPress = async () => {
@@ -56,15 +66,6 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any
   };
 
   //const age = calculateAge(userData.dateBirth);
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
   const ScreenWidth = Dimensions.get('window').width;
   console.log(ScreenWidth);
   const gradientColors =  ['#F857A6', '#20BDFF'];
@@ -108,12 +109,20 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any
     PushNotificationIOS.addNotificationRequest(notReq)
   }
 
+
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <NavPanel panel={ContextPanel.profile} />
       </View>
-    <ScrollView showsVerticalScrollIndicator={false}>
+      {profile==null
+        ?  <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+              <Text>Load...</Text>
+          </View>
+        :<>
+          <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{paddingLeft:0,marginTop:32.27}} > 
        <ScrollView horizontal contentContainerStyle={{width:ScreenWidth*2-38,height:319.73}} bounces={false} showsHorizontalScrollIndicator={false}>
         <Image
@@ -147,46 +156,36 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any
      
       <View style={{flexDirection:"row",justifyContent:"space-between",marginTop:32,paddingHorizontal:20}}>
         <View>
-            <Text style={{fontFamily:"SF Pro Display",fontWeight:"600",fontSize:25,lineHeight:29.3, color:"rgba(36, 39, 41, 1)"}}>Кирилл, 12</Text>
-            <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:16,lineHeight:18.75, color:"rgba(54, 67, 77, 0.7)",marginTop:10}}>Сварщик</Text>
+            <Text style={{fontFamily:"SF Pro Display",fontWeight:"600",fontSize:25,lineHeight:29.3, color:"rgba(36, 39, 41, 1)"}}>{profile.first_name}, {new Date().getFullYear()-profile.birth.getFullYear()}</Text>
+            <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:16,lineHeight:18.75, color:"rgba(54, 67, 77, 0.7)",marginTop:10}}>Сварщик{"(mock)"}</Text>
         </View>
-        <View style={{backgroundColor: "rgba(240, 246, 250, 1)",borderRadius:13,height:25.93,alignItems:'center',justifyContent:'center',paddingHorizontal:8.98}}>
+        {/* <View style={{backgroundColor: "rgba(240, 246, 250, 1)",borderRadius:13,height:25.93,alignItems:'center',justifyContent:'center',paddingHorizontal:8.98}}>
           <Text style={{fontFamily:"SF Pro Display",fontWeight:"600",fontSize:12.96,lineHeight:15.19, color:"rgba(36, 39, 41, 1)"}}>1.8 км</Text>
-        </View>
+        </View> */}
       </View>
       <View style={{marginTop:20.66,paddingHorizontal:20}}>
           <Text style={{fontFamily:"SF Pro Display",fontWeight:"500",fontSize:19,lineHeight:22.27, color:"rgba(54, 67, 77, 0.9)"}}>О себе</Text>
-          <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:16,lineHeight:18.75, color:"rgba(54, 67, 77, 0.7)",marginTop:10.77}}>Обожаю гулять ночью.{"\n"}Мой самоед ест больше, чем я!</Text>
+          <Text style={{fontFamily:"SF Pro Display",fontWeight:"400",fontSize:16,lineHeight:18.75, color:"rgba(54, 67, 77, 0.7)",marginTop:10.77}}>{profile.about_me}</Text>
       </View>
       <View style={{marginTop:20.57,paddingHorizontal:20}}>
           <Text style={{fontFamily:"SF Pro Display",fontWeight:"500",fontSize:19,lineHeight:22.27, color:"rgba(54, 67, 77, 0.9)",marginBottom:10}}>Интересы</Text>
           <Wrap style={{flexDirection:"row",padding:0}}>
-         <GradientBorderView
-             gradientProps={{
-              colors: gradientColors
-            }}
-            style={[
-              styles.buttonContainer,
-              {
-                opacity:  1
-              }
-            ]}
-          >
-            <Text style={{fontFamily:"SF Pro Display",fontWeight:"500",fontSize:15.04,lineHeight:17.62, color:"rgba(36, 39, 41, 0.7)"}}>Спорт</Text>
-          </GradientBorderView>
-          <GradientBorderView
-             gradientProps={{
-              colors: gradientColors
-            }}
-            style={[
-              styles.buttonContainer,
-              {
-                opacity:  1
-              }
-            ]}
-          >
-            <Text style={{fontFamily:"SF Pro Display",fontWeight:"500",fontSize:15.04,lineHeight:17.62, color:"rgba(36, 39, 41, 0.7)"}}>Пивко</Text>
-          </GradientBorderView>
+            {profile.interests.map(el=>(
+               <GradientBorderView
+               gradientProps={{
+                colors: gradientColors
+              }}
+              style={[
+                styles.buttonContainer,
+                {
+                  opacity:  1,
+                  marginBottom:10
+                }
+              ]}
+            >
+              <Text style={{fontFamily:"SF Pro Display",fontWeight:"500",fontSize:15.04,lineHeight:17.62, color:"rgba(36, 39, 41, 0.7)"}}>{el.interest_text}</Text>
+            </GradientBorderView>
+            ))}
          </Wrap>
       </View>
          
@@ -197,6 +196,8 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationProp<any>, route: any
       <Pressable onPress={onPress} style={{height:40}}>
               <Text>go push</Text>
       </Pressable>
+        </>
+      }
     </SafeAreaView>
     
   );

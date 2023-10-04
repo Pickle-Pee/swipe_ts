@@ -55,20 +55,25 @@ const BannerVip:FC<{cancel:()=>void}>=({cancel})=>{
     }
 
     useEffect(()=>{
-       
+        scrollTo()
     },[reload])
 
     const onMomentumScrollEnd=()=>{
         console.log("dd");
         setReload(r=>!r)
         setPage(offset/width);
+        
     }
    
+    const close=()=>{
+        clearInterval(interval)
+        cancel()
+    }
     
     return(
             <SafeAreaView style={{ flex: 1,width:"100%",height:"100%",backgroundColor:"white",justifyContent:"flex-end" }}>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <Pressable onPress={cancel} style={{height:40,width:40,alignItems:"center",justifyContent:'center',marginLeft:15.97,marginTop:19.46,marginBottom:43}}>
+                <Pressable onPress={close} style={{height:40,width:40,alignItems:"center",justifyContent:'center',marginLeft:15.97,marginTop:19.46,marginBottom:43}}>
                     <SvgUri
                         source={require("../../../../assets/svg/cancel_vip.svg")}
                     />
