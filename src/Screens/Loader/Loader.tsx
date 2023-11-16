@@ -58,6 +58,7 @@ const Loader:FC<{navigation : StackNavigationProp<any>}>=({navigation})=>{
         if(timeCompleted&&completed){
           navigation.navigate("MainStack");
         }
+        
         if(timeCompleted&&noAuth){
             navigation.navigate("AuthStack");
         }

@@ -178,7 +178,8 @@ export interface IOnGetMessage{
                 type:ETypeMessage.voice,
                 uuid:UUIDGenerator.v4().toString(),
                 userId:newMessage.sender_id,
-                path:newMessage.media_urls![0]
+                path:newMessage.media_urls![0],
+                metric:[]
             }
            message=voiceMessage;
       }
