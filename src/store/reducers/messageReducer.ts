@@ -29,6 +29,7 @@ export interface IVoiceMessage{
     uuid:string;
     id:number;
     type:ETypeMessage.voice;
+    metric:number[];
 }
 export interface IPatchComplete{
     path:string;
@@ -127,19 +128,19 @@ const messageSlice=createSlice({
             state.chatInfo[action.payload.chatId]=null
         }
         if(action.payload.message.id!=-1){
-            const wash=new Sound("send.mp3",Sound.MAIN_BUNDLE,(err)=>{
-                if(err!=null){
-                 console.log('failed to load the sound', err);
-                }
-                wash.setVolume(0.3);
-                wash.play((success) => {
-                 if (success) {
-                   console.log('successfully finished playing');
-                 } else {
-                   console.log('playback failed due to audio decoding errors');
-                 }
-               });
-            });
+            // const wash=new Sound("send.mp3",Sound.MAIN_BUNDLE,(err)=>{
+            //     if(err!=null){
+            //      console.log('failed to load the sound', err);
+            //     }
+            //     wash.setVolume(0.3);
+            //     wash.play((success) => {
+            //      if (success) {
+            //        console.log('successfully finished playing');
+            //      } else {
+            //        console.log('playback failed due to audio decoding errors');
+            //      }
+            //    });
+            // });
         }
         
          state.listMessage[action.payload.chatId].unshift(action.payload.message)
@@ -184,21 +185,21 @@ const messageSlice=createSlice({
                     element.id=action.payload.id
                }
                
-               const wash=new Sound("sent.mp3",Sound.MAIN_BUNDLE,(err)=>{
-                   if(err!=null){
-                    console.log('failed to load the sound', err);
-                   }
-                   wash.setVolume(1);
-                   wash.setPan(1);
+            //    const wash=new Sound("sent.mp3",Sound.MAIN_BUNDLE,(err)=>{
+            //        if(err!=null){
+            //         console.log('failed to load the sound', err);
+            //        }
+            //        wash.setVolume(1);
+            //        wash.setPan(1);
 
-                   wash.play((success) => {
-                    if (success) {
-                      console.log('successfully finished playing');
-                    } else {
-                      console.log('playback failed due to audio decoding errors');
-                    }
-                  });
-               });
+            //        wash.play((success) => {
+            //         if (success) {
+            //           console.log('successfully finished playing');
+            //         } else {
+            //           console.log('playback failed due to audio decoding errors');
+            //         }
+            //       });
+            //    });
                state.chatInfo[chatId]!.statusMessage=1;
 
        },
@@ -235,7 +236,8 @@ const messageSlice=createSlice({
                         type:ETypeMessage.voice,
                         uuid:UUIDGenerator.v4().toString(),
                         userId:element.sender_id,
-                        path:element.media_urls![0]
+                        path:element.media_urls![0],
+                        metric:[]
                     }
                     arr.unshift(voiceMessage);
                 }

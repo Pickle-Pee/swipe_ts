@@ -6,7 +6,7 @@ import SvgIconDone from "../svg/IconDone";
 import SvgIconsAllDone from "../svg/Icon_all_done";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faClock } from '@fortawesome/free-regular-svg-icons'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCloudUpload, faExclamationCircle, faPause, faPlay, faTruckLoading } from '@fortawesome/free-solid-svg-icons'
 import dispatcherMessages from "../helpers/dispatcherMessages";
 import fsvoice from "../../../../../fs/voise/fsvoice";
 import { IImageMessage, IMessage, IVoiceMessage } from "../../../../../store/reducers/messageReducer";
@@ -119,7 +119,7 @@ const MessageItem:FC<IMessageItem>=({message,setPhotoVisibleUri,})=>{
 
     return(
         <Animated.View {...panResponder.panHandlers} style={{alignSelf,marginRight:message.userId==userId?xPosition:0,marginLeft:message.userId!=userId?xPosition:0}} >
-                        <View style={{ marginTop:10, backgroundColor:"white",borderRadius:10, minWidth:100,maxWidth:300,paddingHorizontal:20,paddingVertical:10}}>
+                        <View style={{ marginTop:10, backgroundColor:"white",borderRadius:20, minWidth:100,maxWidth:300,paddingLeft:9,paddingVertical:8}}>
                             {currentMessage}
                             {message.userId==userId&&<View style={{position:"absolute",bottom:0,left:-20}}>
                                  {status==1&& <SvgIconDone/>}
@@ -200,21 +200,32 @@ const ItemVoice:FC<IMessageTyped<IVoiceMessage>>=({message})=>{
         setPlay(p=>!p);
     }
 
-    return(
-        <View style={{flexDirection:"row"}}>
-            {load
-            ?<View>
-                <Text>Load</Text>
-            </View>
-            :<Pressable onPressIn={playVoice} style={{backgroundColor:"black",width:40,height:40}}>
-                <Text style={{color:"white"}}>{play?"||":"|>"}</Text>
-            </Pressable>
+    const parseTime=()=>{
+        const currentTime= time.toString().split(".");
+        let sec=currentTime[0].length===1?"0"+currentTime[0]:currentTime[0];
+        const currentMin=(parseInt(sec)-(parseInt(sec)%60)).toString();
+        const min=currentMin.length===1?"0"+currentMin:currentMin;
+        sec=sec=="00"?"01":sec;
+        return min+":"+sec;
+    }
 
-            }
+    return(
+        <View style={{flexDirection:"row",minWidth:210,alignItems:'center',paddingHorizontal:9}}>
+            <Pressable onPressIn={playVoice} style={{backgroundColor:"black",width:40,height:40,borderRadius:20,alignItems:'center',justifyContent:'center'}}>
+               <FontAwesomeIcon icon={load?faCloudUpload:play?faPlay:faPause} color="white" size={20}/>
+            </Pressable>
+            {load?<View>
+
+            </View>
+            :<View style={{justifyContent:'center',marginLeft:10}}>
+                <View style={{flexDirection:'row',alignItems:'flex-end',marginBottom:10}}>
+                    {message.metric.map((el,i)=><View key={i} style={{width:3,height:el,backgroundColor:'black',marginHorizontal:1}}></View>)}
+                </View>
+                <Text style={{fontFamily:"SF Pro Display",fontSize:12,fontWeight:"400",lineHeight:14.06}}>
+                {parseTime()}
+               </Text>
+            </View>}
             
-            <Text style={{fontFamily:"SF Pro Display",fontSize:12,fontWeight:"400",lineHeight:14.06}}>
-                {path+"//"+time}
-            </Text>
         </View>
         
     )

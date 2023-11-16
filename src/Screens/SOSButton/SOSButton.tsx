@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { BackHandler, Linking, Pressable, SafeAreaView, Text, View, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
+import { NativeModules, DeviceEventEmitter } from 'react-native';
 //@ts-ignore
 import {BoxShadow} from 'react-native-shadow';
 import SVGCancelVip from "../../SVG/SVGCancelVip";
@@ -56,8 +57,23 @@ const SOSButton:FC<ISOSButton>=({route,navigation})=>{
     }
 
     const call112=()=>{
-        Linking.openURL('tel:112');
+       // Linking.openURL('tel:112');
+       const { CustomAudio } = NativeModules;
+       console.log(NativeModules);
+       
+    //    CustomAudio.startRecording(); // Начать запись аудио
+    //     setTimeout(()=>{
+    //         CustomAudio.stopRecording();
+    //     },2000) // Остановить запись аудио
+
     }
+    useEffect(()=>{
+        DeviceEventEmitter.addListener('audioLevel', (event) => {
+            const audioLevel = event.level;
+            console.log('Уровень громкости:', audioLevel);
+          });
+          
+    },[])
     return(
         <View style={{height}}>
             <LinearGradient 

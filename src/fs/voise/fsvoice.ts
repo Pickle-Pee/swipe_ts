@@ -5,12 +5,14 @@ import { LoadFileHttp } from '../../http/loadFile/httpLoadFile';
 import Sound from 'react-native-sound';
 import { store } from '../../store/store';
 class FSVoice{
+  currentmetric:number[]=[];
    private cacheDir:string;
  private audioRecorderPlayer:AudioRecorderPlayer;
 
     constructor(){
         this.cacheDir=RNFetchBlob.fs.dirs.CacheDir
        this.audioRecorderPlayer=new AudioRecorderPlayer()
+       this.audioRecorderPlayer.setSubscriptionDuration(0.1)
     }
 
    async createVoiceDir():Promise<number>{
@@ -30,12 +32,12 @@ class FSVoice{
           });
           try {
             
-            const pathCompleted:string=await this.audioRecorderPlayer.startRecorder(paths)
+            const pathCompleted:string=await this.audioRecorderPlayer.startRecorder(paths,undefined,true)
            
             
             this.audioRecorderPlayer.addRecordBackListener((event)=>{
               //  console.log(event);
-                
+                this.currentmetric.push(event.currentMetering!)
             })
             
             return paths!.substring(6);
@@ -51,6 +53,13 @@ class FSVoice{
         try {
           const fullPath= await this.audioRecorderPlayer.stopRecorder()
           this.audioRecorderPlayer.removeRecordBackListener()
+          // const min = Math.min(...lines);
+          // const max = Math.max(...lines);
+          // const scaledNumbers = this.currentmetric.map(number => {
+          //   const scaled = 10 + (number - min) * (30 / (max - min));
+          //   const rounded = Math.round(Math.min(40, Math.max(10, scaled)));
+          //   return rounded;
+          // });
           
            return fullPath;
            

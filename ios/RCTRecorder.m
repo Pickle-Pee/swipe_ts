@@ -1,4 +1,4 @@
-#import "Recorder.h"
+#import "RCTRecorder.h"
 #import <AVFoundation/AVFoundation.h>
 
 @implementation CustomAudioModule

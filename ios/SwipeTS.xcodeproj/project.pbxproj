@@ -28,7 +28,7 @@
 		068DB3392AD71B5F00C6AE46 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 068DB3252AD71B5E00C6AE46 /* SF-Pro-Text-Bold.otf */; };
 		068DB33A2AD71B5F00C6AE46 /* SF-Pro-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 068DB3262AD71B5E00C6AE46 /* SF-Pro-Display-Thin.otf */; };
 		068DB33B2AD71B5F00C6AE46 /* SF-Pro-Display-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 068DB3272AD71B5E00C6AE46 /* SF-Pro-Display-HeavyItalic.otf */; };
-		069EB14D2AFB7D4100C7052F /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 069EB14C2AFB7D4100C7052F /* Recorder.m */; };
+		069EB14D2AFB7D4100C7052F /* RCTRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 069EB14C2AFB7D4100C7052F /* RCTRecorder.m */; };
 		06EAD5232AD6EB1200649D7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06EAD5222AD6EB1200649D7F /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -72,8 +72,8 @@
 		068DB3252AD71B5E00C6AE46 /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Text-Bold.otf"; path = "../../assets/fonts/SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		068DB3262AD71B5E00C6AE46 /* SF-Pro-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Thin.otf"; path = "../../assets/fonts/SF-Pro-Display-Thin.otf"; sourceTree = "<group>"; };
 		068DB3272AD71B5E00C6AE46 /* SF-Pro-Display-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-HeavyItalic.otf"; path = "../../assets/fonts/SF-Pro-Display-HeavyItalic.otf"; sourceTree = "<group>"; };
-		069EB1462AFB7BB100C7052F /* Recorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
-		069EB14C2AFB7D4100C7052F /* Recorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Recorder.m; sourceTree = "<group>"; };
+		069EB1462AFB7BB100C7052F /* RCTRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTRecorder.h; sourceTree = "<group>"; };
+		069EB14C2AFB7D4100C7052F /* RCTRecorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTRecorder.m; sourceTree = "<group>"; };
 		06EAD5222AD6EB1200649D7F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06EAD52A2AD6F00600649D7F /* SwipeTS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SwipeTS.entitlements; path = SwipeTS/SwipeTS.entitlements; sourceTree = "<group>"; };
 		0C041BE3B34D7F3C4A0E05AB /* Pods_SwipeTS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwipeTS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,8 +166,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				069EB1462AFB7BB100C7052F /* Recorder.h */,
-				069EB14C2AFB7D4100C7052F /* Recorder.m */,
+				069EB1462AFB7BB100C7052F /* RCTRecorder.h */,
+				069EB14C2AFB7D4100C7052F /* RCTRecorder.m */,
 			);
 			name = SwipeTS;
 			sourceTree = "<group>";
@@ -527,7 +527,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				069EB14D2AFB7D4100C7052F /* Recorder.m in Sources */,
+				069EB14D2AFB7D4100C7052F /* RCTRecorder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

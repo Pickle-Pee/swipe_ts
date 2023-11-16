@@ -36,7 +36,7 @@ class DispatcherFileMessage{
             this.correctionChatInformation(chatId);
             this.sendSocketMessage(addMessageInfo);
     }
-    async addVoiceMessage(chatId:number,userId:number,path:string,pathFull:string){
+    async addVoiceMessage(chatId:number,userId:number,path:string,pathFull:string,metric:number[]){
         
 
         const newVoiceMessage:IVoiceMessage={
@@ -45,7 +45,8 @@ class DispatcherFileMessage{
             uuid: UUIDGenerator.v4().toString(),
             status:-1,
             type:ETypeMessage.voice,
-            userId
+            userId,
+            metric
         }
     
         const messageToStore:IAddMessage={

@@ -85,15 +85,16 @@ useEffect(()=>{
                     {/* <Animated.View style={{opacity:xPosition.interpolate({inputRange:[0,140,160],outputRange:[0,0.2,1]})}}>
                             <FontAwesomeIcon icon={faTrashCan} size={25} color="red"/>
                         </Animated.View> */}
-                    <View style={{width:width*0.70}}>
-                        {recorded
-                        ?<View style={{flexDirection:"row",alignItems:"center"}}>
+                                                {recorded
+                        &&<View style={{flexDirection:"row",alignItems:"center",position:"absolute",height:75,backgroundColor:'white',zIndex:0,width:width,paddingLeft:20}}>
                             <Animated.View style={{opacity:animatedVoice,backgroundColor:"red",width:10,height:10,borderRadius:10,marginRight:30}}></Animated.View>
                             <Text style={{width:50}}>{(secondMetr>=60000?Math.floor(secondMetr/60000)+":":"")+((secondMetr/1000)%60).toString()+(secondMetr%1000==0?".0":"")}</Text>
                             <Text style={{flex:1,}}>{"< - Для отмены"}</Text>
                         </View>
-                        : <TextInput ref={textInputRef} onSubmitEditing={sendMessage} blurOnSubmit={msg.length<1} placeholder="Введите сообщение..." value={msg} onChangeText={setMsg} style={{paddingLeft:19, borderColor:"#DDDDDD",borderWidth:1,height:42,borderRadius:10}}/>
+                        
                         }
+                    <View style={{width:width*0.70,opacity:recorded?0:1}}>
+                        <TextInput ref={textInputRef} onSubmitEditing={sendMessage} blurOnSubmit={msg.length<1} placeholder="Введите сообщение..." value={msg} onChangeText={setMsg} style={{paddingLeft:19, borderColor:"#DDDDDD",borderWidth:1,height:42,borderRadius:10}}/>
                        
                     </View> 
                     {msg.length>1

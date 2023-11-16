@@ -7,7 +7,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTRootView.h>
-#import "Recorder.h"
+#import "RCTRecorder.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -19,13 +19,13 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
   
-    RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-    RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"YourApp" initialProperties:nil];
-  
+   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+    //RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"SwipeTS" initialProperties:nil];
+   [bridge enqueueJSCall:@"RCTDeviceEventEmitter.addListener" args:@[@"audioLevel", @1]];
    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
    center.delegate = self;
   
-  [bridge enqueueJSCall:@"RCTDeviceEventEmitter.addListener" args:@[@"audioLevel", @1]];
+ 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken

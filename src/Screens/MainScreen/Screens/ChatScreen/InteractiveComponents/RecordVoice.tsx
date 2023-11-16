@@ -59,7 +59,7 @@ const RecordVoice:FC<IRecordVoice>=({chatId})=>{
             },
             onMoveShouldSetPanResponder: () =>{
               
-              return true
+              return false;
             },
             onPanResponderMove: (event, gestureState) => {
               // Вызывается при движении
@@ -111,8 +111,7 @@ const RecordVoice:FC<IRecordVoice>=({chatId})=>{
 
 
       const startRecorded=async()=>{
-        //console.log("recoord");
-        
+        //console.log("recoord"); 
         const path:string= await fsvoice.recordVoise(userId,chatId);
         currentPatch=path;
 
@@ -121,21 +120,71 @@ const RecordVoice:FC<IRecordVoice>=({chatId})=>{
 
       const stopRecorded=async()=>{
         const pathFull:string= await  fsvoice.stopRecord()
+      
+          
             if(deleted){
               currentPatch=""
                 //TODO delete voice!!!per currentpatch
             }else{
-              console.log(currentPatch);
-                dispatcherMessages.addVoiceMessage(chatId,userId,currentPatch,pathFull).then(()=>{
+              const metric=[...fsvoice.currentmetric];
+              const min = Math.min(...metric);
+               const max = Math.max(...metric);
+     
+               let scaledNumbers = metric.map(number => {
+                 const scaled = 2 + (number - min) * (28 / (max - min));
+                 const rounded = Math.round(Math.min(30, Math.max(2, scaled)));
+                 return rounded;
+               });
+               console.log("1scale"+scaledNumbers);
+               
+               if(scaledNumbers.length<=32){
+                  while(scaledNumbers.length<32){
+                    if(scaledNumbers.length%2==1){
+                      scaledNumbers.push(2)
+                    }else{
+                      scaledNumbers.unshift(2)
+                    }
+                 }
+               }else{
+                console.log(scaledNumbers);
+                  const otherRate=scaledNumbers.length%32
+                  console.log("otherRate:"+otherRate);
+                  
+                  const tickRate=(scaledNumbers.length-otherRate)/32
+                  console.log("tickRate:"+tickRate);
+
+                  const newScale=[];
+                  const getAverage = (numbers:number[]) => {
+                    const sum = numbers.reduce((acc, number) => acc + number, 0);
+                    const length = numbers.length;
+                    return sum / length;
+                  };
+                  const otherNumbers=(scaledNumbers.length)%tickRate
+                  for(let i=0;i<scaledNumbers.length-(scaledNumbers.length)%tickRate;i+=tickRate){
+                    const currentArray=scaledNumbers.slice(i*tickRate,(i+1)*tickRate)
+                    console.log(i+"-step:"+currentArray);
+                    newScale.push(getAverage(currentArray))
+                  }
+                  console.log("other"+scaledNumbers.slice(-otherRate));
+                  
+                  newScale.push(getAverage(scaledNumbers.slice(-otherNumbers)))
+                  scaledNumbers=newScale;
+               }
+             
+               console.log(scaledNumbers);
+               
+              //console.log(currentPatch);
+                dispatcherMessages.addVoiceMessage(chatId,userId,currentPatch,pathFull,scaledNumbers).then(()=>{
                   currentPatch=""
                 })
             }
             deleted=false;
+            fsvoice.currentmetric=[]
             
       }
 
     return(
-        <Animated.View {...(disabledGesture?{}:panResponder.panHandlers)} style={{position:"absolute",right:margins?xPosition:0,width:recorded?75:width*0.16,backgroundColor:recorded?"#EB539F":"white",height:75,alignItems:'center',justifyContent:"center",borderRadius:recorded?75:0}}>
+        <Animated.View {...(disabledGesture?{}:panResponder.panHandlers)}  style={{position:"absolute",right:margins?xPosition:0,width:recorded?75:width*0.16,backgroundColor:recorded?"#EB539F":"white",height:75,alignItems:'center',justifyContent:"center",borderRadius:recorded?75:0}}>
                          {/* < Pressable  onPressIn={async()=>{
                         
                     //  const result:string= await fsvoice.recordVoise(userId,chatId)
